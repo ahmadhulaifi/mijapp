@@ -5,24 +5,25 @@
                 <img src="<?= base_url(); ?>/asset/images/logo_madrasah.png" alt="IMG">
             </div>
 
-            <form class="login100-form validate-form">
+            <form class="login100-form validate-form" id="loginkaryawan">
+                <?= csrf_field(); ?>
                 <span class="login100-form-title">
                     Login Karyawan MIJ
                 </span>
 
-                <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-                    <input class="input100" type="text" name="email" placeholder="Email">
+                <div class="wrap-input100 validate-input">
+                    <input class="input100" type="text" id="username" name="username" placeholder="Username">
                     <span class="focus-input100"></span>
                     <span class="symbol-input100">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <i class="fa fa-fw fa-user" aria-hidden="true"></i>
                     </span>
                 </div>
 
-                <div class="wrap-input100 validate-input" data-validate="Password is required">
-                    <input class="input100" type="password" name="pass" placeholder="Password">
+                <div class="wrap-input100 validate-input">
+                    <input class="input100" type="password" id="password" name="password" placeholder="Password">
                     <span class="focus-input100"></span>
                     <span class="symbol-input100">
-                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        <i class="fa fa-fw fa-lock" aria-hidden="true"></i>
                     </span>
                 </div>
 
