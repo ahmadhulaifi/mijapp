@@ -4,10 +4,10 @@ namespace App\Models\backend;
 
 use CodeIgniter\Model;
 
-class SubmenuModel extends Model
+class RoleModel extends Model
 {
-    protected $table      = 'user_sub_menu';
-    protected $allowedFields = ['menu_id', 'sub_menu', 'icon', 'url', 'sort', 'is_active'];
+    protected $table      = 'user_role';
+    protected $allowedFields = ['role_kode', 'role', 'sort'];
 
     // protected $useTimestamps = true;
     // protected $createdField  = 'created_at';

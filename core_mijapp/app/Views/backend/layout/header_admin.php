@@ -28,6 +28,9 @@
     <link rel="stylesheet" href="<?= base_url(); ?>/asset/plugins/summernote/summernote-bs4.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <!-- toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -117,7 +120,7 @@
                         ?>
                         <?php foreach ($querymenu as $qm) : ?>
                             <li class="nav-item has-treeview">
-                                <a href="<?= base_url($qm['url']); ?>" class="nav-link">
+                                <a href="<?= base_url($qm['url']); ?>" class="sub_menu nav-link <?php echo ($title == $qm['menu']) ? 'active' : '' ?>">
                                     <i class="nav-icon <?= $qm['icon']; ?>"></i>
                                     <p>
                                         <?= $qm['menu']; ?>
@@ -136,7 +139,7 @@
                                 <?php foreach ($querysubmenu as $qsm) : ?>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="<?= base_url($qsm['url']); ?>" class="nav-link">
+                                            <a href="<?= base_url($qsm['url']); ?>" class="sub_menu nav-link <?php echo ($title == $qsm['sub_menu']) ? 'active' : '' ?>">
                                                 <i class="<?= $qsm['icon']; ?>"></i>
                                                 <p><?= $qsm['sub_menu']; ?></p>
                                             </a>

@@ -49,10 +49,128 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<?= base_url(); ?>/asset/dist/js/demo.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <!-- isi content -->
 <?= $this->renderSection('script'); ?>
 
+<script>
+    $(document).ready(function() {
+        // menambahkan kelas aktif di sidebar
+        let tes = $(".sub_menu.active").parent().parent().prev().addClass('active')
 
+        // delete menu
+        $(".deletemenu").click(function() {
+            event.preventDefault()
+            let idmenu = $(this).parents("tr").attr("id");
+
+            Swal.fire({
+                title: 'Apa kamu yakin untuk menghapusnya?',
+                text: "kamu tidak akan bisa mengembalikannya",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus saja!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '<?= base_url('/menu/deletemenu'); ?>/' + idmenu,
+                        type: 'DELETE',
+                        error: function() {
+                            alert('Something is wrong');
+                        },
+                        success: function(data) {
+                            $("#" + idmenu).remove();
+                            Swal.fire(
+                                'Deleted!',
+                                'File sudah terdelete.',
+                                'success'
+                            )
+                        }
+                    });
+
+                }
+            })
+
+        })
+
+        // delete submenu
+        $(".deletesubmenu").click(function() {
+            event.preventDefault()
+            let idsub = $(this).parents("tr").attr("id");
+
+            Swal.fire({
+                title: 'Apa kamu yakin untuk menghapusnya?',
+                text: "kamu tidak akan bisa mengembalikannya",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus saja!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '<?= base_url('/menu/deletesubmenu'); ?>/' + idsub,
+                        type: 'DELETE',
+                        error: function() {
+                            alert('Something is wrong');
+                        },
+                        success: function(data) {
+                            $("#" + idsub).remove();
+                            Swal.fire(
+                                'Deleted!',
+                                'File sudah terdelete.',
+                                'success'
+                            )
+
+                        }
+                    });
+
+                }
+            })
+        })
+
+        // delete role
+        $(".deleterole").click(function() {
+            event.preventDefault()
+            let idrole = $(this).parents("tr").attr("id");
+
+            Swal.fire({
+                title: 'Apa kamu yakin untuk menghapusnya?',
+                text: "kamu tidak akan bisa mengembalikannya",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus saja!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '<?= base_url('/role/deleterole'); ?>/' + idrole,
+                        type: 'DELETE',
+                        error: function() {
+                            alert('Something is wrong');
+                        },
+                        success: function(data) {
+                            $("#" + idrole).remove();
+                            Swal.fire(
+                                'Deleted!',
+                                'File sudah terdelete.',
+                                'success'
+                            )
+
+                        }
+                    });
+
+                }
+            })
+
+        })
+
+    });
+</script>
 </body>
 
 </html>

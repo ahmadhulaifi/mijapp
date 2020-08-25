@@ -18,7 +18,7 @@ class AksesFilter implements FilterInterface
         $role_kode = $cekuser['role_kode'];
         $builder = $db->table('user_menu');
         $builder2 = $db->table('user_access_menu');
-
+        // dd(uri_string());
         $posisi = strpos(uri_string(), '/');
         if ($posisi == 0) {
             $uricurrent =  uri_string();
@@ -26,7 +26,7 @@ class AksesFilter implements FilterInterface
             $urli = explode("/", uri_string());
             $uricurrent = $urli[0];
         }
-
+        // dd($uricurrent);
         $querymenu   = $builder->where('menu', $uricurrent)->get()->getRowArray();
         $queryaccess = $builder2->where('menu_id', $querymenu['id'])->where('role_kode', $role_kode)->countAllResults();
 
