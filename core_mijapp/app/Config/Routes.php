@@ -35,12 +35,21 @@ $routes->get('/', 'backend/Login::index');
 $routes->get('/login', 'backend/Login::index');
 $routes->get('/loginadmin', 'backend/Login::index');
 $routes->post('/ceklogin', 'backend/login::ceklogin');
-$routes->post('backend/login/ceklogin', 'backend/login::ceklogin');
-$routes->post('backend/login/ceklogin', 'backend/login::ceklogin');
+$routes->post('/backend/login/ceklogin', 'backend/login::ceklogin');
+$routes->post('/backend/login/ceklogin', 'backend/login::ceklogin');
+$routes->get('/logout', 'backend/login::logout');
+$routes->get('/backend/login/logout', 'backend/login::logout');
 
-$routes->get('/dashboard', 'backend/dashboard::index');
-$routes->get('backend/dashboard', 'backend/dashboard::index');
+$routes->get('/block', 'backend/login::block');
+$routes->get('/backend/login/block', 'backend/login::block');
 
+$routes->get('/dashboard', 'backend/dashboard::index', ['filter' => 'akseslogin']);
+$routes->get('/backend/dashboard', 'backend/dashboard::index', ['filter' => 'akseslogin']);
+
+$routes->get('/menu', 'backend/menu::index', ['filter' => 'akseslogin']);
+$routes->get('/backend/menu', 'backend/menu::index', ['filter' => 'akseslogin']);
+$routes->post('/menu/savemenu', 'backend/menu::savemenu', ['filter' => 'akseslogin']);
+$routes->post('/backend/menu/savemenu', 'backend/menu::savemenu', ['filter' => 'akseslogin']);
 
 /**
  * --------------------------------------------------------------------
