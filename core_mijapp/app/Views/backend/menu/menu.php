@@ -27,25 +27,25 @@
                                     <div class="form-group row">
                                         <label for="menu" class="col-sm-2 col-form-label">Menu</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="menu" name="menu">
+                                            <input type="text" class="form-control" name="menu">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="icon" class="col-sm-2 col-form-label">Icon</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="icon" name="icon">
+                                            <input type="text" class="form-control" name="icon">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="url" class="col-sm-2 col-form-label">Url</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="url" name="url">
+                                            <input type="text" class="form-control" name="url">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="sort" class="col-sm-2 col-form-label">Sort</label>
                                         <div class="col-sm-2">
-                                            <input type="text" class="form-control" id="sort" name="sort">
+                                            <input type="text" class="form-control" name="sort">
                                         </div>
                                     </div>
 
@@ -123,25 +123,25 @@
                                                     <div class="form-group row">
                                                         <label for="menu" class="col-sm-2 col-form-label">Menu</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="menu" name="menu" placeholder="Nama Menu" value="<?= $menu['menu']; ?>">
+                                                            <input type="text" class="form-control" name="menu" placeholder="Nama Menu" value="<?= $menu['menu']; ?>">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="icon" class="col-sm-2 col-form-label">Icon</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="icon" name="icon" placeholder="Menu Icon" value="<?= $menu['icon']; ?>">
+                                                            <input type="text" class="form-control" name="icon" placeholder="Menu Icon" value="<?= $menu['icon']; ?>">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="url" class="col-sm-2 col-form-label">Url</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="url" name="url" placeholder="Url Menu" value="<?= $menu['url']; ?>">
+                                                            <input type="text" class="form-control" name="url" placeholder="Url Menu" value="<?= $menu['url']; ?>">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="menu" class="col-sm-2 col-form-label">Sort</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="sort" name="sort" placeholder="Sort Menu" value="<?= $menu['sort']; ?>">
+                                                            <input type="text" class="form-control" name="sort" placeholder="Sort Menu" value="<?= $menu['sort']; ?>">
                                                         </div>
                                                     </div>
                                                 </div>

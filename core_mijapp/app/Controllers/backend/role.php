@@ -4,6 +4,8 @@ namespace App\Controllers\backend;
 
 use App\Models\backend\KaryawanModel;
 use App\Models\backend\RoleModel;
+use App\Models\backend\MenuModel;
+use App\Models\backend\RoleAksesModel;
 use CodeIgniter\Controller;
 
 
@@ -12,12 +14,15 @@ class Role extends Controller
 
     protected $karyawanModel;
     protected $roleModel;
+    protected $menuModel;
 
     public function __construct()
     {
-        helper(['form', 'url']);
+        helper(['form', 'url', 'fisi']);
         $this->karyawanModel = new KaryawanModel();
         $this->roleModel = new RoleModel();
+        $this->menuModel = new MenuModel();
+        $this->roleAksesModel = new RoleAksesModel();
     }
 
     // controller role
@@ -135,5 +140,39 @@ class Role extends Controller
     public function deleterole($id)
     {
         $this->roleModel->where('id', $id)->delete();
+    }
+
+    // controller Role Akses
+    public function roleakses($role_kode)
+    {
+        $cekuser = $this->karyawanModel->where('username', session('username'))->get()->getRowArray();
+        $menu = $this->menuModel->orderBy('sort', 'asc')->findAll();
+
+        $userakses = $this->roleAksesModel->cekakses($role_kode);
+        // $member = $this->roleAksesModel->cekmember($role_kode);
+        $member = $this->roleModel->where('role_kode', $role_kode)->get()->getRowArray();
+        // dd($member);
+
+        $data = [
+            'title' => 'Role Akses',
+            'user' => $cekuser,
+            'menu' => $menu,
+            'userakses' => $userakses,
+            'member' => $member
+        ];
+
+        echo view('backend/layout/header_admin', $data);
+        echo view('backend/role/akses', $data);
+        echo view('backend/layout/footer_admin');
+    }
+
+    public function gantiakses()
+    {
+        $menu_id = $this->request->getPost('menuId');
+        $role_kode = $this->request->getPost('roleKode');
+
+        $this->roleAksesModel->gantiakses($role_kode, $menu_id);
+
+        session()->setFlashdata('pesan', 'Akses Berubah');
     }
 }

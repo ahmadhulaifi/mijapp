@@ -75,6 +75,11 @@ $routes->post('/role/editrole/(:num)', 'backend\role::editrole/$1', ['filter' =>
 $routes->post('/backend/role/editrole/(:num)', 'backend\role::editrole/$1', ['filter' => 'akseslogin']);
 $routes->delete('/backend/role/deleterole/(:num)', 'backend\role::deleterole/$1', ['filter' => 'akseslogin']);
 $routes->delete('/role/deleterole/(:num)', 'backend\role::deleterole/$1', ['filter' => 'akseslogin']);
+
+$routes->get('/role/roleakses/(:any)', 'backend\role::roleakses/$1', ['filter' => 'akseslogin']);
+$routes->get('/backend/role/roleakses/(:any)', 'backend\role::roleakses/$1', ['filter' => 'akseslogin']);
+$routes->post('/role/gantiakses', 'backend\role::gantiakses', ['filter' => 'akseslogin']);
+$routes->post('/backend/role/gantiakses', 'backend\role::gantiakses', ['filter' => 'akseslogin']);
 /**
  * --------------------------------------------------------------------
  * Additional Routing

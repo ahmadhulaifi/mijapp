@@ -29,8 +29,8 @@
 <!-- Sparkline -->
 <script src="<?= base_url(); ?>/asset/plugins/sparklines/sparkline.js"></script>
 <!-- JQVMap -->
-<script src="<?= base_url(); ?>/asset/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?= base_url(); ?>/asset/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- <script src="<?= base_url(); ?>/asset/plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="<?= base_url(); ?>/asset/plugins/jqvmap/maps/jquery.vmap.usa.js"></script> -->
 <!-- jQuery Knob Chart -->
 <script src="<?= base_url(); ?>/asset/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
@@ -166,8 +166,24 @@
 
                 }
             })
-
         })
+
+        $('.form-check-input.akses').on('click', function() {
+            let menuId = $(this).data('menu');
+            let roleKode = $(this).data('role');
+
+            $.ajax({
+                url: "<?= base_url('role/gantiakses'); ?>",
+                type: "post",
+                data: {
+                    menuId: menuId,
+                    roleKode: roleKode
+                },
+                success: function() {
+                    document.location.href = "<?= base_url('/role/roleakses'); ?>" + "/" + roleKode;
+                }
+            });
+        });
 
     });
 </script>

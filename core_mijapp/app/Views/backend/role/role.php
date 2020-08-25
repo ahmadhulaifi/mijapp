@@ -94,7 +94,7 @@
                                     <td><?= $role['role']; ?></td>
                                     <td><?= $role['sort']; ?></td>
                                     <td>
-                                        <a href="<?= base_url('role/roleakses'); ?>/<?= $role['id']; ?>" class="badge badge-warning"><i class="fas fa-fw fa-sign-in-alt"></i></a>
+                                        <a href="<?= base_url('role/roleakses'); ?>/<?= $role['role_kode']; ?>" class="badge badge-warning"><i class="fas fa-fw fa-sign-in-alt"></i></a>
 
                                         <?php if ($role['role_kode'] != 'ADMIN') : ?>
                                             <a href="" class="badge badge-info" data-toggle="modal" data-target="#editRoleModal<?= $role['id']; ?>"><i class="far fa-fw fa-edit"></i></a>
