@@ -1,3 +1,6 @@
+<?= $this->extend('backend/layout/template_admin'); ?>
+
+<?= $this->section('content'); ?>
 <!-- /.content-header -->
 
 <!-- Main content -->
@@ -58,3 +61,27 @@
 <!-- /.content -->
 <!-- /.content-wrapper -->
 </div>
+
+
+<script>
+    $(document).ready(function() {
+        // role akses
+        $('.form-check-input.akses').on('click', function() {
+            let menuId = $(this).data('menu');
+            let roleKode = $(this).data('role');
+
+            $.ajax({
+                url: "<?= base_url('role/gantiakses'); ?>",
+                type: "post",
+                data: {
+                    menuId: menuId,
+                    roleKode: roleKode
+                },
+                success: function() {
+                    document.location.href = "<?= base_url('/role/roleakses'); ?>" + "/" + roleKode;
+                }
+            });
+        });
+    });
+</script>
+<?= $this->endSection(); ?>

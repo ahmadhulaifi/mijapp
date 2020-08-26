@@ -18,7 +18,7 @@ class Role extends Controller
 
     public function __construct()
     {
-        helper(['form', 'url', 'fisi']);
+        helper('fisi');
         $this->karyawanModel = new KaryawanModel();
         $this->roleModel = new RoleModel();
         $this->menuModel = new MenuModel();
@@ -39,9 +39,7 @@ class Role extends Controller
             'validation' => \Config\Services::validation()
         ];
 
-        echo view('backend/layout/header_admin', $data);
-        echo view('backend/role/role', $data);
-        echo view('backend/layout/footer_admin');
+        return view('backend/role/role', $data);
     }
 
 
@@ -161,9 +159,7 @@ class Role extends Controller
             'member' => $member
         ];
 
-        echo view('backend/layout/header_admin', $data);
-        echo view('backend/role/akses', $data);
-        echo view('backend/layout/footer_admin');
+        return view('backend/role/akses', $data);
     }
 
     public function gantiakses()

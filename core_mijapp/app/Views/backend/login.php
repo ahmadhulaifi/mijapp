@@ -1,3 +1,7 @@
+<?= $this->extend('backend/layout/template_login'); ?>
+
+<?= $this->section('content'); ?>
+
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
@@ -52,3 +56,65 @@
         </div>
     </div>
 </div>
+
+<script>
+    let input = $('.validate-input .input100');
+    $(document).ready(function() {
+        $('#loginkaryawan').on('submit', function() {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: $(this).serialize(),
+                url: '<?= base_url(); ?>/ceklogin',
+                success: function(data) {
+                    if (data.success == true) {
+                        if (data.responce == 'not') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Username / Password anda tidak sesuai'
+                            })
+                        } else {
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Kamu berhasil login',
+                                showConfirmButton: false,
+                                timer: 5000
+                            })
+                            window.location = '<?= base_url('/dashboard'); ?>'
+                            // alert('berhasil');
+                        }
+                    } else {
+                        if (data.validation['username'] !== '') {
+                            showValidate('#username', data.validation['username']);
+                        }
+                        if (data.validation['password'] !== '') {
+                            showValidate('#password', data.validation['password']);
+
+                        }
+                    }
+                }
+            });
+            return false;
+        });
+    });
+
+    $('.validate-form .input100').each(function() {
+        $(this).focus(function() {
+            hideValidate(this);
+        });
+    });
+
+    function showValidate(input, param) {
+        let thisAlert = $(input).parent();
+        $(thisAlert).addClass('alert-validate');
+        $(input).parent().attr("data-validate", param);
+    }
+
+    function hideValidate(input) {
+        var thisAlert = $(input).parent();
+        $(thisAlert).removeClass('alert-validate');
+    }
+</script>
+<?= $this->endSection(); ?>

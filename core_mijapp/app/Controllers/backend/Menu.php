@@ -15,7 +15,7 @@ class Menu extends Controller
     protected $submenuModel;
     public function __construct()
     {
-        helper(['form', 'url']);
+
         $this->karyawanModel = new KaryawanModel();
         $this->menuModel = new MenuModel();
         $this->submenuModel = new SubmenuModel();
@@ -37,9 +37,7 @@ class Menu extends Controller
             'validation' => \Config\Services::validation()
         ];
 
-        echo view('backend/layout/header_admin', $data);
-        echo view('backend/menu/menu', $data);
-        echo view('backend/layout/footer_admin');
+        return view('backend/menu/menu', $data);
     }
 
     public function savemenu()
@@ -171,9 +169,7 @@ class Menu extends Controller
             'validation' => \Config\Services::validation()
         ];
 
-        echo view('backend/layout/header_admin', $data);
-        echo view('backend/menu/submenu', $data);
-        echo view('backend/layout/footer_admin');
+        return view('backend/menu/submenu', $data);
     }
 
     public function savesubmenu()

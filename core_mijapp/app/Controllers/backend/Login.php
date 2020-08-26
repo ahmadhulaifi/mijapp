@@ -20,7 +20,6 @@ class Login extends Controller
 
     public function __construct()
     {
-        helper(['form', 'url']);
         $this->loginModel = new LoginModel();
         $this->karyawanModel = new KaryawanModel();
         $this->menuModel = new MenuModel();
@@ -34,9 +33,7 @@ class Login extends Controller
             'title' => 'Login Karyawan',
             'validation' => \Config\Services::validation()
         ];
-        echo view('backend/layout/header_login', $data);
-        echo view('backend/login', $data);
-        echo view('backend/layout/footer_login', $data);
+        return view('backend/login', $data);
     }
 
     public function ceklogin()

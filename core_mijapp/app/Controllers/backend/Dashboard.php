@@ -15,7 +15,6 @@ class Dashboard extends Controller
     protected $submenuModel;
     public function __construct()
     {
-        helper(['form', 'url']);
         $this->karyawanModel = new KaryawanModel();
         $this->menuModel = new MenuModel();
         $this->submenuModel = new SubmenuModel();
@@ -36,8 +35,6 @@ class Dashboard extends Controller
             'submenu' => $submenu
         ];
 
-        echo view('backend/layout/header_admin', $data);
-        echo view('backend/dashboard', $data);
-        echo view('backend/layout/footer_admin');
+        return view('backend/dashboard', $data);
     }
 }

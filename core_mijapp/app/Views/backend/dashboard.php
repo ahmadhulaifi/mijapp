@@ -1,3 +1,6 @@
+<?= $this->extend('backend/layout/template_admin'); ?>
+
+<?= $this->section('content'); ?>
 <!-- /.content-header -->
 
 <!-- Main content -->
@@ -77,3 +80,4 @@
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<?= $this->endSection(); ?>

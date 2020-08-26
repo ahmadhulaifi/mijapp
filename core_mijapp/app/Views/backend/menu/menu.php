@@ -1,3 +1,7 @@
+<?= $this->extend('backend/layout/template_admin'); ?>
+
+<?= $this->section('content'); ?>
+
 <!-- /.content-header -->
 
 <!-- Main content -->
@@ -169,3 +173,46 @@
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
+
+<script>
+    $(document).ready(function() {
+        // delete menu
+        $(".deletemenu").click(function() {
+            event.preventDefault()
+            let idmenu = $(this).parents("tr").attr("id");
+
+            Swal.fire({
+                title: 'Apa kamu yakin untuk menghapusnya?',
+                text: "kamu tidak akan bisa mengembalikannya",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus saja!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '<?= base_url('/menu/deletemenu'); ?>/' + idmenu,
+                        type: 'DELETE',
+                        error: function() {
+                            alert('Something is wrong');
+                        },
+                        success: function(data) {
+                            $("#" + idmenu).remove();
+                            Swal.fire(
+                                'Deleted!',
+                                'File sudah terdelete.',
+                                'success'
+                            )
+                        }
+                    });
+
+                }
+            })
+
+        })
+    });
+</script>
+
+<?= $this->endSection(); ?>
