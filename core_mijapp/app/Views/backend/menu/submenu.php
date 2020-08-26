@@ -104,8 +104,8 @@
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead-dark">
+                    <table class="table table-striped" id="tableSubMenu">
+                        <thead class="bg-success">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Submenu</th>
@@ -234,6 +234,16 @@
 
 <script>
     $(document).ready(function() {
+
+        $('#tableSubMenu').DataTable({
+            responsive: true,
+            dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            buttons: [
+                'copy', 'excel', 'pdf'
+            ]
+        });
 
         // delete submenu
         $(".deletesubmenu").click(function() {

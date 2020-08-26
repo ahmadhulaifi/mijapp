@@ -84,8 +84,8 @@
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead-dark">
+                    <table class="table table-striped" id="tableMenu">
+                        <thead class="bg-success">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Menu</th>
@@ -177,6 +177,18 @@
 
 <script>
     $(document).ready(function() {
+
+
+        $('#tableMenu').DataTable({
+            responsive: true,
+            dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            buttons: [
+                'copy', 'excel', 'pdf'
+            ]
+        });
+
         // delete menu
         $(".deletemenu").click(function() {
             event.preventDefault()

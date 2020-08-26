@@ -79,8 +79,8 @@
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead-dark">
+                    <table class="table table-striped" id="tableRole">
+                        <thead class="bg-success">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Kode Role</th>
@@ -168,6 +168,25 @@
 
 <script>
     $(document).ready(function() {
+
+        $('#tableRole').DataTable({
+            responsive: true,
+            dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            buttons: [
+                'copy', 'excel', 'pdf'
+            ]
+        });
+
+        // let table = $('#tableRole').DataTable();
+
+        // new $.fn.dataTable.Buttons(table, {
+        //     buttons: [
+        //         'copy', 'excel', 'pdf'
+        //     ]
+        // });
+
         // delete role
         $(".deleterole").click(function() {
             event.preventDefault()
