@@ -1,52 +1,54 @@
 <tbody>
     <?php
     $i = 1;
-    foreach ($role as $role) : ?>
-        <tr id="<?= $role['id']; ?>">
+    foreach ($menu as $menu) : ?>
+        <tr id="<?= $menu['id']; ?>">
             <th scope="row"><?= $i; ?></th>
-            <td><?= $role['role_kode']; ?></td>
-            <td><?= $role['role']; ?></td>
-            <td><?= $role['sort']; ?></td>
+            <td><?= $menu['menu']; ?></td>
+            <td><i class="<?= $menu['icon']; ?>"></i></td>
+            <td><?= $menu['url']; ?></td>
+            <td><?= $menu['sort']; ?></td>
             <td>
-                <a href="<?= base_url('role/roleakses'); ?>/<?= $role['role_kode']; ?>" class="badge badge-warning"><i class="fas fa-fw fa-sign-in-alt"></i></a>
-
-                <?php if ($role['role_kode'] != 'ADMIN') : ?>
-                    <a href="" class="badge badge-info" data-toggle="modal" data-target="#editRoleModal<?= $role['id']; ?>"><i class="far fa-fw fa-edit"></i></a>
-                    <a type="submit" href="" class="badge badge-danger deleterole"><i class="fas fa-fw fa-trash-alt"></i></a>
-                <?php endif; ?>
-
+                <a href="" class="badge badge-info" data-toggle="modal" data-target="#editMenuModal<?= $menu['id']; ?>"><i class="far fa-fw fa-edit"></i></a>
+                <a type="submit" href="" class="badge badge-danger deletemenu"><i class="fas fa-fw fa-trash-alt"></i></a>
             </td>
         </tr>
         <?php $i++; ?>
         <!-- Modal Edit menu -->
-        <div class="modal fade" id="editRoleModal<?= $role['id']; ?>" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editMenuModal<?= $menu['id']; ?>" tabindex="-1" aria-labelledby="editMenuModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
+                        <h5 class="modal-title" id="newMenuModalLabel">Edit Menu</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="<?= base_url('/role/editrole'); ?>/<?= $role['id']; ?>" method="POST">
+                    <form action="<?= base_url('/menu/editmenu'); ?>/<?= $menu['id']; ?>" method="POST">
                         <?= csrf_field(); ?>
                         <div class="modal-body">
                             <div class="form-group row">
-                                <label for="menu" class="col-sm-2 col-form-label">Kode Role</label>
+                                <label for="menu" class="col-sm-2 col-form-label">Menu</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="role_kode" placeholder="Kode Role" value="<?= $role['role_kode']; ?>">
+                                    <input type="text" class="form-control" name="menu" placeholder="Nama Menu" value="<?= $menu['menu']; ?>">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="icon" class="col-sm-2 col-form-label">Role</label>
+                                <label for="icon" class="col-sm-2 col-form-label">Icon</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="role" placeholder="Role" value="<?= $role['role']; ?>">
+                                    <input type="text" class="form-control" name="icon" placeholder="Menu Icon" value="<?= $menu['icon']; ?>">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="url" class="col-sm-2 col-form-label">Url</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="url" placeholder="Url Menu" value="<?= $menu['url']; ?>">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="menu" class="col-sm-2 col-form-label">Sort</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="sort" placeholder="Sort Menu" value="<?= $role['sort']; ?>">
+                                    <input type="text" class="form-control" name="sort" placeholder="Sort Menu" value="<?= $menu['sort']; ?>">
                                 </div>
                             </div>
                         </div>

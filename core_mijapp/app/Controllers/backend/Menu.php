@@ -6,16 +6,16 @@ use App\Models\backend\KaryawanModel;
 use App\Models\backend\MenuModel;
 use App\Models\backend\SubmenuModel;
 use CodeIgniter\Controller;
-
+use CodeIgniter\HTTP\Request;
 
 class Menu extends Controller
 {
     protected $karyawanModel;
     protected $menuModel;
     protected $submenuModel;
+
     public function __construct()
     {
-
         $this->karyawanModel = new KaryawanModel();
         $this->menuModel = new MenuModel();
         $this->submenuModel = new SubmenuModel();
@@ -25,131 +25,183 @@ class Menu extends Controller
     public function index()
     {
         $cekuser = $this->karyawanModel->where('username', session('username'))->get()->getRowArray();
-        $menu = $this->menuModel->orderBy('sort', 'asc')->findAll();
-        $submenu = $this->submenuModel->orderBy('menu_id', 'asc')->findAll();
+
+        // $submenu = $this->submenuModel->orderBy('menu_id', 'asc')->findAll();
         // dd($submenu);
 
         $data = [
             'title' => 'Menu Management',
             'user' => $cekuser,
-            'menu' => $menu,
-            'submenu' => $submenu,
             'validation' => \Config\Services::validation()
         ];
 
         return view('backend/menu/menu', $data);
     }
 
-    public function savemenu()
+    public function fetchmenu()
     {
-        if (!$this->validate([
-            'menu' => [
-                'rules' => 'required|is_unique[user_menu.menu]',
-                'errors' => [
-                    'required' => 'Menu tidak boleh kosong',
-                    'is_unique' => 'Data Menu sudah ada'
-                ]
-            ],
-            'icon' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Icon tidak boleh kosong'
-                ]
-            ],
-            'url' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Url tidak boleh kosong'
-                ]
-            ],
-            'sort' => [
-                'rules' => 'required|numeric',
-                'errors' => [
-                    'required' => 'Sort tidak boleh kosong',
-                    'numeric' => 'Sort harus berupa angka'
-                ]
-            ]
-        ])) {
-            $validation = \Config\Services::validation();
-
-            return redirect()->to(base_url('/menu'))->withInput()->with('validation', $validation);
+        if ($this->request->isAJAX()) {
+            if ($menu = $this->menuModel->orderBy('sort', 'asc')->findAll()) {
+                $data = [
+                    'responce' => 'success',
+                    'menu' => $menu
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch menu'
+                ];
+            }
+            echo json_encode($data);
         } else {
-            // validasi sukses
-            $menu = $this->request->getVar('menu');
-            $icon = $this->request->getVar('icon');
-            $url = $this->request->getVar('url');
-            $sort = $this->request->getVar('sort');
-
-            $insert = [
-                'menu' => $menu,
-                'icon' => $icon,
-                'url' => $url,
-                'sort' => $sort
-            ];
-
-
-            session()->setFlashdata('pesan', 'Menu Berhasil ditambah');
-            $this->menuModel->insert($insert);
-            return redirect()->to(base_url('/menu'));
+            echo "No direct script access allowed";
         }
     }
 
-    public function editmenu($id)
+    public function savemenu()
     {
-        if (!$this->validate([
-            'menu' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Menu tidak boleh kosong'
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'menu' => [
+                    'rules' => 'required|is_unique[user_menu.menu]',
+                    'errors' => [
+                        'required' => 'Menu tidak boleh kosong',
+                        'is_unique' => 'Data Menu sudah ada'
+                    ]
+                ],
+                'icon' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Icon tidak boleh kosong'
+                    ]
+                ],
+                'url' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Url tidak boleh kosong'
+                    ]
+                ],
+                'sort' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Sort tidak boleh kosong',
+                        'numeric' => 'Sort harus berupa angka'
+                    ]
                 ]
-            ],
-            'icon' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Icon tidak boleh kosong'
-                ]
-            ],
-            'url' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Url tidak boleh kosong'
-                ]
-            ],
-            'sort' => [
-                'rules' => 'required|numeric',
-                'errors' => [
-                    'required' => 'Sort tidak boleh kosong',
-                    'numeric' => 'Sort harus berupa angka'
-                ]
-            ]
-        ])) {
-            $validation = \Config\Services::validation();
+            ])) {
+                $validation = \Config\Services::validation();
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $insert = $this->request->getVar();
 
-            return redirect()->to(base_url('/menu'))->withInput()->with('validation', $validation);
+                $this->menuModel->insert($insert);
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Menu berhasil ditambah'
+                ];
+            }
+            echo json_encode($data);
         } else {
-            // validasi sukses
-            $menu = $this->request->getVar('menu');
-            $icon = $this->request->getVar('icon');
-            $url = $this->request->getVar('url');
-            $sort = $this->request->getVar('sort');
-            $update = [
-                'menu' => $menu,
-                'icon' => $icon,
-                'url' => $url,
-                'sort' => $sort
-            ];
+            echo "No direct script access allowed";
+        }
+    }
 
+    public function edit()
+    {
+        if ($this->request->isAJAX()) {
+            $idemenu = $this->request->getVar('idmenu');
+            if ($menu = $this->menuModel->where('id', $idemenu)->get()->getRowArray()) {
+                $data = [
+                    'responce' => 'success',
+                    'menu' => $menu
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal memunculkan modal edit data'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
 
-            session()->setFlashdata('pesan', 'Menu Berhasil diupdate');
-            $this->menuModel->update($id, $update);
-            return redirect()->to(base_url('/menu'));
+    public function editmenu()
+    {
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'menu' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Menu tidak boleh kosong'
+                    ]
+                ],
+                'icon' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Icon tidak boleh kosong'
+                    ]
+                ],
+                'url' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Url tidak boleh kosong'
+                    ]
+                ],
+                'sort' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Sort tidak boleh kosong',
+                        'numeric' => 'Sort harus berupa angka'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $idemenu = $this->request->getVar('idmenu');
+                $menu = $this->request->getVar('menu');
+                $icon = $this->request->getVar('icon');
+                $url = $this->request->getVar('url');
+                $sort = $this->request->getVar('sort');
+                $update = [
+                    'menu' => $menu,
+                    'icon' => $icon,
+                    'url' => $url,
+                    'sort' => $sort
+                ];
+
+                $this->menuModel->update($idemenu, $update);
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data berhasil diupdate'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
         }
     }
 
     public function deletemenu($id)
     {
-        $this->submenuModel->where('menu_id', $id)->delete();
-        $this->menuModel->where('id', $id)->delete();
+        if ($this->request->isAJAX()) {
+            $this->submenuModel->where('menu_id', $id)->delete();
+            $this->menuModel->where('id', $id)->delete();
+        } else {
+            echo "No direct script access allowed";
+        }
     }
 
 

@@ -48,16 +48,23 @@ $routes->get('/backend/dashboard', 'backend/dashboard::index', ['filter' => 'aks
 
 $routes->get('/menu', 'backend/menu::index', ['filter' => 'akseslogin']);
 $routes->get('/backend/menu', 'backend/menu::index', ['filter' => 'akseslogin']);
-$routes->post('/menu/savemenu', 'backend/menu::savemenu', ['filter' => 'akseslogin']);
-$routes->post('/backend/menu/savemenu', 'backend/menu::savemenu', ['filter' => 'akseslogin']);
+$routes->post('/menu/fetchmenu', 'backend/menu::fetchmenu', ['filter' => 'akseslogin']);
+$routes->post('/backend/menu/fetchmenu', 'backend/menu::fetchmenu', ['filter' => 'akseslogin']);
 
-$routes->post('/menu/editmenu/(:num)', 'backend\menu::editmenu/$1', ['filter' => 'akseslogin']);
-$routes->post('/backend/menu/editmenu/(:num)', 'backend\menu::editmenu/$1', ['filter' => 'akseslogin']);
+
+$routes->post('/menu/savemenu', 'backend\menu::savemenu', ['filter' => 'akseslogin']);
+$routes->post('/backend/menu/savemenu', 'backend\menu::savemenu', ['filter' => 'akseslogin']);
+$routes->post('/menu/edit', 'backend\menu::edit', ['filter' => 'akseslogin']);
+$routes->post('/backend/menu/edit', 'backend\menu::edit', ['filter' => 'akseslogin']);
+
+$routes->post('/menu/editmenu', 'backend\menu::editmenu', ['filter' => 'akseslogin']);
+$routes->post('/backend/menu/editmenu', 'backend\menu::editmenu', ['filter' => 'akseslogin']);
 $routes->delete('/backend/menu/deletemenu/(:num)', 'backend\menu::deletemenu/$1', ['filter' => 'akseslogin']);
 $routes->delete('/menu/deletemenu/(:num)', 'backend\menu::deletemenu/$1', ['filter' => 'akseslogin']);
 
 $routes->get('/menu/submenu', 'backend/menu::submenu', ['filter' => 'akseslogin']);
 $routes->get('/backend/menu/submenu', 'backend/menu::submenu', ['filter' => 'akseslogin']);
+
 $routes->post('/menu/savesubmenu', 'backend/menu::savesubmenu', ['filter' => 'akseslogin']);
 $routes->post('/backend/menu/savesubmenu', 'backend/menu::savesubmenu', ['filter' => 'akseslogin']);
 

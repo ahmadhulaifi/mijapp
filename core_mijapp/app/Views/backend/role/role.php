@@ -211,6 +211,7 @@
                         fetchRole();
                         toastr["success"](data.pesan);
                     } else {
+                        console.log(data);
                         toastr["error"](data.pesan);
                     }
                 }
