@@ -210,160 +210,227 @@ class Menu extends Controller
     {
         $cekuser = $this->karyawanModel->where('username', session('username'))->get()->getRowArray();
         $menu = $this->menuModel->findAll();
-        $submenu = $this->submenuModel->orderBy('menu_id', 'asc')->findAll();
         // dd($menu);
 
         $data = [
             'title' => 'Submenu Management',
             'user' => $cekuser,
             'menu' => $menu,
-            'submenu' => $submenu,
             'validation' => \Config\Services::validation()
         ];
 
         return view('backend/menu/submenu', $data);
     }
 
-    public function savesubmenu()
+    public function fetchsubmenu()
     {
-        if (!$this->validate([
-            'submenu' => [
-                'rules' => 'required|is_unique[user_sub_menu.sub_menu]',
-                'errors' => [
-                    'required' => 'Sub Menu tidak boleh kosong',
-                    'is_unique' => 'Data Sub Menu sudah ada'
-                ]
-            ],
-            'menu_id' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Menu harus dipilih'
-                ]
-            ],
-            'icon' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Icon tidak boleh kosong'
-                ]
-            ],
-            'url' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Url tidak boleh kosong'
-                ]
-            ],
-            'sort' => [
-                'rules' => 'required|numeric',
-                'errors' => [
-                    'required' => 'Sort tidak boleh kosong',
-                    'numeric' => 'Sort harus berupa angka'
-                ]
-            ]
-        ])) {
-            $validation = \Config\Services::validation();
+        if ($this->request->isAJAX()) {
 
-            return redirect()->to(base_url('/menu/submenu'))->withInput()->with('validation', $validation);
-        } else {
-            // validasi sukses
-            $submenu = $this->request->getVar('submenu');
-            $menuid = $this->request->getVar('menu_id');
-            $icon = $this->request->getVar('icon');
-            $url = $this->request->getVar('url');
-            $sort = $this->request->getVar('sort');
-
-            if ($this->request->getVar('is_active') == null) {
-                $active = 0;
+            if ($submenu = $this->submenuModel->getsubmenu()) {
+                $data = [
+                    'responce' => 'success',
+                    'submenu' => $submenu
+                ];
             } else {
-                $active = 1;
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch data submenu'
+                ];
             }
-
-            $insert = [
-                'sub_menu' => $submenu,
-                'menu_id' => $menuid,
-                'icon' => $icon,
-                'url' => $url,
-                'sort' => $sort,
-                'is_active' => $active
-            ];
-
-
-            session()->setFlashdata('pesan', 'Sub Menu Berhasil ditambah');
-            $this->submenuModel->insert($insert);
-            return redirect()->to(base_url('/menu/submenu'));
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
         }
     }
 
-    public function editsubmenu($id)
+    public function savesubmenu()
     {
-        if (!$this->validate([
-            'submenu' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Sub Menu tidak boleh kosong'
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'submenu' => [
+                    'rules' => 'required|is_unique[user_sub_menu.sub_menu]',
+                    'errors' => [
+                        'required' => 'Sub Menu tidak boleh kosong',
+                        'is_unique' => 'Data Sub Menu sudah ada'
+                    ]
+                ],
+                'menu_id' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Menu harus dipilih'
+                    ]
+                ],
+                'icon' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Icon tidak boleh kosong'
+                    ]
+                ],
+                'url' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Url tidak boleh kosong'
+                    ]
+                ],
+                'sort' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Sort tidak boleh kosong',
+                        'numeric' => 'Sort harus berupa angka'
+                    ]
                 ]
-            ],
-            'menu_id' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Menu harus dipilih'
-                ]
-            ],
-            'icon' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Icon tidak boleh kosong'
-                ]
-            ],
-            'url' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Url tidak boleh kosong'
-                ]
-            ],
-            'sort' => [
-                'rules' => 'required|numeric',
-                'errors' => [
-                    'required' => 'Sort tidak boleh kosong',
-                    'numeric' => 'Sort harus berupa angka'
-                ]
-            ]
-        ])) {
-            $validation = \Config\Services::validation();
+            ])) {
+                $validation = \Config\Services::validation();
 
-            return redirect()->to(base_url('/menu/submenu'))->withInput()->with('validation', $validation);
-        } else {
-            // validasi sukses
-            $submenu = $this->request->getVar('submenu');
-            $menuid = $this->request->getVar('menu_id');
-            $icon = $this->request->getVar('icon');
-            $url = $this->request->getVar('url');
-            $sort = $this->request->getVar('sort');
-
-            if ($this->request->getVar('is_active') == null) {
-                $active = 0;
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
             } else {
-                $active = 1;
+                // validasi sukses
+                $submenu = $this->request->getVar('submenu');
+                $menuid = $this->request->getVar('menu_id');
+                $icon = $this->request->getVar('icon');
+                $url = $this->request->getVar('url');
+                $sort = $this->request->getVar('sort');
+
+                if ($this->request->getVar('is_active') == null) {
+                    $active = 0;
+                } else {
+                    $active = 1;
+                }
+
+                $insert = [
+                    'sub_menu' => $submenu,
+                    'menu_id' => $menuid,
+                    'icon' => $icon,
+                    'url' => $url,
+                    'sort' => $sort,
+                    'is_active' => $active
+                ];
+
+                $this->submenuModel->insert($insert);
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Sub Menu berhasil ditambah'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function editsub()
+    {
+        if ($this->request->isAJAX()) {
+            $idsubmenu = $this->request->getVar('idsubmenu');
+
+            if ($submenu = $this->submenuModel->getmodalsub($idsubmenu)) {
+                $data = [
+                    'responce' => 'success',
+                    'submenu' => $submenu
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal edit modal submenu'
+                ];
             }
 
-            // dd($this->request->getVar('is_active'));
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
 
-            $update = [
-                'sub_menu' => $submenu,
-                'menu_id' => $menuid,
-                'icon' => $icon,
-                'url' => $url,
-                'sort' => $sort,
-                'is_active' => $active
-            ];
-            session()->setFlashdata('pesan', 'Sub Menu Berhasil diupdate');
-            $this->submenuModel->update($id, $update);
-            return redirect()->to(base_url('/menu/submenu'));
+    public function editsubmenu()
+    {
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'submenu' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Sub Menu tidak boleh kosong'
+                    ]
+                ],
+                'menu_id' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Menu harus dipilih'
+                    ]
+                ],
+                'icon' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Icon tidak boleh kosong'
+                    ]
+                ],
+                'url' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Url tidak boleh kosong'
+                    ]
+                ],
+                'sort' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Sort tidak boleh kosong',
+                        'numeric' => 'Sort harus berupa angka'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $idsubmenu = $this->request->getVar('idsubmenu');
+                $submenu = $this->request->getVar('submenu');
+                $menuid = $this->request->getVar('menu_id');
+                $icon = $this->request->getVar('icon');
+                $url = $this->request->getVar('url');
+                $sort = $this->request->getVar('sort');
+
+                if ($this->request->getVar('is_active') == null) {
+                    $active = 0;
+                } else {
+                    $active = 1;
+                }
+
+                // dd($this->request->getVar('is_active'));
+
+                $update = [
+                    'sub_menu' => $submenu,
+                    'menu_id' => $menuid,
+                    'icon' => $icon,
+                    'url' => $url,
+                    'sort' => $sort,
+                    'is_active' => $active
+                ];
+
+                $this->submenuModel->update($idsubmenu, $update);
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data sub menu berhasil diupdate'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
         }
     }
 
     public function deletesubmenu($id)
     {
-
-        $this->submenuModel->where('id', $id)->delete();
+        if ($this->request->isAJAX()) {
+            $this->submenuModel->where('id', $id)->delete();
+        } else {
+            echo "No direct script access allowed";
+        }
     }
 }

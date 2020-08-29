@@ -64,12 +64,16 @@ $routes->delete('/menu/deletemenu/(:num)', 'backend\menu::deletemenu/$1', ['filt
 
 $routes->get('/menu/submenu', 'backend/menu::submenu', ['filter' => 'akseslogin']);
 $routes->get('/backend/menu/submenu', 'backend/menu::submenu', ['filter' => 'akseslogin']);
+$routes->post('/menu/fetchsubmenu', 'backend/menu::fetchsubmenu', ['filter' => 'akseslogin']);
+$routes->post('/backend/menu/fetchsubmenu', 'backend/menu::fetchsubmenu', ['filter' => 'akseslogin']);
 
 $routes->post('/menu/savesubmenu', 'backend/menu::savesubmenu', ['filter' => 'akseslogin']);
 $routes->post('/backend/menu/savesubmenu', 'backend/menu::savesubmenu', ['filter' => 'akseslogin']);
 
-$routes->post('/menu/editsubmenu/(:num)', 'backend\menu::editsubmenu/$1', ['filter' => 'akseslogin']);
-$routes->post('/backend/menu/editsubmenu/(:num)', 'backend\menu::editsubmenu/$1', ['filter' => 'akseslogin']);
+$routes->post('/menu/editsub', 'backend\menu::editsub', ['filter' => 'akseslogin']);
+$routes->post('/backend/menu/editsub', 'backend\menu::editsub', ['filter' => 'akseslogin']);
+$routes->post('/menu/editsubmenu', 'backend\menu::editsubmenu', ['filter' => 'akseslogin']);
+$routes->post('/backend/menu/editsubmenu', 'backend\menu::editsubmenu', ['filter' => 'akseslogin']);
 
 $routes->delete('/backend/menu/deletesubmenu/(:num)', 'backend\menu::deletesubmenu/$1', ['filter' => 'akseslogin']);
 $routes->delete('/menu/deletesubmenu/(:num)', 'backend\menu::deletesubmenu/$1', ['filter' => 'akseslogin']);
