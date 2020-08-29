@@ -69,10 +69,14 @@ $routes->delete('/menu/deletesubmenu/(:num)', 'backend\menu::deletesubmenu/$1', 
 
 $routes->get('/role', 'backend/role::index', ['filter' => 'akseslogin']);
 $routes->get('/backend/role', 'backend/role::index', ['filter' => 'akseslogin']);
+$routes->post('/role/fetchrole', 'backend/role::fetchrole', ['filter' => 'akseslogin']);
+$routes->post('/backend/role/fetchrole', 'backend/role::fetchrole', ['filter' => 'akseslogin']);
 $routes->post('/role/saverole', 'backend/role::saverole', ['filter' => 'akseslogin']);
 $routes->post('/backend/role/saverole', 'backend/role::saverole', ['filter' => 'akseslogin']);
-$routes->post('/role/editrole/(:num)', 'backend\role::editrole/$1', ['filter' => 'akseslogin']);
-$routes->post('/backend/role/editrole/(:num)', 'backend\role::editrole/$1', ['filter' => 'akseslogin']);
+$routes->post('/role/edit', 'backend/role::edit', ['filter' => 'akseslogin']);
+$routes->post('/backend/role/edit', 'backend/role::edit', ['filter' => 'akseslogin']);
+$routes->post('/role/editrole', 'backend\role::editrole', ['filter' => 'akseslogin']);
+$routes->post('/backend/role/editrole', 'backend\role::editrole', ['filter' => 'akseslogin']);
 $routes->delete('/backend/role/deleterole/(:num)', 'backend\role::deleterole/$1', ['filter' => 'akseslogin']);
 $routes->delete('/role/deleterole/(:num)', 'backend\role::deleterole/$1', ['filter' => 'akseslogin']);
 

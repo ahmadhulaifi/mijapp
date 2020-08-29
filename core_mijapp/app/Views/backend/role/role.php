@@ -16,7 +16,7 @@
                     Tambah Role
                 </button>
 
-                <!-- Modal -->
+                <!-- Modal Tambah -->
                 <div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -27,7 +27,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="<?= base_url(); ?>/role/saverole">
+                                <form method="post" action="" id="addrole">
                                     <?= csrf_field(); ?>
                                     <div class="form-group row">
                                         <label for="menu" class="col-sm-2 col-form-label">Kode Role</label>
@@ -61,21 +61,7 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <?php if ($validation->getErrors()) : ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?= $validation->listErrors() ?>
-                    </div>
-                <?php endif; ?>
 
-                <?php if (session()->getFlashdata('pesan')) : ?>
-                    <div class="alert alert-success" role="alert">
-                        <?= session()->getFlashdata('pesan'); ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
@@ -89,74 +75,54 @@
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php
-                            $i = 1;
-                            foreach ($role as $role) : ?>
-                                <tr id="<?= $role['id']; ?>">
-                                    <th scope="row"><?= $i; ?></th>
-                                    <td><?= $role['role_kode']; ?></td>
-                                    <td><?= $role['role']; ?></td>
-                                    <td><?= $role['sort']; ?></td>
-                                    <td>
-                                        <a href="<?= base_url('role/roleakses'); ?>/<?= $role['role_kode']; ?>" class="badge badge-warning"><i class="fas fa-fw fa-sign-in-alt"></i></a>
-
-                                        <?php if ($role['role_kode'] != 'ADMIN') : ?>
-                                            <a href="" class="badge badge-info" data-toggle="modal" data-target="#editRoleModal<?= $role['id']; ?>"><i class="far fa-fw fa-edit"></i></a>
-                                            <a type="submit" href="" class="badge badge-danger deleterole"><i class="fas fa-fw fa-trash-alt"></i></a>
-                                        <?php endif; ?>
-
-                                    </td>
-                                </tr>
-                                <?php $i++; ?>
-                                <!-- Modal Edit menu -->
-                                <div class="modal fade" id="editRoleModal<?= $role['id']; ?>" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <form action="<?= base_url('/role/editrole'); ?>/<?= $role['id']; ?>" method="POST">
-                                                <?= csrf_field(); ?>
-                                                <div class="modal-body">
-                                                    <div class="form-group row">
-                                                        <label for="menu" class="col-sm-2 col-form-label">Kode Role</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control" name="role_kode" placeholder="Kode Role" value="<?= $role['role_kode']; ?>">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="icon" class="col-sm-2 col-form-label">Role</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control" name="role" placeholder="Role" value="<?= $role['role']; ?>">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="menu" class="col-sm-2 col-form-label">Sort</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control" name="sort" placeholder="Sort Menu" value="<?= $role['sort']; ?>">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary">Update</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            <?php endforeach; ?>
-
-                        </tbody>
                     </table>
+
                 </div>
 
 
+            </div>
+        </div>
+
+        <!-- modal edit -->
+        <div class="modal fade" id="editRoleModal" tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="" id="editroleform">
+                            <?= csrf_field(); ?>
+                            <input type="hidden" class="form-control" name="idrole">
+                            <div class="form-group row">
+                                <label for="menu" class="col-sm-2 col-form-label">Kode Role</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="editrole_kode">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="icon" class="col-sm-2 col-form-label">Role</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="editrole">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="sort" class="col-sm-2 col-form-label">Sort</label>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control" name="editsort">
+                                </div>
+                            </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -169,28 +135,96 @@
 <script>
     $(document).ready(function() {
 
-        $('#tableRole').DataTable({
-            responsive: true,
-            dom: "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-            buttons: [
-                'copy', 'excel', 'pdf'
-            ]
+        //fetch role
+        function fetchRole() {
+            $.ajax({
+                url: '<?= base_url(); ?>/role/fetchrole',
+                type: 'post',
+                dataType: 'json',
+                success: function(data) {
+                    // console.log(data);
+                    let i = "1";
+                    $('#tableRole').DataTable({
+                        "data": data.role,
+                        "responsive": true,
+                        "dom": "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
+                            "<'row'<'col-sm-12'tr>>" +
+                            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                        "buttons": [
+                            'copy', 'excel', 'pdf'
+                        ],
+
+                        "columns": [{
+                                "data": null,
+                                "render": function() {
+                                    return a = i++;
+                                }
+                            },
+                            {
+                                "data": "role_kode"
+                            },
+                            {
+                                "data": "role"
+                            },
+                            {
+                                "data": "sort"
+                            },
+                            {
+                                "data": null,
+                                "render": function(data, type, row, meta) {
+                                    let a = '';
+                                    if (`${row.role_kode}` == 'ADMIN') {
+                                        a = `
+                                    <a href="<?= base_url('role/roleakses'); ?>/${row.role_kode}" class="badge badge-warning"><i class="fas fa-fw fa-sign-in-alt"></i></a>
+                                    `
+                                    } else {
+                                        a = `
+                                    <a href="<?= base_url('role/roleakses'); ?>/${row.role_kode}" class="badge badge-warning"><i class="fas fa-fw fa-sign-in-alt"></i></a>
+   
+                                    <a href="" class="badge badge-info editrole" value="${row.id}"><i class="far fa-fw fa-edit"></i></a>
+                                    <a href="" value="${row.id}" class="badge badge-danger deleterole"><i class="fas fa-fw fa-trash-alt"></i></a>`
+                                    };
+
+                                    return a;
+                                }
+                            }
+                        ]
+                    });
+                }
+            });
+        }
+
+        fetchRole();
+
+        // add role
+        $("#addrole").submit(function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '<?= base_url(); ?>/role/saverole',
+                type: 'post',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(data) {
+                    if (data.responce == "success") {
+                        $('#roleModal').modal('hide')
+                        $('#tableRole').DataTable().destroy();
+                        fetchRole();
+                        toastr["success"](data.pesan);
+                    } else {
+                        toastr["error"](data.pesan);
+                    }
+                }
+            });
+
+
         });
 
-        // let table = $('#tableRole').DataTable();
-
-        // new $.fn.dataTable.Buttons(table, {
-        //     buttons: [
-        //         'copy', 'excel', 'pdf'
-        //     ]
-        // });
 
         // delete role
-        $(".deleterole").click(function() {
-            event.preventDefault()
-            let idrole = $(this).parents("tr").attr("id");
+
+        $(document).on("click", ".deleterole", function(e) {
+            e.preventDefault();
+            let idrole = $(this).attr("value");
 
             Swal.fire({
                 title: 'Apa kamu yakin untuk menghapusnya?',
@@ -203,27 +237,73 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: '<?= base_url('/role/deleterole'); ?>/' + idrole,
+                        url: '<?= base_url(); ?>/role/deleterole/' + idrole,
                         type: 'DELETE',
                         error: function() {
                             alert('Something is wrong');
                         },
                         success: function(data) {
-                            $("#" + idrole).remove();
+                            $('#tableRole').DataTable().destroy();
+                            fetchRole();
                             Swal.fire(
                                 'Deleted!',
                                 'File sudah terdelete.',
                                 'success'
                             )
-
                         }
                     });
-
                 }
             })
         })
 
+        // edit role modal
+        $(document).on("click", ".editrole", function(e) {
+            e.preventDefault();
 
+            let edit_id = $(this).attr("value");
+
+            $.ajax({
+                url: '<?= base_url('/role/edit'); ?>',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    edit_id: edit_id
+                },
+                success: function(data) {
+                    // console.log(data)
+                    $('#editRoleModal').modal('show');
+                    $("input[name='idrole']").val(data.posts.id);
+                    $("input[name='editrole_kode']").val(data.posts.role_kode);
+                    $("input[name='editrole']").val(data.posts.role);
+                    $("input[name='editsort']").val(data.posts.sort);
+                }
+            });
+        });
+
+        // edit role
+        $("#editroleform").submit(function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: '<?= base_url(); ?>/role/editrole',
+                type: 'post',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(data) {
+                    // console.log(data);
+                    if (data.responce == "success") {
+                        $('#editRoleModal').modal('hide');
+                        $('#tableRole').DataTable().destroy();
+                        fetchRole();
+                        toastr["success"](data.pesan);
+                    } else {
+                        toastr["error"](data.pesan);
+                    }
+                }
+            });
+
+
+        });
 
 
     });

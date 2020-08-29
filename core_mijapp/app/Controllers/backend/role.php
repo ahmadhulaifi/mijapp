@@ -29,115 +29,175 @@ class Role extends Controller
     public function index()
     {
         $cekuser = $this->karyawanModel->where('username', session('username'))->get()->getRowArray();
-        $role = $this->roleModel->orderBy('sort', 'asc')->findAll();
+
         // dd($role);
 
         $data = [
             'title' => 'Role Akses',
             'user' => $cekuser,
-            'role' => $role,
             'validation' => \Config\Services::validation()
         ];
 
         return view('backend/role/role', $data);
     }
 
-
+    public function fetchrole()
+    {
+        if ($this->request->isAJAX()) {
+            if ($role = $this->roleModel->orderBy('sort', 'asc')->findAll()) {
+                $data = [
+                    'responce' => 'success',
+                    'role' => $role
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'role' => 'gagal fetch data'
+                ];
+            }
+            return json_encode($data);
+        } else {
+            echo "No Direct script access allowed";
+        }
+    }
     public function saverole()
     {
-        if (!$this->validate([
-            'role_kode' => [
-                'rules' => 'required|is_unique[user_role.role_kode]',
-                'errors' => [
-                    'required' => 'Kode Role tidak boleh kosong',
-                    'is_unique' => 'Kode Role sudah ada'
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'role_kode' => [
+                    'rules' => 'required|is_unique[user_role.role_kode]',
+                    'errors' => [
+                        'required' => 'Kode Role tidak boleh kosong',
+                        'is_unique' => 'Kode Role sudah ada'
+                    ]
+                ],
+                'role' => [
+                    'rules' => 'required|is_unique[user_role.role]',
+                    'errors' => [
+                        'required' => 'Role tidak boleh kosong',
+                        'is_unique' => 'Role sudah ada'
+                    ]
+                ],
+                'sort' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Sort tidak boleh kosong',
+                        'numeric' => 'Sort harus berupa angka'
+                    ]
                 ]
-            ],
-            'role' => [
-                'rules' => 'required|is_unique[user_role.role]',
-                'errors' => [
-                    'required' => 'Role tidak boleh kosong',
-                    'is_unique' => 'Role sudah ada'
-                ]
-            ],
-            'sort' => [
-                'rules' => 'required|numeric',
-                'errors' => [
-                    'required' => 'Sort tidak boleh kosong',
-                    'numeric' => 'Sort harus berupa angka'
-                ]
-            ]
-        ])) {
-            $validation = \Config\Services::validation();
+            ])) {
+                $validation = \Config\Services::validation();
 
-            return redirect()->to(base_url('/role'))->withInput()->with('validation', $validation);
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+
+                ];
+            } else {
+                // validasi sukses
+
+                $insert = $this->request->getVar();
+                $this->roleModel->insert($insert);
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data Role berhasil ditambah'
+                ];
+            }
+            echo json_encode($data);
         } else {
-            // validasi sukses
-            $role_kode = $this->request->getVar('role_kode');
-            $role = $this->request->getVar('role');
-            $sort = $this->request->getVar('sort');
-
-            $insert = [
-                'role_kode' => $role_kode,
-                'role' => $role,
-                'sort' => $sort
-            ];
-
-
-            session()->setFlashdata('pesan', 'Role Berhasil ditambah');
-            $this->roleModel->insert($insert);
-            return redirect()->to(base_url('/role'));
+            echo "No direct script allowed";
         }
     }
 
-    public function editrole($id)
+    public function edit()
     {
-        if (!$this->validate([
-            'role_kode' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Kode Role tidak boleh kosong'
-                ]
-            ],
-            'role' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Role tidak boleh kosong'
-                ]
-            ],
-            'sort' => [
-                'rules' => 'required|numeric',
-                'errors' => [
-                    'required' => 'Sort tidak boleh kosong',
-                    'numeric' => 'Sort harus berupa angka'
-                ]
-            ]
-        ])) {
-            $validation = \Config\Services::validation();
+        if ($this->request->isAJAX()) {
+            $edit_id = $this->request->getPost('edit_id');
 
-            return redirect()->to(base_url('/role'))->withInput()->with('validation', $validation);
+
+            if ($posts = $this->roleModel->where('id', $edit_id)->get()->getRowArray()) {
+                $data = [
+                    'responce' => 'success',
+                    'posts' => $posts
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'Gagal fetch data edit'
+                ];
+            }
+            echo json_encode($data);
         } else {
-            // validasi sukses
-            $role_kode = $this->request->getVar('role_kode');
-            $role = $this->request->getVar('role');
-            $sort = $this->request->getVar('sort');
+            echo "No Direct script access allowed";
+        }
+    }
 
-            $update = [
-                'role_kode' => $role_kode,
-                'role' => $role,
-                'sort' => $sort
-            ];
+    public function editrole()
+    {
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'editrole_kode' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Kode Role tidak boleh kosong'
+                    ]
+                ],
+                'editrole' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Role tidak boleh kosong'
+                    ]
+                ],
+                'editsort' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Sort tidak boleh kosong',
+                        'numeric' => 'Sort harus berupa angka'
+                    ]
+                ]
+            ])) {
 
+                $validation = \Config\Services::validation();
 
-            session()->setFlashdata('pesan', 'Role Berhasil diupdate');
-            $this->roleModel->update($id, $update);
-            return redirect()->to(base_url('/role'));
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+
+                ];
+            } else {
+                // validasi sukses
+                $idrole = $this->request->getVar('idrole');
+                $role_kode = $this->request->getVar('editrole_kode');
+                $editrole = $this->request->getVar('editrole');
+                $editsort = $this->request->getVar('editsort');
+
+                $update = [
+                    'role_kode' => $role_kode,
+                    'role' => $editrole,
+                    'sort' => $editsort
+                ];
+
+                $this->roleModel->update($idrole, $update);
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data Role berhasil diupdate'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
         }
     }
 
     public function deleterole($id)
     {
-        $this->roleModel->where('id', $id)->delete();
+        if ($this->request->isAJAX()) {
+            $this->roleModel->where('id', $id)->delete();
+        } else {
+            echo "No Direct script access allowed";
+        }
     }
 
     // controller Role Akses
