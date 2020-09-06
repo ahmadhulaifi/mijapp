@@ -4,9 +4,9 @@ namespace App\Models\backend;
 
 use CodeIgniter\Model;
 
-class KaryawanModel extends Model
+class JabatanModel extends Model
 {
-    protected $table      = 'karyawan';
+    protected $table      = 'jabatan';
     // protected $allowedFields = ['username', 'password'];
 
     protected $useTimestamps = true;
@@ -24,15 +24,4 @@ class KaryawanModel extends Model
     // protected $validationRules    = [];
     // protected $validationMessages = [];
     // protected $skipValidation     = false;
-
-    public function getProfil($nip)
-    {
-        $builder = $this->table($this->table);
-        $builder->select('karyawan.*, jabatan.jabatan');
-        $builder->join('jabatan', 'jabatan.jabatan_kode = karyawan.jabatan_kode');
-        $builder->where('nip', $nip);
-        $query = $builder->get()->getRowArray();
-
-        return $query;
-    }
 }

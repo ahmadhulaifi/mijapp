@@ -95,6 +95,11 @@ $routes->get('/role/roleakses/(:any)', 'backend\role::roleakses/$1', ['filter' =
 $routes->get('/backend/role/roleakses/(:any)', 'backend\role::roleakses/$1', ['filter' => 'akseslogin']);
 $routes->post('/role/gantiakses', 'backend\role::gantiakses', ['filter' => 'akseslogin']);
 $routes->post('/backend/role/gantiakses', 'backend\role::gantiakses', ['filter' => 'akseslogin']);
+
+$routes->get('/backend/profil', 'backend/profil::index', ['filter' => 'akseslogin']);
+$routes->get('/profil', 'backend/profil::index', ['filter' => 'akseslogin']);
+
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing
