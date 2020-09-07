@@ -23,7 +23,7 @@ class Dashboard extends Controller
     public function index()
     {
 
-        $cekuser = $this->karyawanModel->where('username', session('username'))->get()->getRowArray();
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
         $menu = $this->menuModel->findAll();
         $submenu = $this->submenuModel->findAll();
         // dd($submenu);

@@ -28,7 +28,7 @@ class Role extends Controller
     // controller role
     public function index()
     {
-        $cekuser = $this->karyawanModel->where('username', session('username'))->get()->getRowArray();
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
 
         // dd($role);
 
@@ -203,7 +203,7 @@ class Role extends Controller
     // controller Role Akses
     public function roleakses($role_kode)
     {
-        $cekuser = $this->karyawanModel->where('username', session('username'))->get()->getRowArray();
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
         $menu = $this->menuModel->orderBy('sort', 'asc')->findAll();
 
         $userakses = $this->roleAksesModel->cekakses($role_kode);

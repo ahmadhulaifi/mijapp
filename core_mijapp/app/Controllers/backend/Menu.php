@@ -24,7 +24,7 @@ class Menu extends Controller
     // controller menu
     public function index()
     {
-        $cekuser = $this->karyawanModel->where('username', session('username'))->get()->getRowArray();
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
 
         // $submenu = $this->submenuModel->orderBy('menu_id', 'asc')->findAll();
         // dd($submenu);
@@ -208,7 +208,7 @@ class Menu extends Controller
     // controller submenu
     public function submenu()
     {
-        $cekuser = $this->karyawanModel->where('username', session('username'))->get()->getRowArray();
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
         $menu = $this->menuModel->findAll();
         // dd($menu);
 

@@ -179,16 +179,25 @@ class Profil extends Controller
 
                 //cek gambar, apakah tetap gambar lama
                 if ($fileFoto->getError() == 4) {
-                    $namaFoto = $this->request->getPost('fotoLama');
+                    $namaFoto = $this->request->getVar('fotoLama');
                 } else {
-                    //generate nama file random
-                    $namaFoto = $fileFoto->getRandomName();
 
-                    //pindahkan gambar
-                    $fileFoto->move('asset/images/user', $namaFoto);
+                    if ($this->request->getVar('fotoLama') == "default.png") {
+                        //generate nama file random
+                        $namaFoto = $fileFoto->getRandomName();
 
-                    //hapus gambar lama
-                    unlink('asset/images/user/' . $this->request->getPost('fotoLama'));
+                        //pindahkan gambar
+                        $fileFoto->move('asset/images/user', $namaFoto);
+                    } else {
+                        //generate nama file random
+                        $namaFoto = $fileFoto->getRandomName();
+
+                        //pindahkan gambar
+                        $fileFoto->move('asset/images/user', $namaFoto);
+
+                        //hapus gambar lama
+                        unlink('asset/images/user/' . $this->request->getPost('fotoLama'));
+                    }
                 }
 
                 $idkaryawan = $this->request->getVar('idkaryawan');
