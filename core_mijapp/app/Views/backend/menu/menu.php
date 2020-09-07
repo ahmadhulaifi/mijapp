@@ -226,6 +226,7 @@
                     if (data.responce == "success") {
                         $('#menuModal').modal('hide');
                         $('#tableMenu').DataTable().destroy();
+                        $('#tambahmenuform')[0].reset();
                         fetchMenu();
                         toastr["success"](data.pesan);
 

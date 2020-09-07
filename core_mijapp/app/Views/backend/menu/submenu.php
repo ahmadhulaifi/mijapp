@@ -295,13 +295,16 @@
                     if (data.responce == 'success') {
                         $('#submenuModal').modal('hide');
                         $('#tableSubMenu').DataTable().destroy();
+                        $('#tambahsubform')[0].reset();
                         fetchsubmenu();
                         toastr["success"](data.pesan);
                     } else {
                         toastr["error"](data.pesan);
                     }
                 }
+
             });
+
         })
 
         // edit modal sub

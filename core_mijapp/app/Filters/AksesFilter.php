@@ -12,7 +12,7 @@ class AksesFilter implements FilterInterface
     {
         $db      = \Config\Database::connect();
 
-        $cekuser = $db->table('karyawan')->where('username', session('username'))->get()->getRowArray();
+        $cekuser = $db->table('karyawan')->where('id', session('id'))->get()->getRowArray();
 
         // $role_id = session('role_id');
         $role_kode = $cekuser['role_kode'];
