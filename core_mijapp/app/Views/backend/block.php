@@ -1,3 +1,9 @@
+<?= $this->extend('backend/layout/template_admin'); ?>
+
+<?= $this->section('content'); ?>
+
+
+
 <!-- Content Wrapper. Contains page content -->
 
 
@@ -21,3 +27,6 @@
 </section>
 <!-- /.content -->
 </div>
+
+
+<?= $this->endSection(); ?>

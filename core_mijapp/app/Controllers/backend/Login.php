@@ -78,14 +78,15 @@ class Login extends Controller
                     'ceklog' => $ceklog
                 ];
             } else {
-                // if (password_verify($password, $ceklog['password'])) {
-                if ($password == $ceklog[0]['password']) {
+                if (password_verify($password, $ceklog[0]['password'])) {
+                    // if ($password == $ceklog[0]['password']) {
                     $data = [
                         'success' => true,
                         'responce' => 'yes',
                         'ceklog' => $ceklog
                     ];
                     $user = [
+                        'id' => $ceklog[0]['id'],
                         'username' => $ceklog[0]['username'],
                         'password' => $ceklog[0]['password']
                     ];
@@ -125,8 +126,7 @@ class Login extends Controller
         ];
 
 
-        echo view('backend/layout/header_admin', $data);
-        echo view('backend/block', $data);
-        echo view('backend/layout/footer_admin');
+
+        return view('backend/block', $data);
     }
 }
