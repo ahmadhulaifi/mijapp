@@ -7,6 +7,7 @@ use App\Models\backend\MenuModel;
 use App\Models\backend\SubmenuModel;
 use App\Models\backend\DivisiModel;
 use App\Models\backend\JabatanModel;
+use App\Models\backend\StatusPegawaiModel;
 use CodeIgniter\Controller;
 
 class Datasekolah extends Controller
@@ -16,6 +17,7 @@ class Datasekolah extends Controller
     protected $submenuModel;
     protected $divisiModel;
     protected $jabatanModel;
+    protected $statusPegawaiModel;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class Datasekolah extends Controller
         $this->submenuModel = new SubmenuModel();
         $this->divisiModel = new DivisiModel();
         $this->jabatanModel = new JabatanModel();
+        $this->statusPegawaiModel = new StatusPegawaiModel();
     }
 
     // controller datasekolah divisi
@@ -330,6 +333,163 @@ class Datasekolah extends Controller
                 $data = [
                     'responce' => 'success',
                     'pesan' => 'Jabatan berhasil diupdate'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    // controller datasekolah status pegawai
+    public function statuspegawai()
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+        // $statuspegawai = $this->statusPegawaiModel->findAll();
+        // dd($statuspegawai);
+        // $submenu = $this->submenuModel->orderBy('menu_id', 'asc')->findAll();
+        // dd($submenu);
+
+        $data = [
+            'title' => 'Status Pegawai',
+            'user' => $cekuser,
+            'validation' => \Config\Services::validation()
+        ];
+
+        return view('backend/datasekolah/statuspegawai', $data);
+    }
+
+    public function fetchstatuspegawai()
+    {
+        if ($this->request->isAJAX()) {
+            if ($statuspegawai = $this->statusPegawaiModel->findAll()) {
+                // dd($statuspegawai);
+                $data = [
+                    'responce' => 'success',
+                    'status_pegawai' => $statuspegawai
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch jabatan'
+                ];
+            }
+
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function savestatuspegawai()
+    {
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'status_pegawai_kode' => [
+                    'rules' => 'required|is_unique[status_pegawai.status_pegawai_kode]',
+                    'errors' => [
+                        'required' => 'Kode Status tidak boleh kosong',
+                        'is_unique' => 'Data Status sudah ada'
+                    ]
+                ],
+                'status_pegawai' => [
+                    'rules' => 'required|is_unique[status_pegawai.status_pegawai]',
+                    'errors' => [
+                        'required' => 'Status Pegaawai tidak boleh kosong',
+                        'is_unique' => 'Status sudah ada'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $insert = $this->request->getVar();
+
+                $this->statusPegawaiModel->insert($insert);
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Status Pegawai berhasil ditambah'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function deletestatuspegawai($id)
+    {
+        if ($this->request->isAJAX()) {
+            $this->statusPegawaiModel->where('id', $id)->delete();
+            // $this->menuModel->where('id', $id)->delete();
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function editstatuspegawaimodal()
+    {
+        if ($this->request->isAJAX()) {
+            $idstatuspegawai = $this->request->getVar('idstatuspegawai');
+            if ($statuspegawai = $this->statusPegawaiModel->where('id', $idstatuspegawai)->get()->getRowArray()) {
+                $data = [
+                    'responce' => 'success',
+                    'status_pegawai' => $statuspegawai
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal memunculkan modal edit data'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function editstatuspegawai()
+    {
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'status_pegawai_kode' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Kode tidak boleh kosong'
+                    ]
+                ],
+                'status_pegawai' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Status tidak boleh kosong'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $idstatuspegawai = $this->request->getVar('idstatuspegawai');
+                $status_pegawai_kode = $this->request->getVar('status_pegawai_kode');
+                $status_pegawai = $this->request->getVar('status_pegawai');
+                $update = [
+                    'status_pegawai_kode' => $status_pegawai_kode,
+                    'status_pegawai' => $status_pegawai
+                ];
+
+                $this->statusPegawaiModel->update($idstatuspegawai, $update);
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Status pegawai berhasil diupdate'
                 ];
             }
             echo json_encode($data);

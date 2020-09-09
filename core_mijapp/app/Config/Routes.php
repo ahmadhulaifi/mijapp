@@ -132,6 +132,18 @@ $routes->post('/backend/datasekolah/editjabatanmodal', 'backend\datasekolah::edi
 $routes->post('/datasekolah/editjabatan', 'backend\datasekolah::editjabatan', ['filter' => 'akseslogin']);
 $routes->post('/backend/datasekolah/editjabatan', 'backend\datasekolah::editjabatan', ['filter' => 'akseslogin']);
 
+$routes->get('/datasekolah/statuspegawai', 'backend/datasekolah::statuspegawai', ['filter' => 'akseslogin']);
+$routes->get('/backend/datasekolah/statuspegawai', 'backend/datasekolah::statuspegawai', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/fetchstatuspegawai', 'backend/datasekolah::fetchstatuspegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/fetchstatuspegawai', 'backend/datasekolah::fetchstatuspegawai', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/savestatuspegawai', 'backend/datasekolah::savestatuspegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/savestatuspegawai', 'backend/datasekolah::savestatuspegawai', ['filter' => 'akseslogin']);
+$routes->delete('/backend/datasekolah/deletestatuspegawai/(:num)', 'backend\datasekolah::deletestatuspegawai/$1', ['filter' => 'akseslogin']);
+$routes->delete('/datasekolah/deletestatuspegawai/(:num)', 'backend\datasekolah::deletestatuspegawai/$1', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/editstatuspegawaimodal', 'backend\datasekolah::editstatuspegawaimodal', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/editstatuspegawaimodal', 'backend\datasekolah::editstatuspegawaimodal', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/editstatuspegawai', 'backend\datasekolah::editstatuspegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/editstatuspegawai', 'backend\datasekolah::editstatuspegawai', ['filter' => 'akseslogin']);
 
 /**
  * --------------------------------------------------------------------
