@@ -106,6 +106,20 @@ $routes->post('/profil/updateprofil', 'backend\profil::updateprofil', ['filter' 
 $routes->post('/backend/profil/updateprofil', 'backend\profil::updateprofil', ['filter' => 'akseslogin']);
 
 
+$routes->get('/datasekolah/divisi', 'backend/datasekolah::divisi', ['filter' => 'akseslogin']);
+$routes->get('/backend/datasekolah/divisi', 'backend/datasekolah::divisi', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/fetchdivisi', 'backend/datasekolah::fetchdivisi', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/fetchdivisi', 'backend/datasekolah::fetchdivisi', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/savedivisi', 'backend/datasekolah::savedivisi', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/savedivisi', 'backend/datasekolah::savedivisi', ['filter' => 'akseslogin']);
+$routes->delete('/backend/datsekolah/deletedivisi/(:num)', 'backend\datasekolah::deletedivisi/$1', ['filter' => 'akseslogin']);
+$routes->delete('/datasekolah/deletedivisi/(:num)', 'backend\datasekolah::deletedivisi/$1', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/editdivisimodal', 'backend\datasekolah::editdivisimodal', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/editdivisimodal', 'backend\datasekolah::editdivisimodal', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/editdivisi', 'backend\datasekolah::editdivisi', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/editdivisi', 'backend\datasekolah::editdivisi', ['filter' => 'akseslogin']);
+
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing

@@ -27,7 +27,7 @@ class AksesFilter implements FilterInterface
             $uricurrent = $urli[0];
         }
         // dd($uricurrent);
-        $querymenu   = $builder->where('menu', $uricurrent)->get()->getRowArray();
+        $querymenu   = $builder->where('controller', $uricurrent)->get()->getRowArray();
         $queryaccess = $builder2->where('menu_id', $querymenu['id'])->where('role_kode', $role_kode)->countAllResults();
 
         // Do something here
