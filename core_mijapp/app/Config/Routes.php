@@ -112,12 +112,25 @@ $routes->post('/datasekolah/fetchdivisi', 'backend/datasekolah::fetchdivisi', ['
 $routes->post('/backend/datasekolah/fetchdivisi', 'backend/datasekolah::fetchdivisi', ['filter' => 'akseslogin']);
 $routes->post('/datasekolah/savedivisi', 'backend/datasekolah::savedivisi', ['filter' => 'akseslogin']);
 $routes->post('/backend/datasekolah/savedivisi', 'backend/datasekolah::savedivisi', ['filter' => 'akseslogin']);
-$routes->delete('/backend/datsekolah/deletedivisi/(:num)', 'backend\datasekolah::deletedivisi/$1', ['filter' => 'akseslogin']);
+$routes->delete('/backend/datasekolah/deletedivisi/(:num)', 'backend\datasekolah::deletedivisi/$1', ['filter' => 'akseslogin']);
 $routes->delete('/datasekolah/deletedivisi/(:num)', 'backend\datasekolah::deletedivisi/$1', ['filter' => 'akseslogin']);
 $routes->post('/datasekolah/editdivisimodal', 'backend\datasekolah::editdivisimodal', ['filter' => 'akseslogin']);
 $routes->post('/backend/datasekolah/editdivisimodal', 'backend\datasekolah::editdivisimodal', ['filter' => 'akseslogin']);
 $routes->post('/datasekolah/editdivisi', 'backend\datasekolah::editdivisi', ['filter' => 'akseslogin']);
 $routes->post('/backend/datasekolah/editdivisi', 'backend\datasekolah::editdivisi', ['filter' => 'akseslogin']);
+
+$routes->get('/datasekolah/jabatan', 'backend/datasekolah::jabatan', ['filter' => 'akseslogin']);
+$routes->get('/backend/datasekolah/jabatan', 'backend/datasekolah::jabatan', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/fetchjabatan', 'backend/datasekolah::fetchjabatan', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/fetchjabatan', 'backend/datasekolah::fetchjabatan', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/savejabatan', 'backend/datasekolah::savejabatan', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/savejabatan', 'backend/datasekolah::savejabatan', ['filter' => 'akseslogin']);
+$routes->delete('/backend/datasekolah/deletejabatan/(:num)', 'backend\datasekolah::deletejabatan/$1', ['filter' => 'akseslogin']);
+$routes->delete('/datasekolah/deletejabatan/(:num)', 'backend\datasekolah::deletejabatan/$1', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/editjabatanmodal', 'backend\datasekolah::editjabatanmodal', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/editjabatanmodal', 'backend\datasekolah::editjabatanmodal', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/editjabatan', 'backend\datasekolah::editjabatan', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/editjabatan', 'backend\datasekolah::editjabatan', ['filter' => 'akseslogin']);
 
 
 /**

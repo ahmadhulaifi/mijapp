@@ -11,48 +11,36 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#menuModal">
-                    Tambah Menu
+                <button type="button" class="btn btn-success" id="btntambahjabatan" data-toggle="modal" data-target="#jabatanModal">
+                    Tambah Divisi
                 </button>
 
                 <!-- Modal -->
-                <div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuModalLabel" aria-hidden="true">
+                <div class="modal fade" id="jabatanModal" tabindex="-1" aria-labelledby="jabatanModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="menuModalLabel">Tambah Menu</h5>
+                                <h5 class="modal-title" id="jabatanModalLabel">Tambah Jabatan</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="" id="tambahmenuform">
+                                <form method="post" action="" id="tambahjabatanform">
                                     <?= csrf_field(); ?>
                                     <div class="form-group row">
-                                        <label for="menu" class="col-sm-2 col-form-label">Menu</label>
+                                        <label for="jabatan_kode" class="col-sm-2 col-form-label">Kode Jabatan</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="menu">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="icon" class="col-sm-2 col-form-label">Icon</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="icon">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="url" class="col-sm-2 col-form-label">Url</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="url">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="sort" class="col-sm-2 col-form-label">Sort</label>
-                                        <div class="col-sm-2">
-                                            <input type="text" class="form-control" name="sort">
+                                            <input type="text" class="form-control" name="jabatan_kode">
                                         </div>
                                     </div>
 
+                                    <div class="form-group row">
+                                        <label for="jabatan" class="col-sm-2 col-form-label">Jabatan</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="jabatan">
+                                        </div>
+                                    </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -70,15 +58,12 @@
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="tableMenu">
+                    <table class="table table-striped" id="tableJabatan">
                         <thead class="bg-success">
                             <tr>
                                 <th scope="col">No</th>
-                                <th scope="col">Menu</th>
-                                <th scope="col">Controller</th>
-                                <th scope="col">Icon</th>
-                                <th scope="col">Url</th>
-                                <th scope="col">Sort</th>
+                                <th scope="col">Kode Jabatan</th>
+                                <th scope="col">Jabatan</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -91,41 +76,30 @@
         </div>
 
         <!-- Modal Edit -->
-        <div class="modal fade" id="editmenuModal" tabindex="-1" aria-labelledby="editmenuModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editjabatanModal" tabindex="-1" aria-labelledby="editjabatanModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editmenuModalLabel">Edit Menu</h5>
+                        <h5 class="modal-title" id="editjabatanModalLabel">Edit Jabatan</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="" id="editmenuform">
+                        <form method="post" action="" id="editjabatanform">
                             <?= csrf_field(); ?>
-                            <input type="hidden" class="form-control" name="idmenu">
+                            <input type="hidden" class="form-control" name="idjabatan">
                             <div class="form-group row">
-                                <label for="menu" class="col-sm-2 col-form-label">Menu</label>
+                                <label for="jabatan_kode" class="col-sm-2 col-form-label">Kode Jabatan</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="menu">
+                                    <input type="text" class="form-control" name="jabatan_kode">
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label for="icon" class="col-sm-2 col-form-label">Icon</label>
+                                <label for="jabatan" class="col-sm-2 col-form-label">Jabatan</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="icon">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="url" class="col-sm-2 col-form-label">Url</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="url">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="sort" class="col-sm-2 col-form-label">Sort</label>
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" name="sort">
+                                    <input type="text" class="form-control" name="jabatan">
                                 </div>
                             </div>
 
@@ -149,23 +123,45 @@
 <script>
     $(document).ready(function() {
 
-        //fetch menu
-        function fetchMenu() {
+        $("#btntambahjabatan").click(function() {
+            $('#tambahjabatanform')[0].reset();
+        });
+
+        //fetch jabatan
+        function fetchJabatan() {
             $.ajax({
-                url: '<?= base_url(); ?>/menu/fetchmenu',
+                url: '<?= base_url(); ?>/datasekolah/fetchjabatan',
                 type: 'post',
                 dataType: 'json',
                 success: function(data) {
                     // console.log(data);
                     let i = "1";
-                    $('#tableMenu').DataTable({
-                        "data": data.menu,
+                    $('#tableJabatan').DataTable({
+                        "data": data.jabatan,
                         "responsive": true,
                         "dom": "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'B><'col-sm-12 col-md-4'f>>" +
                             "<'row'<'col-sm-12'tr>>" +
                             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                        "buttons": [
-                            'copy', 'excel', 'pdf'
+                        "buttons": [{
+                                extend: 'copyHtml5',
+                                text: '<i class="far fa-fw fa-copy"></i>',
+                                titleAttr: 'Copy'
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                text: '<i class="far fa-fw fa-file-excel"></i>',
+                                titleAttr: 'Excel'
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                text: '<i class="far fa-fw fa-file-pdf"></i>',
+                                titleAttr: 'Pdf'
+                            },
+                            {
+                                extend: 'print',
+                                text: '<i class="fas fa-fw fa-print"></i>',
+                                titleAttr: 'Print'
+                            }
                         ],
 
                         "columns": [{
@@ -175,35 +171,18 @@
                                 }
                             },
                             {
-                                "data": "menu"
+                                "data": "jabatan_kode"
                             },
                             {
-                                "data": "controller"
-                            },
-                            {
-                                "data": null,
-                                "render": function(data, type, row, meta) {
-                                    let a = '';
-                                    a = `
-                                    <i class="${row.icon}"></i>`;
-
-                                    return a;
-                                }
-
-                            },
-                            {
-                                "data": "url"
-                            },
-                            {
-                                "data": "sort"
+                                "data": "jabatan"
                             },
                             {
                                 "data": null,
                                 "render": function(data, type, row, meta) {
                                     let a = '';
                                     a = `
-                                    <a href="" class="badge badge-info editmenu" value="${row.id}"><i class="far fa-fw fa-edit"></i></a>
-                                    <a href="" value="${row.id}" class="badge badge-danger deletemenu"><i class="fas fa-fw fa-trash-alt"></i></a>`;
+                                    <a href="" class="badge badge-info editjabatan" value="${row.id}"><i class="far fa-fw fa-edit"></i></a>
+                                    <a href="" value="${row.id}" class="badge badge-danger deletejabatan"><i class="fas fa-fw fa-trash-alt"></i></a>`;
 
                                     return a;
                                 }
@@ -214,24 +193,24 @@
             });
         }
 
-        fetchMenu();
+        fetchJabatan();
 
-        // save menu
-        $('#tambahmenuform').submit(function() {
+        // save jabatan
+        $('#tambahjabatanform').submit(function() {
             event.preventDefault();
 
             $.ajax({
-                url: '<?= base_url('/menu/savemenu'); ?>',
+                url: '<?= base_url('/datasekolah/savejabatan'); ?>',
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
                 // data: $(this).serialize(),
                 success: function(data) {
                     if (data.responce == "success") {
-                        $('#menuModal').modal('hide');
-                        $('#tableMenu').DataTable().destroy();
-                        $('#tambahmenuform')[0].reset();
-                        fetchMenu();
+                        $('#jabatanModal').modal('hide');
+                        $('#tableJabatan').DataTable().destroy();
+                        $('#tambahjabatanform')[0].reset();
+                        fetchJabatan();
                         toastr["success"](data.pesan);
 
                     } else {
@@ -242,10 +221,10 @@
             });
         });
 
-        // delete menu
-        $(document).on("click", ".deletemenu", function() {
+        // delete jabatan
+        $(document).on("click", ".deletejabatan", function() {
             event.preventDefault();
-            let idmenu = $(this).attr('value');
+            let idjabatan = $(this).attr('value');
 
             Swal.fire({
                 title: 'Apa kamu yakin untuk menghapusnya?',
@@ -258,14 +237,14 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: '<?= base_url('/menu/deletemenu'); ?>/' + idmenu,
+                        url: '<?= base_url('/datasekolah/deletejabatan'); ?>/' + idjabatan,
                         type: 'DELETE',
                         error: function() {
                             alert('Something is wrong');
                         },
                         success: function(data) {
-                            $('#tableMenu').DataTable().destroy();
-                            fetchMenu();
+                            $('#tableJabatan').DataTable().destroy();
+                            fetchJabatan();
                             Swal.fire(
                                 'Deleted!',
                                 'File sudah terdelete.',
@@ -279,24 +258,22 @@
         });
 
         // modal edit
-        $(document).on("click", ".editmenu", function() {
+        $(document).on("click", ".editjabatan", function() {
             event.preventDefault();
-            let idmenu = $(this).attr("value")
+            let idjabatan = $(this).attr("value")
             $.ajax({
-                url: '<?= base_url('/menu/edit'); ?>',
+                url: '<?= base_url('/datasekolah/editjabatanmodal'); ?>',
                 type: 'post',
                 data: {
-                    idmenu: idmenu
+                    idjabatan: idjabatan
                 },
                 dataType: 'json',
                 success: function(data) {
                     if (data.responce == 'success') {
-                        $('#editmenuModal').modal('show');
-                        $("input[name='idmenu']").val(data.menu.id);
-                        $("input[name='menu']").val(data.menu.menu);
-                        $("input[name='icon']").val(data.menu.icon);
-                        $("input[name='url']").val(data.menu.url);
-                        $("input[name='sort']").val(data.menu.sort);
+                        $('#editjabatanModal').modal('show');
+                        $("input[name='idjabatan']").val(data.jabatan.id);
+                        $("input[name='jabatan_kode']").val(data.jabatan.jabatan_kode);
+                        $("input[name='jabatan']").val(data.jabatan.jabatan);
                     } else {
 
                         toastr["error"](data.pesan);
@@ -305,21 +282,21 @@
             });
         });
 
-        // edit menu
+        // edit Jabatan
 
-        $("#editmenuform").submit(function(event) {
+        $("#editjabatanform").submit(function(event) {
             event.preventDefault();
             $.ajax({
-                url: '<?= base_url(); ?>/menu/editmenu',
+                url: '<?= base_url(); ?>/datasekolah/editjabatan',
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == "success") {
-                        $('#editmenuModal').modal('hide');
-                        $('#tableMenu').DataTable().destroy();
-                        fetchMenu();
+                        $('#editjabatanModal').modal('hide');
+                        $('#tableJabatan').DataTable().destroy();
+                        fetchJabatan();
                         toastr["success"](data.pesan);
                     } else {
                         toastr["error"](data.pesan);

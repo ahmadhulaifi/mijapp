@@ -7,11 +7,11 @@ use CodeIgniter\Model;
 class JabatanModel extends Model
 {
     protected $table      = 'jabatan';
-    // protected $allowedFields = ['username', 'password'];
+    protected $allowedFields = ['jabatan_kode', 'jabatan'];
 
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    // protected $useTimestamps = true;
+    // protected $createdField  = 'created_at';
+    // protected $updatedField  = 'updated_at';
 
     // protected $primaryKey = 'id';
 
