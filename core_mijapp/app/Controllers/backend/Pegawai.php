@@ -3,117 +3,91 @@
 namespace App\Controllers\backend;
 
 use App\Models\backend\KaryawanModel;
+use App\Models\backend\MenuModel;
+use App\Models\backend\SubmenuModel;
 use App\Models\backend\JabatanModel;
-use App\Models\backend\UserDivisiModel;
+use App\Models\backend\StatusPegawaiModel;
 use CodeIgniter\Controller;
+use CodeIgniter\HTTP\Request;
 
-
-class Profil extends Controller
+class Pegawai extends Controller
 {
     protected $karyawanModel;
+    protected $menuModel;
+    protected $submenuModel;
     protected $jabatanModel;
-    protected $userDivisiModel;
+    protected $statusPegawaiModel;
 
     public function __construct()
     {
-        helper('fisi');
         $this->karyawanModel = new KaryawanModel();
+        $this->menuModel = new MenuModel();
+        $this->submenuModel = new SubmenuModel();
         $this->jabatanModel = new JabatanModel();
-        $this->userDivisiModel = new UserDivisiModel();
+        $this->statusPegawaiModel = new StatusPegawaiModel();
     }
 
-    // controller menu
+    // controller Data Pegawai
     public function index()
     {
         $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
-        $user = $this->karyawanModel->getProfil($cekuser['id']);
-        $divisi = $this->userDivisiModel->getDivisi($cekuser['id']);
-        // dd($user);
+
+
 
         $data = [
-            'title' => 'Profil Saya',
-            'user' => $user,
-            'divisi' => $divisi,
+            'title' => 'Data Pegawai',
+            'user' => $cekuser,
             'validation' => \Config\Services::validation()
         ];
 
-        return view('backend/profil/profil', $data);
+        return view('backend/pegawai/pegawai', $data);
     }
 
-    public function editpassword()
+    public function fetchpegawai()
     {
         if ($this->request->isAJAX()) {
-            if (!$this->validate([
-                'password' => [
-                    'rules' => 'required',
-                    'errors' => [
-                        'required' => 'Password tidak boleh kosong'
-                    ]
-                ],
-                'repassword' => [
-                    'rules' => 'required|matches[password]',
-                    'errors' => [
-                        'required' => 'Retype password harus dipilih',
-                        'matches' => 'Password tidak sesuai dengan retype'
-                    ]
-                ]
-            ])) {
-                $validation = \Config\Services::validation();
-
-                $data = [
-                    'responce' => 'error',
-                    'pesan' => $validation->listErrors()
-                ];
-            } else {
-                // validasi sukses
-                $idkaryawan = $this->request->getVar('idkaryawan');
-                $password = password_hash($this->request->getVar('password'), PASSWORD_DEFAULT);
-
-                $update = [
-                    'password' => $password
-                ];
-
-                $this->karyawanModel->update($idkaryawan, $update);
-
+            if ($pegawai = $this->karyawanModel->findAll()) {
                 $data = [
                     'responce' => 'success',
-                    'pesan' => 'Password berhasil diupdate'
+                    'pegawai' => $pegawai
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch'
                 ];
             }
             echo json_encode($data);
         } else {
-            echo "No Direct Script access allowed";
+            echo "No direct script access allowed";
         }
     }
 
-    public function editprofil($id)
+    public function formtambah()
     {
-        $user = $this->karyawanModel->getProfil($id);
-        // dd($user);
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+        $jabatan = $this->jabatanModel->findAll();
+        $statuspegawai = $this->statusPegawaiModel->findAll();
+        // dd($statuspegawai);
 
         $data = [
-            'title' => 'Edit Profil',
-            'user' => $user,
+            'title' => 'Tambah Pegawai',
+            'user' => $cekuser,
+            'jabatan' => $jabatan,
+            'status' => $statuspegawai,
             'validation' => \Config\Services::validation()
         ];
 
-        return view('backend/profil/editprofil', $data);
+        return view('backend/pegawai/formtambah', $data);
     }
 
-    public function updateprofil()
+    public function tambahpegawai()
     {
         if ($this->request->isAJAX()) {
 
-            //cek judul
-            // $username = $this->karyawanModel->getKomik($this->request->getVar('slug'));
-            $username = $this->karyawanModel->where('id', $this->request->getVar('idkaryawan'))->get()->getRowArray();
-            // dd($username);
 
-            if ($username['username'] == $this->request->getVar('username')) {
-                $rule_username = 'required';
-            } else {
-                $rule_username = 'required|is_unique[karyawan.username]';
-            }
+            $rule_username = 'required|is_unique[karyawan.username]';
+
 
             if (!$this->validate([
                 'nama_lengkap' => [
@@ -159,17 +133,49 @@ class Profil extends Controller
                         'is_unique' => 'Username sudah ada yang punya'
                     ]
                 ],
-                'email' => [
-                    'rules' => 'valid_email',
+                'password' => [
+                    'rules' => 'required',
                     'errors' => [
-                        'valid_email' => 'format email tidak valid'
+                        'required' => 'Password tidak boleh kosong'
+                    ]
+                ],
+                'repassword' => [
+                    'rules' => 'required|matches[password]',
+                    'errors' => [
+                        'required' => 'Re-Type Password tidak boleh kosong',
+                        'matches' => 'Re-Type password tidak sesuai'
+                    ]
+                ],
+
+                'nip' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'NIP tidak boleh kosong'
+                    ]
+                ],
+                'jabatan_kode' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Jabatan tidak boleh kosong'
+                    ]
+                ],
+                'status_pegawai_kode' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Status Pegawai tidak boleh kosong'
+                    ]
+                ],
+                'tgl_mulai_bekerja' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Tanggal mulai bekerja tidak boleh kosong'
                     ]
                 ],
                 'foto' => [
                     'rules' => 'max_size[foto,1024]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png]',
                     'errors' => [
                         'max_size' => 'ukuran gambar terlalu besar. Max 1 mb ',
-                        'is_image' => 'yang anda pilih bukan gambar',
+                        'is_image' => 'foto yang anda pilih bukan gambar',
                         'mime_in' => 'Gunakan file ekstensi jpg/jpeg/png'
                     ]
                 ]
@@ -182,46 +188,29 @@ class Profil extends Controller
                 ];
             } else {
                 // validasi sukses
-                // $validation = \Config\Services::validation();
+
                 $fileFoto = $this->request->getFile('foto');
 
-                //cek gambar, apakah tetap gambar lama
-                if ($fileFoto->getError() == 4) {
-                    $namaFoto = $this->request->getVar('fotoLama');
-                } else {
 
-                    if ($this->request->getVar('fotoLama') == "default.png") {
-                        //generate nama file random
-                        $namaFoto = $fileFoto->getRandomName();
 
-                        //pindahkan gambar
-                        $fileFoto->move('asset/images/user', $namaFoto);
-                    } else {
-                        //generate nama file random
-                        $namaFoto = $fileFoto->getRandomName();
-
-                        //pindahkan gambar
-                        $fileFoto->move('asset/images/user', $namaFoto);
-
-                        //hapus gambar lama
-                        unlink('asset/images/user/' . $this->request->getPost('fotoLama'));
-                    }
-                }
-
-                $idkaryawan = $this->request->getVar('idkaryawan');
+                //generate nama file random
+                $namaFoto = $fileFoto->getRandomName();
 
 
 
-                $update = [
+
+                $insert = [
                     'nama_lengkap' => $this->request->getVar('nama_lengkap'),
                     'nama_panggilan' => $this->request->getVar('nama_panggilan'),
                     'gelar' => $this->request->getVar('gelar'),
                     'tem_lahir' => $this->request->getVar('tem_lahir'),
                     'tgl_lahir' => $this->request->getVar('tgl_lahir'),
+                    'tgl_mulai_bekerja' => $this->request->getVar('tgl_mulai_bekerja'),
                     'j_kel' => $this->request->getVar('j_kel'),
                     'agama' => $this->request->getVar('agama'),
                     'status' => $this->request->getVar('status'),
                     'username' => $this->request->getVar('username'),
+                    'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                     'jalan_no' => $this->request->getVar('jalan_no'),
                     'rt' => $this->request->getVar('rt'),
                     'rw' => $this->request->getVar('rw'),
@@ -240,16 +229,27 @@ class Profil extends Controller
                     'telepon' => $this->request->getVar('telepon'),
                     'no_ktp' => $this->request->getVar('ktp'),
                     'no_kk' => $this->request->getVar('no_kk'),
+                    'nip' => $this->request->getVar('nip'),
+                    'no_npwp' => $this->request->getVar('no_npwp'),
+                    'no_bpjs_ketenagakerjaan' => $this->request->getVar('no_bpjs_ketenagakerjaan'),
+                    'no_bpjs_kesehatan' => $this->request->getVar('no_bpjs_kesehatan'),
+                    'bank' => $this->request->getVar('bank'),
+                    'no_rek' => $this->request->getVar('no_rekening'),
+                    'status_pegawai_kode' => $this->request->getVar('status_pegawai_kode'),
+                    'jabatan_kode' => $this->request->getVar('jabatan_kode'),
+                    'role_kode' => "UMUM",
                     'foto' => $namaFoto
 
                 ];
 
-                $this->karyawanModel->update($idkaryawan, $update);
+                if ($this->karyawanModel->insert($insert)) {
+                    //pindahkan gambar
+                    $fileFoto->move('asset/images/user', $namaFoto);
+                };
 
                 $data = [
                     'responce' => 'success',
-                    'pesan' => 'Profil berhasil diupdate',
-                    'update' => $update
+                    'pesan' => 'Data Pegawai berhasil ditambah',
                 ];
             }
             echo json_encode($data);

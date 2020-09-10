@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class KaryawanModel extends Model
 {
     protected $table      = 'karyawan';
-    protected $allowedFields = ['id', 'nip', 'role_kode', 'nama_lengkap', 'nama_panggilan', 'gelar', 'tem_lahir', 'tgl_lahir', 'j_kel', 'agama', 'status', 'username', 'password', 'jalan_no', 'rt', 'rw', 'desa_kel', 'kecamatan', 'kota', 'kd_pos', 'jalan_no_domisili', 'rt_domisili', 'rw_domisili', 'desa_kel_domisili', 'kecamatan_domisili', 'kota_domisili', 'kd_pos_domisili', 'email', 'telepon', 'no_ktp', 'no_kk', 'foto', 'created_at', 'updated_at', 'created_at'];
+    protected $allowedFields = ['id', 'nip', 'role_kode', 'nama_lengkap', 'nama_panggilan', 'gelar', 'tem_lahir', 'tgl_lahir', 'j_kel', 'agama', 'status', 'username', 'password', 'jalan_no', 'rt', 'rw', 'desa_kel', 'kecamatan', 'kota', 'kd_pos', 'jalan_no_domisili', 'rt_domisili', 'rw_domisili', 'desa_kel_domisili', 'kecamatan_domisili', 'kota_domisili', 'kd_pos_domisili', 'email', 'telepon', 'no_ktp', 'no_kk', 'foto', 'created_at', 'updated_at', 'jabatan_kode', 'tgl_mulai_bekerja', 'status_pegawai_kode', 'no_npwp', 'no_bpjs_ketenagakerjaan', 'no_bpjs_kesehatan', 'bank', 'no_rek'];
 
 
     protected $useTimestamps = true;

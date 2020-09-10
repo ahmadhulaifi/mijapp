@@ -145,6 +145,17 @@ $routes->post('/backend/datasekolah/editstatuspegawaimodal', 'backend\datasekola
 $routes->post('/datasekolah/editstatuspegawai', 'backend\datasekolah::editstatuspegawai', ['filter' => 'akseslogin']);
 $routes->post('/backend/datasekolah/editstatuspegawai', 'backend\datasekolah::editstatuspegawai', ['filter' => 'akseslogin']);
 
+
+$routes->get('/pegawai', 'backend/pegawai::index', ['filter' => 'akseslogin']);
+$routes->get('/backend/pegawai', 'backend/pegawai::index', ['filter' => 'akseslogin']);
+$routes->get('/pegawai/formtambah', 'backend/pegawai::formtambah', ['filter' => 'akseslogin']);
+$routes->get('/backend/pegawai/formtambah', 'backend/pegawai::formtambah', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/fetchpegawai', 'backend/pegawai::fetchpegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/fetchpegawai', 'backend/pegawai::fetchpegawai', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/tambahpegawai', 'backend/pegawai::tambahpegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/tambahpegawai', 'backend/pegawai::tambahpegawai', ['filter' => 'akseslogin']);
+
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing
