@@ -32,12 +32,19 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                ...
+                                <!-- Form Tambah Data -->
+                                <form action="" method="POST" id="importpegawai" enctype="multipart/form-data">
+                                    <div class="form_group" style="margin-bottom: 5;">
+                                        <label for="">Unggah File</label>
+                                        <input type="file" id="filepegawai" name="filepegawai" class="form-control">
+                                    </div>
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Import</button>
+                                <button type="submit" class="btn btn-primary">Import</button>
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -146,6 +153,14 @@
 
 <script>
     $(document).ready(function() {
+
+        function tanggalindo(tanggal) {
+
+            // var string = "Belajar Pemrograman di rachmat.ID";
+            let pecah = tanggal.split("-");
+
+            return pecah[2] + '/' + pecah[1] + '/' + pecah[0];
+        };
 
         //fetch Pegawai
         function fetchPegawai() {
@@ -304,10 +319,24 @@
                                 "data": "tem_lahir"
                             },
                             {
-                                "data": "tgl_lahir"
+                                "data": null,
+                                "render": function(data, type, row, meta) {
+
+                                    let a = tanggalindo(`${row.tgl_lahir}`);
+
+                                    return a;
+                                }
+
                             },
                             {
-                                "data": "tgl_mulai_bekerja"
+                                "data": null,
+                                "render": function(data, type, row, meta) {
+
+                                    let a = tanggalindo(`${row.tgl_mulai_bekerja}`);
+
+                                    return a;
+                                }
+
                             },
                             {
                                 "data": "status_pegawai_kode"
@@ -366,6 +395,33 @@
                 }
             });
             $("#editpasswordform")[0].reset();
+        });
+
+        // import pegawai
+        $('#importpegawai').submit(function() {
+            event.preventDefault();
+            $.ajax({
+                url: '<?= base_url('/pegawai/importpegawai'); ?>',
+                type: 'post',
+                data: new FormData(this),
+                dataType: 'json',
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if (data.responce == "success") {
+
+                        $('#tablePegawai').DataTable().destroy();
+                        fetchPegawai();
+                        $('#importModal').modal('hide');
+                        toastr["success"](data.pesan);
+                    } else {
+                        // console.log(data);
+                        toastr["error"](data.pesan);
+                    }
+                }
+            });
+
         });
 
     });

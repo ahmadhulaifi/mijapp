@@ -160,6 +160,8 @@ $routes->post('/pegawai/editpegawai', 'backend/pegawai::editpegawai', ['filter' 
 $routes->post('/backend/pegawai/editpegawai', 'backend/pegawai::editpegawai', ['filter' => 'akseslogin']);
 $routes->post('/pegawai/editpasswordpegawai', 'backend/pegawai::editpasswordpegawai', ['filter' => 'akseslogin']);
 $routes->post('/backend/pegawai/editpasswordpegawai', 'backend/pegawai::editpasswordpegawai', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/importpegawai', 'backend/pegawai::importpegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/importpegawai', 'backend/pegawai::importpegawai', ['filter' => 'akseslogin']);
 
 
 /**

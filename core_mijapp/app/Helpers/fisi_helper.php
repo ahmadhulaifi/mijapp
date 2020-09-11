@@ -41,3 +41,35 @@ function tgl_indo($tanggal)
 
     return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
 }
+
+function password($pass)
+{
+    $passinput = password_hash($pass, PASSWORD_DEFAULT);
+
+    return $passinput;
+}
+
+function tanggal($tanggal)
+{
+
+    // $base_day dikurangkan 1 untuk mendapatkan timestamp yang tepat
+    // $base_timestamp = mktime(0, 0, 0, 1, $tanggal - 1, 1900);
+
+    // Output: 01-01-1970:
+    // echo date("d-m-Y", $base_timestamp);
+
+    // $tanggal_jadi = date("Y-m-d", $base_timestamp);
+
+    $pecah = explode('/', $tanggal);
+    return $pecah[2] . '-' . $pecah[0] . '-' . $pecah[1];
+
+
+    // return $tanggal_jadi;
+};
+
+function tanggalindo($tanggal)
+{
+
+    $pecah = explode('-', $tanggal);
+    return $pecah[1] . '/' . $pecah[0] . '/' . $pecah[2];
+};

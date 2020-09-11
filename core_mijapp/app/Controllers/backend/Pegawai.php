@@ -2,6 +2,8 @@
 
 namespace App\Controllers\backend;
 
+use PHPExcel;
+use PHPExcel_IOFactory;
 use App\Models\backend\KaryawanModel;
 use App\Models\backend\MenuModel;
 use App\Models\backend\SubmenuModel;
@@ -9,6 +11,7 @@ use App\Models\backend\JabatanModel;
 use App\Models\backend\StatusPegawaiModel;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\Request;
+use DateTime;
 
 class Pegawai extends Controller
 {
@@ -20,6 +23,7 @@ class Pegawai extends Controller
 
     public function __construct()
     {
+        helper('fisi');
         $this->karyawanModel = new KaryawanModel();
         $this->menuModel = new MenuModel();
         $this->submenuModel = new SubmenuModel();
@@ -31,8 +35,6 @@ class Pegawai extends Controller
     public function index()
     {
         $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
-
-
 
         $data = [
             'title' => 'Data Pegawai',
@@ -198,9 +200,6 @@ class Pegawai extends Controller
                     //generate nama file random
                     $namaFoto = $fileFoto->getRandomName();
                 }
-
-
-
 
                 $insert = [
                     'nama_lengkap' => $this->request->getVar('nama_lengkap'),
@@ -506,6 +505,113 @@ class Pegawai extends Controller
             echo json_encode($data);
         } else {
             echo "No Direct Script access allowed";
+        }
+    }
+
+    public function importpegawai()
+    {
+        if ($this->request->isAJAX()) {
+
+            $file = $this->request->getFile('filepegawai');
+
+            if ($file) {
+                $excelReader  = new PHPExcel();
+                //mengambil lokasi temp file
+                $fileLocation = $file->getTempName();
+                //baca file
+                $objPHPExcel = PHPExcel_IOFactory::load($fileLocation);
+                //ambil sheet active
+                $sheet    = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+
+                foreach ($sheet as $idx => $data) {
+                    //skip index 1 karena title excel
+                    if ($idx == 1) {
+                        continue;
+                    }
+
+                    $nip = $data['B'];
+                    $username = $data['C'];
+                    $password = $data['D'];
+                    $nama_lengkap = $data['E'];
+                    $nama_panggilan = $data['F'];
+                    $gelar = $data['G'];
+                    $j_kel = $data['H'];
+                    $tem_lahir = $data['I'];
+                    $tgl_lahir = $data['J'];
+                    $jalan_no = $data['K'];
+                    $rt = $data['L'];
+                    $rw = $data['M'];
+                    $desa_kel = $data['N'];
+                    $kecamatan = $data['O'];
+                    $kd_pos = $data['P'];
+                    $kota = $data['Q'];
+                    $telepon = $data['R'];
+                    $email = $data['S'];
+                    $agama = $data['T'];
+                    $status = $data['U'];
+                    $tgl_mulai_bekerja = $data['V'];
+                    $status_pegawai_kode = $data['W'];
+                    $jabatan_kode = $data['X'];
+                    $no_ktp = $data['Y'];
+                    $no_kk = $data['Z'];
+                    $no_npwp = $data['AA'];
+                    $no_bpjs_ketenagakerjaan = $data['AB'];
+                    $no_bpjs_kesehatan = $data['AC'];
+                    $bank = $data['AD'];
+                    $no_rek = $data['AE'];
+
+
+                    // insert data
+                    $this->karyawanModel->insert([
+                        'nip'        =>    $nip,
+                        'username'        =>    $username,
+                        'password'       =>    password($password),
+                        'nama_lengkap'       =>    $nama_lengkap,
+                        'nama_panggilan'       =>    $nama_panggilan,
+                        'gelar'       =>    $gelar,
+                        'j_kel'       =>    $j_kel,
+                        'tem_lahir'       =>    $tem_lahir,
+                        'tgl_lahir'       =>    tanggal($tgl_lahir),
+                        'jalan_no'       =>    $jalan_no,
+                        'rt'       =>    $rt,
+                        'rw'       =>    $rw,
+                        'desa_kel'       =>    $desa_kel,
+                        'kecamatan'       =>    $kecamatan,
+                        'kd_pos'       =>    $kd_pos,
+                        'kota'       =>    $kota,
+                        'telepon'       =>    $telepon,
+                        'email'       =>    $email,
+                        'agama'       =>    $agama,
+                        'status'       =>    $status,
+                        'tgl_mulai_bekerja'       =>  tanggal($tgl_mulai_bekerja),
+                        'status_pegawai_kode'       =>    $status_pegawai_kode,
+                        'jabatan_kode'       =>    $jabatan_kode,
+                        'no_ktp'       =>    $no_ktp,
+                        'no_kk'       =>    $no_kk,
+                        'no_npwp'       =>    $no_npwp,
+                        'no_bpjs_ketenagakerjaan'       =>    $no_bpjs_ketenagakerjaan,
+                        'no_bpjs_kesehatan'       =>    $no_bpjs_kesehatan,
+                        'bank'       =>    $bank,
+                        'no_rek'       =>    $no_rek,
+                        'role_kode'       =>    'UMUM'
+                    ]);
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Import pegawai berhasil'
+                ];
+            } else {
+                //upload gagal
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'Import pegawai gagal'
+                ];
+            }
+
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
         }
     }
 }
