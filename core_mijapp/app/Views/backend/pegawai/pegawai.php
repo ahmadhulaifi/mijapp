@@ -17,12 +17,38 @@
                 <a href="<?= base_url(); ?>/profil/editprofil/<?= $user['id']; ?>" type="button" class="btn btn-danger">
                     Hapus Pegawai
                 </a>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importModal">
+                    Import
+                </button>
+
+                <!-- modal import -->
+                <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="importModalLabel">Import Data Pegawai</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                ...
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Import</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
         </div>
 
-
+        <div class="row">
+            <input name="role_kode_hidden" type="hidden" value="<?= session('role_kode'); ?>">
+        </div>
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
@@ -69,6 +95,48 @@
         </div>
 
 
+        <!-- Modal Edit Password -->
+        <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="passwordModalLabel">Edit Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="" id="editpasswordform">
+                            <input type="hidden" name="idpegawaipassword">
+                            <div class="row">
+                                <label for="Nama" class="col-sm-4">Nama Lengkap</label>
+                                <div class="col-sm-8">
+                                    <p id="namapassword"></p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-sm-4 col-form-label">Password</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="inputPassword3" name="password">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword4" class="col-sm-4 col-form-label">Retype-Password</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="inputPassword4" name="repassword">
+                                </div>
+                            </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
@@ -88,6 +156,7 @@
                 success: function(data) {
                     // console.log(data);
                     let i = "1";
+                    let role_kode_hidden = $("input[name='role_kode_hidden']").attr("value");;
                     $('#tablePegawai').DataTable({
                         "data": data.pegawai,
                         "responsive": true,
@@ -135,9 +204,15 @@
                                 "data": null,
                                 "render": function(data, type, row, meta) {
                                     let a = '';
-                                    a = `
-                                    <a href="" class="badge badge-info editpegawai" value="${row.id}"><i class="far fa-fw fa-edit"></i></a>
-                                    <a href="" value="${row.id}" class="badge badge-danger deletepegawai"><i class="fas fa-fw fa-trash-alt"></i></a>`;
+
+                                    if (`${row.role_kode}` == "ADMIN" & role_kode_hidden != "ADMIN") {
+                                        a = `
+                                    <a href="<?= base_url(); ?>/pegawai/editformpegawai/${row.id}" class="badge badge-info editpegawai"><i class="far fa-fw fa-edit"></i></a>`;
+                                    } else {
+                                        a = `
+                                    <a href="<?= base_url(); ?>/pegawai/editformpegawai/${row.id}" class="badge badge-info editpegawai"><i class="far fa-fw fa-edit"></i></a>
+                                    <a type="button" value="${row.id}/${row.nama_lengkap}" class="badge badge-warning passwordpegawai"><i class="fas fa-fw fa-lock"></i></a>`;
+                                    }
 
                                     return a;
                                 }
@@ -258,94 +333,39 @@
 
         fetchPegawai();
 
+        $(document).on('click', '.passwordpegawai', function(e) {
+            let arrayvalue = $(this).attr("value").split("/");
 
+            let idpegawai = arrayvalue[0];
+            let namapegawai = arrayvalue[1];
+            // let idpegawai = $(this).attr("value")
+            // alert("Id pegawai ini adalah " + idpegawai + "<br> dengan nama " + namapegawai)
 
-        // delete menu
-        $(document).on("click", ".deletemenu", function() {
-            event.preventDefault();
-            let idmenu = $(this).attr('value');
+            $('#passwordModal').modal('show')
+            $("input[name='idpegawaipassword']").val(idpegawai);
+            $("#namapassword").text(namapegawai);
 
-            Swal.fire({
-                title: 'Apa kamu yakin untuk menghapusnya?',
-                text: "kamu tidak akan bisa mengembalikannya",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus saja!'
-            }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        url: '<?= base_url('/menu/deletemenu'); ?>/' + idmenu,
-                        type: 'DELETE',
-                        error: function() {
-                            alert('Something is wrong');
-                        },
-                        success: function(data) {
-                            $('#tableMenu').DataTable().destroy();
-                            fetchMenu();
-                            Swal.fire(
-                                'Deleted!',
-                                'File sudah terdelete.',
-                                'success'
-                            )
-                        }
-                    });
-
-                }
-            })
         });
 
-        // modal edit
-        $(document).on("click", ".editmenu", function() {
-            event.preventDefault();
-            let idmenu = $(this).attr("value")
-            $.ajax({
-                url: '<?= base_url('/menu/edit'); ?>',
-                type: 'post',
-                data: {
-                    idmenu: idmenu
-                },
-                dataType: 'json',
-                success: function(data) {
-                    if (data.responce == 'success') {
-                        $('#editmenuModal').modal('show');
-                        $("input[name='idmenu']").val(data.menu.id);
-                        $("input[name='menu']").val(data.menu.menu);
-                        $("input[name='icon']").val(data.menu.icon);
-                        $("input[name='url']").val(data.menu.url);
-                        $("input[name='sort']").val(data.menu.sort);
-                    } else {
-
-                        toastr["error"](data.pesan);
-                    }
-                }
-            });
-        });
-
-        // edit menu
-
-        $("#editmenuform").submit(function(event) {
+        // edit password
+        $('#editpasswordform').submit(function() {
             event.preventDefault();
             $.ajax({
-                url: '<?= base_url(); ?>/menu/editmenu',
+                url: '<?= base_url('/pegawai/editpasswordpegawai'); ?>',
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
                 success: function(data) {
-                    // console.log(data);
                     if (data.responce == "success") {
-                        $('#editmenuModal').modal('hide');
-                        $('#tableMenu').DataTable().destroy();
-                        fetchMenu();
+                        $('#passwordModal').modal('hide');
                         toastr["success"](data.pesan);
                     } else {
+                        // console.log(data);
                         toastr["error"](data.pesan);
                     }
                 }
             });
-
-
+            $("#editpasswordform")[0].reset();
         });
 
     });

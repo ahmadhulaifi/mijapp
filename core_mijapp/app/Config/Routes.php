@@ -154,6 +154,12 @@ $routes->post('/pegawai/fetchpegawai', 'backend/pegawai::fetchpegawai', ['filter
 $routes->post('/backend/pegawai/fetchpegawai', 'backend/pegawai::fetchpegawai', ['filter' => 'akseslogin']);
 $routes->post('/pegawai/tambahpegawai', 'backend/pegawai::tambahpegawai', ['filter' => 'akseslogin']);
 $routes->post('/backend/pegawai/tambahpegawai', 'backend/pegawai::tambahpegawai', ['filter' => 'akseslogin']);
+$routes->get('/pegawai/editformpegawai/(:num)', 'backend\pegawai::editformpegawai/$1', ['filter' => 'akseslogin']);
+$routes->get('/backend/pegawai/editformpegawai/(:num)', 'backend\pegawai::editformpegawai/$1', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/editpegawai', 'backend/pegawai::editpegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/editpegawai', 'backend/pegawai::editpegawai', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/editpasswordpegawai', 'backend/pegawai::editpasswordpegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/editpasswordpegawai', 'backend/pegawai::editpasswordpegawai', ['filter' => 'akseslogin']);
 
 
 /**

@@ -88,7 +88,8 @@ class Login extends Controller
                     $user = [
                         'id' => $ceklog[0]['id'],
                         'username' => $ceklog[0]['username'],
-                        'password' => $ceklog[0]['password']
+                        'password' => $ceklog[0]['password'],
+                        'role_kode' => $ceklog[0]['role_kode']
                     ];
                     session()->set($user);
                 } else {
