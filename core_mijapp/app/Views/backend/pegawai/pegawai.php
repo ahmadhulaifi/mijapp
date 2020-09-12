@@ -14,9 +14,7 @@
                 <a href="<?= base_url(); ?>/pegawai/formtambah" type="button" class="btn btn-success">
                     Tambah Pegawai
                 </a>
-                <a href="<?= base_url(); ?>/profil/editprofil/<?= $user['id']; ?>" type="button" class="btn btn-danger">
-                    Hapus Pegawai
-                </a>
+                <button type="button" name="btn_deletepegawai" id="deletepegawai" class="btn btn-danger">Hapus</button>
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importModal">
                     Import
                 </button>
@@ -38,6 +36,8 @@
                                         <label for="">Unggah File</label>
                                         <input type="file" id="filepegawai" name="filepegawai" class="form-control">
                                     </div>
+                                    <br>
+                                    <p style="font-size: 15px;"><a href="<?= base_url(); ?>/asset/template/template_import_pegawai.xls">Download Template Import pegawai</a></p>
 
                             </div>
                             <div class="modal-footer">
@@ -62,7 +62,8 @@
                     <table class="table table-striped" id="tablePegawai">
                         <thead class="bg-success">
                             <tr>
-                                <th scope="col">No</th>
+                                <th><input type="checkbox" id='checkall'></th>
+                                <!-- <th scope="col">No</th> -->
                                 <th scope="col">Action</th>
                                 <th scope="col">NIP</th>
                                 <th scope="col">Nama Lengkap</th>
@@ -209,11 +210,31 @@
                             visible: false
                         }],
 
-                        "columns": [{
-                                "data": null,
-                                "render": function() {
-                                    return a = i++;
-                                }
+                        "columns": [
+                            // {
+                            //     "data": null,
+                            //     "render": function() {
+                            //         return a = i++;
+                            //     }
+                            // },
+                            {
+                                targets: 0,
+                                data: null,
+                                className: 'text-center',
+                                searchable: false,
+                                orderable: false,
+                                // render: function(data, type, row) {
+                                //     return row.id;
+                                // },
+                                // "data": row.id // can be null or undefined
+                                // "defaultContent": ""
+
+                                "render": function(data, type, row, meta) {
+                                    var r =
+                                        '<input type="checkbox" name="checkbox" id = "' + row.id + '"  value = "' + row.id + '" class="delete_checkbox"></input>';
+
+                                    return r;
+                                },
                             },
                             {
                                 "data": null,
@@ -422,6 +443,85 @@
                 }
             });
 
+        });
+
+        // Check all 
+        $('#checkall').click(function() {
+            if ($(this).is(':checked')) {
+                $('.delete_checkbox').prop('checked', true);
+            } else {
+                $('.delete_checkbox').prop('checked', false);
+            }
+        });
+
+        $('.delete_checkbox').click(function() {
+            if ($(this).is(':checked')) {
+                $(this).closest('tr').addClass('removeRow');
+            } else {
+                $(this).closest('tr').removeClass('removeRow');
+            }
+        });
+
+        $('#deletepegawai').click(function() {
+
+            var checkbox = $('.delete_checkbox:checked');
+
+            if (checkbox.length > 0) {
+                Swal.fire({
+                    title: 'Apa kamu yakin ingin menghapus ' + checkbox.length + ' data pegawai?',
+                    text: "kamu tidak akan bisa mengembalikannya!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus saja!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        var checkbox_value = [];
+                        $(checkbox).each(function() {
+                            checkbox_value.push($(this).val());
+                        });
+
+                        // console.log(checkbox);
+                        $.ajax({
+                            url: '<?= base_url('/pegawai/deletepegawai'); ?>',
+                            type: "POST",
+                            data: {
+                                checkbox_value: checkbox_value
+                            },
+                            dataType: 'json',
+                            success: function(data) {
+                                if (data.responce == "success") {
+                                    // toastr["success"](data.pesan);
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Data berhasil dihapus.',
+                                        'success'
+                                    )
+                                    $('#tablePegawai').DataTable().destroy();
+                                    fetchPegawai();
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'Ada yang tidak beres!',
+                                    })
+                                }
+                            }
+                        })
+
+                    }
+                })
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pilih minimal satu data',
+                })
+
+            }
         });
 
     });

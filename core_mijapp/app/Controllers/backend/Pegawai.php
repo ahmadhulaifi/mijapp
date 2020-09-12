@@ -614,4 +614,25 @@ class Pegawai extends Controller
             echo "No direct script access allowed";
         }
     }
+
+    public function deletepegawai()
+    {
+        if ($this->request->isAJAX()) {
+            if ($id = $this->request->getVar('checkbox_value')) {
+                for ($count = 0; $count < count($id); $count++) {
+                    // $this->karyawanModel->delete_karyawan($id[$count]);
+                    $this->karyawanModel->where('id', $id[$count])->delete();
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data pegawai berhasil dihapus'
+                ];
+
+                echo json_encode($data);
+            }
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
 }
