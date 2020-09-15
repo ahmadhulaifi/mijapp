@@ -155,13 +155,7 @@
 <script>
     $(document).ready(function() {
 
-        function tanggalindo(tanggal) {
 
-            // var string = "Belajar Pemrograman di rachmat.ID";
-            let pecah = tanggal.split("-");
-
-            return pecah[2] + '/' + pecah[1] + '/' + pecah[0];
-        };
 
         //fetch Pegawai
         function fetchPegawai() {

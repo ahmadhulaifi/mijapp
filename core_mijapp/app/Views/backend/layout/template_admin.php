@@ -46,6 +46,16 @@
     <!-- jQuery UI 1.11.4 -->
     <script src="<?= base_url(); ?>/asset/plugins/jquery-ui/jquery-ui.min.js"></script>
 
+    <script>
+        function tanggalindo(tanggal) {
+
+            // var string = "Belajar Pemrograman di rachmat.ID";
+            let pecah = tanggal.split("-");
+
+            return pecah[2] + '/' + pecah[1] + '/' + pecah[0];
+        };
+    </script>
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -131,6 +141,8 @@
         $(document).ready(function() {
             // menambahkan kelas aktif di sidebar
             let tes = $(".sub_menu.active").parent().parent().prev().addClass('active')
+
+
 
         });
     </script>

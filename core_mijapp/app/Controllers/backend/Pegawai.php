@@ -9,6 +9,8 @@ use App\Models\backend\MenuModel;
 use App\Models\backend\SubmenuModel;
 use App\Models\backend\JabatanModel;
 use App\Models\backend\StatusPegawaiModel;
+use App\Models\backend\DivisiModel;
+use App\Models\backend\UserDivisiModel;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\Request;
 use DateTime;
@@ -20,6 +22,8 @@ class Pegawai extends Controller
     protected $submenuModel;
     protected $jabatanModel;
     protected $statusPegawaiModel;
+    protected $divisiModel;
+    protected $userDivisiModel;
 
     public function __construct()
     {
@@ -29,6 +33,8 @@ class Pegawai extends Controller
         $this->submenuModel = new SubmenuModel();
         $this->jabatanModel = new JabatanModel();
         $this->statusPegawaiModel = new StatusPegawaiModel();
+        $this->divisiModel = new DivisiModel();
+        $this->userDivisiModel = new UserDivisiModel();
     }
 
     // controller Data Pegawai
@@ -631,6 +637,103 @@ class Pegawai extends Controller
 
                 echo json_encode($data);
             }
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    // controller divisi pegawai
+    public function divisi()
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+        $divisi = $this->divisiModel->findAll();
+        $divisi2 = $this->divisiModel->findAll();
+        // dd($divisi);
+
+        $data = [
+            'title' => 'Divisi Pegawai',
+            'user' => $cekuser,
+            'divisi' => $divisi,
+            'divisi2' => $divisi2,
+            'validation' => \Config\Services::validation()
+        ];
+
+        return view('backend/pegawai/divisi', $data);
+    }
+
+    // fetch divisi belum diatur
+    public function fetchdivisibdpegawai()
+    {
+
+        if ($this->request->isAJAX()) {
+            if ($pegawaibd = $this->userDivisiModel->getdivisibd()) {
+                $data = [
+                    'responce' => 'success',
+                    'pegawai' => $pegawaibd
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    // fetch divisi semua
+    public function fetchdivisisemuapegawai()
+    {
+
+        if ($this->request->isAJAX()) {
+            if ($pegawaisemua = $this->userDivisiModel->getdivisisemua()) {
+
+                $data = [
+                    'responce' => 'success',
+                    'pegawai' => $pegawaisemua
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    // delete divisi
+    public function deletedivisipegawai($id)
+    {
+        if ($this->request->isAJAX()) {
+            $this->userDivisiModel->where('id', $id)->delete();
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    // fetch divisi satuan
+    public function fetchdivisipegawai()
+    {
+        if ($this->request->isAJAX()) {
+            $satuan = $this->request->getVar('divisiasal');
+            // dd($satuan);
+            if ($pegawaisatuan = $this->userDivisiModel->getdivisisatuan($satuan)) {
+                $data = [
+                    'responce' => 'success',
+                    'pegawai' => $pegawaisatuan
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch'
+                ];
+            }
+            echo json_encode($data);
         } else {
             echo "No direct script access allowed";
         }

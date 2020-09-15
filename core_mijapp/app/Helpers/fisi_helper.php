@@ -17,6 +17,28 @@ function checkaccess($role_kode, $menu_id)
     }
 }
 
+function checkdivisi($id_karyawan)
+{
+    $db      = \Config\Database::connect();
+
+    $builder = $db->table('user_divisi');
+    $builder->select('user_divisi.*,divisi.divisi');
+    $builder->join('divisi', 'divisi.id = user_divisi.id_divisi');
+
+    $builder->where('id_karyawan', $id_karyawan);
+    // $builder->where('id_divisi', $id_divisi);
+
+    if ($builder->countAllResults() > 0) {
+        $query = $builder->get()->getResultArray();
+        $hasil = "ada datanya";
+    } else {
+        $query = "belum diatur";
+        $hasil = "belum diatur";
+    }
+
+    return $hasil;
+}
+
 function tgl_indo($tanggal)
 {
     $bulan = array(
