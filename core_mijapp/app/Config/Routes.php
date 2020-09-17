@@ -175,6 +175,8 @@ $routes->delete('/backend/pegawai/deletedivisipegawai/(:num)', 'backend\pegawai:
 $routes->delete('/pegawai/deletedivisipegawai/(:num)', 'backend\pegawai::deletedivisipegawai/$1', ['filter' => 'akseslogin']);
 $routes->post('/pegawai/fetchdivisipegawai', 'backend/pegawai::fetchdivisipegawai', ['filter' => 'akseslogin']);
 $routes->post('/backend/pegawai/fetchdivisipegawai', 'backend/pegawai::fetchdivisipegawai', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/btntujuandivisipegawai', 'backend/pegawai::btntujuandivisipegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/btntujuandivisipegawai', 'backend/pegawai::btntujuandivisipegawai', ['filter' => 'akseslogin']);
 
 /**
  * --------------------------------------------------------------------

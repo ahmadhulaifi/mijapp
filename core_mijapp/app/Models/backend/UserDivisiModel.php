@@ -7,11 +7,11 @@ use CodeIgniter\Model;
 class UserDivisiModel extends Model
 {
     protected $table      = 'user_divisi';
-    // protected $allowedFields = ['username', 'password'];
+    protected $allowedFields = ['id_karyawan', 'id_divisi'];
 
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    // protected $useTimestamps = true;
+    // protected $createdField  = 'created_at';
+    // protected $updatedField  = 'updated_at';
 
     // protected $primaryKey = 'id';
 
@@ -41,7 +41,7 @@ class UserDivisiModel extends Model
     {
         $builder = $this->table($this->table);
 
-        $builder->select('user_divisi.*,karyawan.nama_lengkap,,karyawan.nip,divisi.divisi');
+        $builder->select('user_divisi.*,karyawan.id as nik,karyawan.nama_lengkap,,karyawan.nip,divisi.divisi');
         $builder->join('karyawan', 'karyawan.id=user_divisi.id_karyawan', 'right');
         $builder->join('divisi', 'divisi.id=user_divisi.id_divisi', 'left outer');
 
@@ -53,7 +53,7 @@ class UserDivisiModel extends Model
     public function getdivisibd()
     {
         $builder = $this->table($this->table);
-        $builder->select('user_divisi.*,karyawan.nama_lengkap,,karyawan.nip,divisi.divisi');
+        $builder->select('user_divisi.*,karyawan.id as nik,karyawan.nama_lengkap,,karyawan.nip,divisi.divisi');
         $builder->join('karyawan', 'karyawan.id=user_divisi.id_karyawan', 'right');
         $builder->join('divisi', 'divisi.id=user_divisi.id_divisi', 'left outer');
 
@@ -66,7 +66,7 @@ class UserDivisiModel extends Model
     public function getdivisisatuan($id)
     {
         $builder = $this->table($this->table);
-        $builder->select('user_divisi.*,karyawan.nama_lengkap,karyawan.nip,divisi.divisi');
+        $builder->select('user_divisi.*,karyawan.id as nik,karyawan.nama_lengkap,karyawan.nip,divisi.divisi');
         // $builder->select('user_divisi.*,karyawan.nama_lengkap,,karyawan.nip,divisi.divisi');
         $builder->join('karyawan', 'karyawan.id=user_divisi.id_karyawan', 'right');
         $builder->join('divisi', 'divisi.id=user_divisi.id_divisi', 'left outer');

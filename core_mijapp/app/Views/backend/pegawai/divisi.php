@@ -39,7 +39,7 @@
         <div class="row">
 
             <div class="col-md-12">
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-4">
                         <form action="">
                             <div class="form-group row">
@@ -62,8 +62,8 @@
                             <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-4 col-form-label">Divisi Tujuan</label>
                                 <div class="col-sm-8">
-                                    <select name="divisitujuan" id="divisitujuan" class="form-control" onchange="fetchdivisitujuan(this.id)">
-                                        <option selected>Tampilkan semua</option>
+                                    <select name="divisitujuan" id="divisitujuan" class="form-control">
+                                        <option selected disabled>Tampilkan semua</option>
                                         <?php foreach ($divisi2 as $div) : ?>
                                             <option value="<?= $div['id']; ?>"><?= $div['divisi']; ?></option>
                                         <?php endforeach; ?>
@@ -73,9 +73,10 @@
                         </form>
                     </div>
 
-                    <div class="col-md4">
-                        <button class="btn btn-sm btn-primary float-right" onclick="saveToDestinationClass()"><i class="fa fa-arrow-right"></i> Tambah Divisi Tujuan</button>
+                    <div class="col-md-2 mb-2">
+                        <button class="btn btn-sm btn-primary" id="btntujuandivisipegawai"><i class="fa fa-arrow-right"></i> Tambah Divisi Tujuan</button>
                     </div>
+
 
                 </div>
 
@@ -141,7 +142,7 @@
 
                         "render": function(data, type, row, meta) {
                             var r =
-                                '<input type="checkbox" name="checkbox" id = "' + row.id + '"  value = "' + row.id + '" class="delete_checkbox"></input>';
+                                '<input type="checkbox" name="checkbox" id = "' + row.nik + '"  value = "' + row.nik + '" class="select_checkbox"></input>';
 
                             return r;
                         },
@@ -220,7 +221,7 @@
         }
 
         fetchDivisiAsalSemua();
-        // fetchDivisiAsalbd();
+
 
         // delete divisi
         $(document).on("click", ".deletedivisipegawai", function() {
@@ -267,7 +268,7 @@
                 $('.asal-divisi-overlay').hide();
             } else if (divisiasal == 'belum') {
                 $('.asal-divisi-overlay').show();
-
+                $('#tableAsalPegawai').DataTable().clear();
                 $('#tableAsalPegawai').DataTable().destroy();
                 fetchDivisiAsalbd();
                 $('.asal-divisi-overlay').hide();
@@ -302,6 +303,89 @@
             }
         })
 
+        // Check all 
+        $('#checkall').click(function() {
+            if ($(this).is(':checked')) {
+                $('.select_checkbox').prop('checked', true);
+            } else {
+                $('.select_checkbox').prop('checked', false);
+            }
+        });
+
+        $('.select_checkbox').click(function() {
+            if ($(this).is(':checked')) {
+                $(this).closest('tr').addClass('removeRow');
+            } else {
+                $(this).closest('tr').removeClass('removeRow');
+            }
+        });
+
+
+
+        $('#btntujuandivisipegawai').click(function() {
+            let checkbox = $('.select_checkbox:checked');
+            let iddivisitujuan = $("#divisitujuan").val();
+            // let iddivisitujuan = $("input[name='divisitujuan']").val();;
+
+            // alert(checkbox);
+
+
+            if (checkbox.length > 0) {
+                Swal.fire({
+                    title: 'Apa kamu yakin ingin menambah ' + checkbox.length + ' data divisi pegawai?',
+                    text: "kamu bisa menghapusnya kembali nanti!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, tambahkan!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let checkbox_value = [];
+                        $(checkbox).each(function() {
+                            checkbox_value.push($(this).val());
+                        });
+
+                        // console.log(checkbox);
+                        $.ajax({
+                            url: '<?= base_url('/pegawai/btntujuandivisipegawai'); ?>',
+                            type: "POST",
+                            data: {
+                                checkbox_value: checkbox_value,
+                                iddivisitujuan: iddivisitujuan
+                            },
+                            dataType: 'json',
+                            success: function(data) {
+                                if (data.responce == "success") {
+                                    Swal.fire(
+                                        'Sukses!',
+                                        'Data divisi berhasil ditambah.',
+                                        'success'
+                                    )
+                                    $('#tableAsalPegawai').DataTable().destroy();
+                                    fetchDivisiAsalSemua();
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'Ada yang tidak beres!',
+                                    })
+                                }
+                            }
+                        })
+
+                    }
+                })
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pilih minimal satu data',
+                })
+
+            }
+        });
 
 
     })

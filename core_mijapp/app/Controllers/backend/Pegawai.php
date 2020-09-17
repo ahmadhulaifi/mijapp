@@ -738,4 +738,33 @@ class Pegawai extends Controller
             echo "No direct script access allowed";
         }
     }
+
+
+
+    public function btntujuandivisipegawai()
+    {
+        if ($this->request->isAJAX()) {
+            if ($id = $this->request->getVar('checkbox_value')) {
+                $iddivisi = $this->request->getVar('iddivisitujuan');
+
+                for ($count = 0; $count < count($id); $count++) {
+                    $insert = [
+                        'id_karyawan' => $id[$count],
+                        'id_divisi' => $iddivisi,
+                    ];
+                    // $this->userDivisiModel->where('id', $id[$count])->delete();
+                    $this->userDivisiModel->insert($insert);
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data Divisi pegawai berhasil dihapus'
+                ];
+
+                echo json_encode($data);
+            }
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
 }

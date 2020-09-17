@@ -217,11 +217,7 @@
                                 className: 'text-center',
                                 searchable: false,
                                 orderable: false,
-                                // render: function(data, type, row) {
-                                //     return row.id;
-                                // },
-                                // "data": row.id // can be null or undefined
-                                // "defaultContent": ""
+
 
                                 "render": function(data, type, row, meta) {
                                     var r =
