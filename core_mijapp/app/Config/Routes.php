@@ -178,6 +178,15 @@ $routes->post('/backend/pegawai/fetchdivisipegawai', 'backend/pegawai::fetchdivi
 $routes->post('/pegawai/btntujuandivisipegawai', 'backend/pegawai::btntujuandivisipegawai', ['filter' => 'akseslogin']);
 $routes->post('/backend/pegawai/btntujuandivisipegawai', 'backend/pegawai::btntujuandivisipegawai', ['filter' => 'akseslogin']);
 
+$routes->get('/pegawai/absen', 'backend/pegawai::absen', ['filter' => 'akseslogin']);
+$routes->get('/backend/pegawai/absen', 'backend/pegawai::absen', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/fetchabsenpegawai', 'backend/pegawai::fetchabsenpegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/fetchabsenpegawai', 'backend/pegawai::fetchabsenpegawai', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/saveabsenpegawai', 'backend/pegawai::saveabsenpegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/saveabsenpegawai', 'backend/pegawai::saveabsenpegawai', ['filter' => 'akseslogin']);
+
+
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing

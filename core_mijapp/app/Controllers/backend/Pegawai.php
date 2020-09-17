@@ -11,6 +11,7 @@ use App\Models\backend\JabatanModel;
 use App\Models\backend\StatusPegawaiModel;
 use App\Models\backend\DivisiModel;
 use App\Models\backend\UserDivisiModel;
+use App\Models\backend\AbsenPegawaiModel;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\Request;
 use DateTime;
@@ -24,6 +25,7 @@ class Pegawai extends Controller
     protected $statusPegawaiModel;
     protected $divisiModel;
     protected $userDivisiModel;
+    protected $absenPegawaiModel;
 
     public function __construct()
     {
@@ -35,6 +37,7 @@ class Pegawai extends Controller
         $this->statusPegawaiModel = new StatusPegawaiModel();
         $this->divisiModel = new DivisiModel();
         $this->userDivisiModel = new UserDivisiModel();
+        $this->absenPegawaiModel = new AbsenPegawaiModel();
     }
 
     // controller Data Pegawai
@@ -157,9 +160,10 @@ class Pegawai extends Controller
                 ],
 
                 'nip' => [
-                    'rules' => 'required',
+                    'rules' => 'required|is_unique[karyawan.nip]',
                     'errors' => [
-                        'required' => 'NIP tidak boleh kosong'
+                        'required' => 'NIP tidak boleh kosong',
+                        'is_unique' => 'NIP harus unik'
                     ]
                 ],
                 'jabatan_kode' => [
@@ -763,6 +767,147 @@ class Pegawai extends Controller
 
                 echo json_encode($data);
             }
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    // controller absen pegawai
+    public function absen()
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+        $pegawai = $this->karyawanModel->findAll();
+
+        $data = [
+            'title' => 'Absen Pegawai',
+            'user' => $cekuser,
+            'pegawai' => $pegawai,
+            'validation' => \Config\Services::validation()
+        ];
+
+        return view('backend/pegawai/absen', $data);
+    }
+
+    public function fetchabsenpegawai()
+    {
+
+        if ($this->request->isAJAX()) {
+            if ($absen = $this->absenPegawaiModel->getabsensemua()) {
+                // dd($absen);
+                $data = [
+                    'responce' => 'success',
+                    'absen' => $absen
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function saveabsenpegawai()
+    {
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'nip' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'NIP tidak boleh kosong'
+                    ]
+                ],
+                'bulan' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Bulan tidak boleh kosong'
+                    ]
+                ],
+                'tahun' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Tahun tidak boleh kosong',
+                        'numeric' => 'Tahun harus berupa angka'
+                    ]
+                ],
+                'sakit' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Jumlah sakit tidak boleh kosong',
+                        'numeric' => 'Jumlah sakit harus berupa angka'
+                    ]
+                ],
+                'izin' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Jumlah izin tidak boleh kosong',
+                        'numeric' => 'Jumlah izin harus berupa angka'
+                    ]
+                ],
+                'alpha' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Jumlah alpha tidak boleh kosong',
+                        'numeric' => 'Jumlah alpha harus berupa angka'
+                    ]
+                ],
+                'cuti' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Jumlah cuti tidak boleh kosong',
+                        'numeric' => 'Jumlah cuti harus berupa angka'
+                    ]
+                ],
+                'lain' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Jumlah lain tidak boleh kosong',
+                        'numeric' => 'Jumlah lain harus berupa angka'
+                    ]
+                ],
+                'hadir' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Jumlah hadir tidak boleh kosong',
+                        'numeric' => 'Jumlah hadir harus berupa angka'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+
+                $insert = [
+                    'nip' => $this->request->getVar('nip'),
+                    'bulan' => $this->request->getVar('bulan'),
+                    'tahun' => $this->request->getVar('tahun'),
+                    'sakit' => $this->request->getVar('sakit'),
+                    'izin' => $this->request->getVar('izin'),
+                    'alpha' => $this->request->getVar('alpha'),
+                    'cuti' => $this->request->getVar('cuti'),
+                    'lain' => $this->request->getVar('lain'),
+                    'hadir' => $this->request->getVar('hadir'),
+                    'user_update' => $cekuser['nama_lengkap']
+                ];
+
+                $this->absenPegawaiModel->insert($insert);
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Absen berhasil ditambah'
+                ];
+            }
+            echo json_encode($data);
         } else {
             echo "No direct script access allowed";
         }
