@@ -184,6 +184,10 @@ $routes->post('/pegawai/fetchabsenpegawai', 'backend/pegawai::fetchabsenpegawai'
 $routes->post('/backend/pegawai/fetchabsenpegawai', 'backend/pegawai::fetchabsenpegawai', ['filter' => 'akseslogin']);
 $routes->post('/pegawai/saveabsenpegawai', 'backend/pegawai::saveabsenpegawai', ['filter' => 'akseslogin']);
 $routes->post('/backend/pegawai/saveabsenpegawai', 'backend/pegawai::saveabsenpegawai', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/editmodalabsen', 'backend/pegawai::editmodalabsen', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/editmodalabsen', 'backend/pegawai::editmodalabsen', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/editabsenpegawai', 'backend/pegawai::editabsenpegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/editabsenpegawai', 'backend/pegawai::editabsenpegawai', ['filter' => 'akseslogin']);
 
 
 

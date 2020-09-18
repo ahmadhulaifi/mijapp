@@ -61,6 +61,7 @@
                     <table class="table table-striped" id="tableAbsenPegawai">
                         <thead class="bg-success">
                             <tr>
+                                <th scope="col"></th>
                                 <th><input type="checkbox" id='checkall'></th>
                                 <!-- <th scope="col">No</th> -->
                                 <th scope="col">Action</th>
@@ -185,34 +186,65 @@
         </div>
 
         <!-- Modal Edit Absen -->
-        <div class="modal fade" id="absenModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editabsenModal" tabindex="-1" aria-labelledby="editabsenModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="passwordModalLabel">Edit Password</h5>
+                        <h5 class="modal-title" id="editabsenModalLabel">Edit Absen</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="" id="editpasswordform">
-                            <input type="hidden" name="idpegawaipassword">
-                            <div class="row">
-                                <label for="Nama" class="col-sm-4">Nama Lengkap</label>
-                                <div class="col-sm-8">
-                                    <p id="namapassword"></p>
+                        <form method="post" action="" id="editabsenform">
+                            <input type="hidden" name="idabsen">
+
+
+                            <div class="form-group row">
+                                <label for="nip" class="col-sm-2">NIP</label>
+                                <div class="col-sm-10">
+                                    <p id="edittextnip">NIP Pegawai</p>
+                                    <input type="hidden" class="form-control" name="nip">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-4 col-form-label">Password</label>
-                                <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="inputPassword3" name="password">
+                                <label for="bulan" class="col-sm-2 col-form-label">Bulan</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="editbulan" name="bulan">
+                                        <option disabled>Choose...</option>
+                                    </select>
+
+                                </div>
+                                <label for="tahun" class="col-sm-2 col-form-label">Tahun</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="tahun">
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="inputPassword4" class="col-sm-4 col-form-label">Retype-Password</label>
-                                <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="inputPassword4" name="repassword">
+
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <center><label for="sakit">Sakit</label></center>
+                                    <input type="text" class="form-control" name="sakit">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <center><label for="izin">Izin</label></center>
+                                    <input type="text" class="form-control" name="izin">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <center><label for="alpha">Alpha</label></center>
+                                    <input type="text" class="form-control" name="alpha">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <center><label for="cuti">Cuti</label></center>
+                                    <input type="text" class="form-control" name="cuti">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <center><label for="lain">Lainnya</label></center>
+                                    <input type="text" class="form-control" name="lain">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <center><label for="hadir">Hadir</label></center>
+                                    <input type="text" class="form-control" name="hadir">
                                 </div>
                             </div>
 
@@ -283,6 +315,13 @@
                 ],
 
                 "columns": [{
+                        "data": null,
+                        "render": function(data, type, row, meta) {
+                            let a = '';
+                            return a;
+                        }
+                    },
+                    {
                         targets: 0,
                         data: null,
                         className: 'text-center',
@@ -301,7 +340,7 @@
                         "render": function(data, type, row, meta) {
                             let a = '';
                             a = `
-                                    <a href="" value="${row.id}" class="badge badge-danger deletedivisipegawai"><i class="fas fa-fw fa-trash-alt"></i></a>`
+                            <center><a href="" class="badge badge-info editabsenpegawai" value="${row.id}"><i class="far fa-fw fa-edit"></i></a></center>`
 
                             return a;
                         }
@@ -372,6 +411,7 @@
         // tambah absen
         $('#tambahabsenform').submit(function() {
             event.preventDefault();
+
             $.ajax({
                 url: '<?= base_url('/pegawai/saveabsenpegawai'); ?>',
                 type: 'post',
@@ -392,26 +432,84 @@
             });
         });
 
-        // edit password
-        $('#editpasswordform').submit(function() {
+        // modal edit
+        $(document).on("click", ".editabsenpegawai", function() {
+            event.preventDefault();
+            $("#editbulan").children().remove();
+            let idabsen = $(this).attr("value")
+            $.ajax({
+                url: '<?= base_url('/pegawai/editmodalabsen'); ?>',
+                type: 'post',
+                data: {
+                    idabsen: idabsen
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.responce == 'success') {
+                        // console.log(data);
+                        $('#editabsenModal').modal('show');
+                        $("input[name='idabsen']").val(data.absen.id);
+
+
+                        $("input[name='nip']").val(data.absen.nip);
+                        $("#edittextnip").text(data.absen.nip);
+
+
+                        $("#editbulan").append('<option value="januari"' + ((data.absen.bulan == 'januari') ? 'selected="selected"' : '') + '>Januari</option>');
+                        $("#editbulan").append('<option value="februari"' + ((data.absen.bulan == 'februari') ? 'selected="selected"' : '') + '>Februari</option>');
+                        $("#editbulan").append('<option value="maret"' + ((data.absen.bulan == 'maret') ? 'selected="selected"' : '') + '>Maret</option>');
+                        $("#editbulan").append('<option value="april"' + ((data.absen.bulan == 'april') ? 'selected="selected"' : '') + '>April</option>');
+                        $("#editbulan").append('<option value="mei"' + ((data.absen.bulan == 'mei') ? 'selected="selected"' : '') + '>Mei</option>');
+                        $("#editbulan").append('<option value="juni"' + ((data.absen.bulan == 'juni') ? 'selected="selected"' : '') + '>Juni</option>');
+                        $("#editbulan").append('<option value="juli"' + ((data.absen.bulan == 'juli') ? 'selected="selected"' : '') + '>Juli</option>');
+                        $("#editbulan").append('<option value="agustus"' + ((data.absen.bulan == 'agustus') ? 'selected="selected"' : '') + '>Agustus</option>');
+                        $("#editbulan").append('<option value="september"' + ((data.absen.bulan == 'september') ? 'selected="selected"' : '') + '>September</option>');
+                        $("#editbulan").append('<option value="oktober"' + ((data.absen.bulan == 'oktober') ? 'selected="selected"' : '') + '>Oktober</option>');
+                        $("#editbulan").append('<option value="november"' + ((data.absen.bulan == 'november') ? 'selected="selected"' : '') + '>November</option>');
+                        $("#editbulan").append('<option value="desember"' + ((data.absen.bulan == 'desember') ? 'selected="selected"' : '') + '>Desember</option>');
+
+
+                        $("input[name='tahun']").val(data.absen.tahun);
+                        $("input[name='sakit']").val(data.absen.sakit);
+                        $("input[name='izin']").val(data.absen.izin);
+                        $("input[name='alpha']").val(data.absen.alpha);
+                        $("input[name='cuti']").val(data.absen.cuti);
+                        $("input[name='lain']").val(data.absen.lain);
+                        $("input[name='hadir']").val(data.absen.hadir);
+                    } else {
+
+                        toastr["error"](data.pesan);
+                    }
+                    $('#tambahabsenform')[0].reset();
+                }
+            });
+        });
+
+        // edit absen
+
+        $("#editabsenform").submit(function(event) {
             event.preventDefault();
             $.ajax({
-                url: '<?= base_url('/pegawai/editpasswordpegawai'); ?>',
+                url: '<?= base_url(); ?>/pegawai/editabsenpegawai',
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
                 success: function(data) {
+                    // console.log(data);
                     if (data.responce == "success") {
-                        $('#passwordModal').modal('hide');
+                        $('#editabsenModal').modal('hide');
+                        $('#tableAbsenPegawai').DataTable().destroy();
+                        fetchAbsen();
                         toastr["success"](data.pesan);
                     } else {
-                        // console.log(data);
                         toastr["error"](data.pesan);
                     }
+                    $('#tambahabsenform')[0].reset();
                 }
+
             });
-            $("#editpasswordform")[0].reset();
-        });
+        })
+
 
         // import pegawai
         $('#importpegawai').submit(function() {
