@@ -20,12 +20,12 @@
                 <!-- <span class="badge badge-warning navbar-badge">15</span> -->
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header"><img src="<?= base_url(); ?>/asset/images/user/default.png" alt="" class="rounded-circle"></span>
+                <span class="dropdown-item dropdown-header"><img src="<?= base_url(); ?>/asset/images/user/<?= $user['foto']; ?>" alt="" class="rounded-circle" width="70"></span>
                 <div class="dropdown-divider"></div>
 
 
                 <center class="mt-3 mb-3">
-                    <a class="btn btn-success mb-2" href="#" role="button" class="dropdown-item"><i class="fas fa-edit">Edit Profile</i></a>
+                    <a class="btn btn-success mb-2" href="<?= base_url(); ?>/profil/editprofil/<?= $user['id']; ?>" role="button" class="dropdown-item"><i class="fas fa-edit">Edit Profile</i></a>
                     <div class="dropdown-divider"></div>
                     <a class="btn btn-success" href="<?= base_url(); ?>/logout" role="button" class="dropdown-item"><i class="fas fa-users mr-2">Logout</i></a>
                 </center>

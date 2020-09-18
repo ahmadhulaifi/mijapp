@@ -12,14 +12,14 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3><?= $jumlahpegawai; ?></h3>
 
                         <p>Pegawai MIJ</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-fw fa-users"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url(); ?>/pegawai" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->

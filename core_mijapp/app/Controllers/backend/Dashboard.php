@@ -26,13 +26,15 @@ class Dashboard extends Controller
         $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
         $menu = $this->menuModel->findAll();
         $submenu = $this->submenuModel->findAll();
+        $jumlahpegawai = $this->karyawanModel->countAll();
         // dd($submenu);
 
         $data = [
             'title' => 'Dashboard',
             'user' => $cekuser,
             'menu' => $menu,
-            'submenu' => $submenu
+            'submenu' => $submenu,
+            'jumlahpegawai' => $jumlahpegawai
         ];
 
         return view('backend/dashboard', $data);

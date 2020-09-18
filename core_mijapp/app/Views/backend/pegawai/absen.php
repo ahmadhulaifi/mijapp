@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-            <div class="col mb-3">
+            <div class="col-md-4 mb-3">
                 <!-- Button trigger modal -->
 
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahModal">
@@ -38,7 +38,7 @@
                                         <input type="file" id="fileabsenpegawai" name="fileabsenpegawai" class="form-control">
                                     </div>
                                     <br>
-                                    <p style="font-size: 15px;"><a href="<?= base_url(); ?>/asset/template/template_import_pegawai.xls">Download Template Import Absen Pegawai</a></p>
+                                    <p style="font-size: 15px;"><a href="<?= base_url(); ?>/asset/template/template_import_absen_pegawai.xls">Download Template Import Absen Pegawai</a></p>
 
                             </div>
                             <div class="modal-footer">
@@ -51,6 +51,20 @@
                 </div>
 
             </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label for="bulan" class="col-sm-2 col-form-label">Bulan</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="searchbulan" name="searchbulan">
+                    </div>
+                    <label for="tahun" class="col-sm-2 col-form-label">Tahun</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="searchtahun" name="searchtahun">
+                    </div>
+                </div>
+            </div>
+
 
         </div>
 
@@ -81,6 +95,7 @@
 
                             </tr>
                         </thead>
+
 
                     </table>
                 </div>
@@ -280,6 +295,7 @@
             theme: "bootstrap"
         });
 
+
         function tabelabsen(dataks) {
             $('#tableAbsenPegawai').DataTable({
                 "data": dataks,
@@ -385,11 +401,14 @@
                     },
                     {
                         "data": "user_update"
+
                     }
 
-                ]
+                ],
+
             });
         }
+
 
         //fungsi fetch absen
         function fetchAbsen() {
@@ -406,6 +425,21 @@
         }
 
         fetchAbsen();
+
+        // #column3_search is a <input type="text"> element
+        $('#searchbulan').on('keyup', function() {
+            $('#tableAbsenPegawai').DataTable()
+                .columns(5)
+                .search(this.value)
+                .draw();
+        });
+
+        $('#searchtahun').on('keyup', function() {
+            $('#tableAbsenPegawai').DataTable()
+                .columns(6)
+                .search(this.value)
+                .draw();
+        });
 
 
         // tambah absen
@@ -591,10 +625,10 @@
 
 
         // import pegawai
-        $('#importpegawai').submit(function() {
+        $('#importabsenpegawai').submit(function() {
             event.preventDefault();
             $.ajax({
-                url: '<?= base_url('/pegawai/importpegawai'); ?>',
+                url: '<?= base_url('/pegawai/importabsenpegawai'); ?>',
                 type: 'post',
                 data: new FormData(this),
                 dataType: 'json',
@@ -604,8 +638,8 @@
                 success: function(data) {
                     if (data.responce == "success") {
 
-                        $('#tablePegawai').DataTable().destroy();
-                        fetchPegawai();
+                        $('#tableAbsenPegawai').DataTable().destroy();
+                        fetchAbsen();
                         $('#importModal').modal('hide');
                         toastr["success"](data.pesan);
                     } else {

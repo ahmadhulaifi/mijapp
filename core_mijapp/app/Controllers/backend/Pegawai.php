@@ -1055,4 +1055,71 @@ class Pegawai extends Controller
             echo "No direct script access allowed";
         }
     }
+
+    public function importabsenpegawai()
+    {
+        if ($this->request->isAJAX()) {
+
+            $file = $this->request->getFile('fileabsenpegawai');
+
+            if ($file) {
+                $excelReader  = new PHPExcel();
+                //mengambil lokasi temp file
+                $fileLocation = $file->getTempName();
+                //baca file
+                $objPHPExcel = PHPExcel_IOFactory::load($fileLocation);
+                //ambil sheet active
+                $sheet    = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+
+                $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+                foreach ($sheet as $idx => $data) {
+                    //skip index 1 karena title excel
+                    if ($idx == 1) {
+                        continue;
+                    }
+
+                    $nip = $data['B'];
+                    $bulan = $data['D'];
+                    $tahun = $data['E'];
+                    $sakit = $data['F'];
+                    $izin = $data['G'];
+                    $alpha = $data['H'];
+                    $cuti = $data['I'];
+                    $lain = $data['J'];
+                    $hadir = $data['K'];
+
+
+                    // insert data
+                    $this->absenPegawaiModel->insert([
+                        'nip'        =>    $nip,
+                        'bulan'        =>    $bulan,
+                        'tahun'       =>    $tahun,
+                        'sakit'       =>    $sakit,
+                        'izin'       =>    $izin,
+                        'alpha'       =>    $alpha,
+                        'cuti'       =>    $cuti,
+                        'lain'       =>    $lain,
+                        'hadir'       =>    $hadir,
+                        'user_update'       =>    $cekuser['nama_lengkap']
+                    ]);
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Import absen pegawai berhasil'
+                ];
+            } else {
+                //upload gagal
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'Import absen pegawai gagal'
+                ];
+            }
+
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
 }
