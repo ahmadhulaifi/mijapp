@@ -15,7 +15,7 @@
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahModal">
                     Tambah
                 </button>
-                <button type="button" name="btn_deleteabsenpegawai" id="btndeleteabsenpegawai" class="btn btn-danger">Hapus</button>
+                <button type="button" name="btndeleteabsenpegawai" id="btndeleteabsenpegawai" class="btn btn-danger">Hapus</button>
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importModal">
                     Import
                 </button>
@@ -330,7 +330,7 @@
 
                         "render": function(data, type, row, meta) {
                             var r =
-                                '<input type="checkbox" name="checkbox" id = "' + row.id + '"  value = "' + row.id + '" class="select_checkbox"></input>';
+                                '<input type="checkbox" name="deletecheckbox" id = "' + row.id + '"  value = "' + row.id + '" class="deletecheckbox"></input>';
 
                             return r;
                         },
@@ -510,6 +510,85 @@
             });
         })
 
+        // Check all 
+        $('#checkall').click(function() {
+            if ($(this).is(':checked')) {
+                $('.deletecheckbox').prop('checked', true);
+            } else {
+                $('.deletecheckbox').prop('checked', false);
+            }
+        });
+
+        $('.deletecheckbox').click(function() {
+            if ($(this).is(':checked')) {
+                $(this).closest('tr').addClass('removeRow');
+            } else {
+                $(this).closest('tr').removeClass('removeRow');
+            }
+        });
+
+
+        $('#btndeleteabsenpegawai').click(function() {
+            let checkbox = $('.deletecheckbox:checked');
+
+            if (checkbox.length > 0) {
+                Swal.fire({
+                    title: 'Apa kamu yakin ingin menghapus ' + checkbox.length + ' absen pegawai?',
+                    text: "kamu tidak akan bisa mengembalikannya!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus saja!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        let checkbox_value = [];
+                        $(checkbox).each(function() {
+                            checkbox_value.push($(this).val());
+                        });
+
+                        // console.log(checkbox);
+                        $.ajax({
+                            url: '<?= base_url('/pegawai/deleteabsenpegawai'); ?>',
+                            type: "POST",
+                            data: {
+                                checkbox_value: checkbox_value
+                            },
+                            dataType: 'json',
+                            success: function(data) {
+                                if (data.responce == "success") {
+
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Data berhasil dihapus.',
+                                        'success'
+                                    )
+                                    $('#tableAbsenPegawai').DataTable().destroy();
+                                    fetchAbsen();
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'Ada yang tidak beres!',
+                                    })
+                                }
+                            }
+                        })
+
+                    }
+                })
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pilih minimal satu data',
+                })
+
+            }
+        });
+
 
         // import pegawai
         $('#importpegawai').submit(function() {
@@ -538,84 +617,7 @@
 
         });
 
-        // Check all 
-        $('#checkall').click(function() {
-            if ($(this).is(':checked')) {
-                $('.delete_checkbox').prop('checked', true);
-            } else {
-                $('.delete_checkbox').prop('checked', false);
-            }
-        });
 
-        $('.delete_checkbox').click(function() {
-            if ($(this).is(':checked')) {
-                $(this).closest('tr').addClass('removeRow');
-            } else {
-                $(this).closest('tr').removeClass('removeRow');
-            }
-        });
-
-        $('#deletepegawai').click(function() {
-
-            var checkbox = $('.delete_checkbox:checked');
-
-            if (checkbox.length > 0) {
-                Swal.fire({
-                    title: 'Apa kamu yakin ingin menghapus ' + checkbox.length + ' data pegawai?',
-                    text: "kamu tidak akan bisa mengembalikannya!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, hapus saja!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        var checkbox_value = [];
-                        $(checkbox).each(function() {
-                            checkbox_value.push($(this).val());
-                        });
-
-                        // console.log(checkbox);
-                        $.ajax({
-                            url: '<?= base_url('/pegawai/deletepegawai'); ?>',
-                            type: "POST",
-                            data: {
-                                checkbox_value: checkbox_value
-                            },
-                            dataType: 'json',
-                            success: function(data) {
-                                if (data.responce == "success") {
-                                    // toastr["success"](data.pesan);
-                                    Swal.fire(
-                                        'Deleted!',
-                                        'Data berhasil dihapus.',
-                                        'success'
-                                    )
-                                    $('#tablePegawai').DataTable().destroy();
-                                    fetchPegawai();
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Oops...',
-                                        text: 'Ada yang tidak beres!',
-                                    })
-                                }
-                            }
-                        })
-
-                    }
-                })
-
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Pilih minimal satu data',
-                })
-
-            }
-        });
 
     });
 </script>

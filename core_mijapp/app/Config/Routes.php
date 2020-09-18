@@ -188,6 +188,8 @@ $routes->post('/pegawai/editmodalabsen', 'backend/pegawai::editmodalabsen', ['fi
 $routes->post('/backend/pegawai/editmodalabsen', 'backend/pegawai::editmodalabsen', ['filter' => 'akseslogin']);
 $routes->post('/pegawai/editabsenpegawai', 'backend/pegawai::editabsenpegawai', ['filter' => 'akseslogin']);
 $routes->post('/backend/pegawai/editabsenpegawai', 'backend/pegawai::editabsenpegawai', ['filter' => 'akseslogin']);
+$routes->post('/pegawai/deleteabsenpegawai', 'backend/pegawai::deleteabsenpegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/pegawai/deleteabsenpegawai', 'backend/pegawai::deleteabsenpegawai', ['filter' => 'akseslogin']);
 
 
 
