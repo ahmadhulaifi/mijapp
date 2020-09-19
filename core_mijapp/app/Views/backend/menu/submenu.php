@@ -285,6 +285,7 @@
         // tambah submenu
         $('#tambahsubform').submit(function() {
             event.preventDefault();
+
             $.ajax({
                 url: '<?= base_url('menu/savesubmenu'); ?>',
                 type: 'post',
@@ -295,7 +296,7 @@
                     if (data.responce == 'success') {
                         $('#submenuModal').modal('hide');
                         $('#tableSubMenu').DataTable().destroy();
-                        $('#tambahsubform')[0].reset();
+
                         fetchsubmenu();
                         toastr["success"](data.pesan);
                     } else {
@@ -350,6 +351,7 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
+                    $('#tambahsubform')[0].reset();
                 },
 
             });

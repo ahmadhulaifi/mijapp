@@ -886,9 +886,13 @@ class Pegawai extends Controller
                 // validasi sukses
                 $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
 
+                $nip = $this->request->getVar('nip');
+                $idkaryawan = $this->karyawanModel->where('nip', $nip)->get()->getRowArray();
+
 
                 $insert = [
-                    'nip' => $this->request->getVar('nip'),
+                    'nip' => $nip,
+                    'id_karyawan' => $idkaryawan['id'],
                     'bulan' => $this->request->getVar('bulan'),
                     'tahun' => $this->request->getVar('tahun'),
                     'sakit' => $this->request->getVar('sakit'),
@@ -1090,9 +1094,13 @@ class Pegawai extends Controller
                     $hadir = $data['K'];
 
 
+
+                    $idkaryawan = $this->karyawanModel->where('nip', $nip)->get()->getRowArray();
+
                     // insert data
                     $this->absenPegawaiModel->insert([
                         'nip'        =>    $nip,
+                        'id_karyawan' => $idkaryawan['id'],
                         'bulan'        =>    $bulan,
                         'tahun'       =>    $tahun,
                         'sakit'       =>    $sakit,

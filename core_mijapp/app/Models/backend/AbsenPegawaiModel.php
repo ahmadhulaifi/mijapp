@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class AbsenPegawaiModel extends Model
 {
     protected $table      = 'absen_pegawai';
-    protected $allowedFields = ['nip', 'bulan', 'tahun', 'sakit', 'izin', 'alpha', 'cuti', 'lain', 'hadir', 'user_update'];
+    protected $allowedFields = ['nip', 'bulan', 'tahun', 'sakit', 'izin', 'alpha', 'cuti', 'lain', 'hadir', 'user_update', 'id_karyawan'];
 
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
