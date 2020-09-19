@@ -90,7 +90,6 @@ $routes->post('/role/editrole', 'backend\role::editrole', ['filter' => 'akseslog
 $routes->post('/backend/role/editrole', 'backend\role::editrole', ['filter' => 'akseslogin']);
 $routes->delete('/backend/role/deleterole/(:num)', 'backend\role::deleterole/$1', ['filter' => 'akseslogin']);
 $routes->delete('/role/deleterole/(:num)', 'backend\role::deleterole/$1', ['filter' => 'akseslogin']);
-
 $routes->get('/role/roleakses/(:any)', 'backend\role::roleakses/$1', ['filter' => 'akseslogin']);
 $routes->get('/backend/role/roleakses/(:any)', 'backend\role::roleakses/$1', ['filter' => 'akseslogin']);
 $routes->post('/role/gantiakses', 'backend\role::gantiakses', ['filter' => 'akseslogin']);
@@ -104,6 +103,10 @@ $routes->post('/profil/editpassword', 'backend\profil::editpassword', ['filter' 
 $routes->post('/backend/profil/editpassword', 'backend\profil::editpassword', ['filter' => 'akseslogin']);
 $routes->post('/profil/updateprofil', 'backend\profil::updateprofil', ['filter' => 'akseslogin']);
 $routes->post('/backend/profil/updateprofil', 'backend\profil::updateprofil', ['filter' => 'akseslogin']);
+$routes->get('/profil/absen', 'backend/profil::absen', ['filter' => 'akseslogin']);
+$routes->get('/backend/profil/absen', 'backend/profil::absen', ['filter' => 'akseslogin']);
+$routes->post('/profil/fetchabsen', 'backend\profil::fetchabsen', ['filter' => 'akseslogin']);
+$routes->post('/backend/profil/fetchabsen', 'backend\profil::fetchabsen', ['filter' => 'akseslogin']);
 
 
 $routes->get('/datasekolah/divisi', 'backend/datasekolah::divisi', ['filter' => 'akseslogin']);

@@ -34,4 +34,15 @@ class AbsenPegawaiModel extends Model
 
         return $query;
     }
+
+    public function getabsenprofil($id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('absen_pegawai.*,karyawan.nama_lengkap');
+        $builder->join('karyawan', 'karyawan.id = absen_pegawai.id_karyawan');
+        $builder->where('id_karyawan', $id);
+        $query = $builder->get()->getResultArray();
+
+        return $query;
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Controllers\backend;
 use App\Models\backend\KaryawanModel;
 use App\Models\backend\JabatanModel;
 use App\Models\backend\UserDivisiModel;
+use App\Models\backend\AbsenPegawaiModel;
 use CodeIgniter\Controller;
 
 
@@ -13,6 +14,7 @@ class Profil extends Controller
     protected $karyawanModel;
     protected $jabatanModel;
     protected $userDivisiModel;
+    protected $absenPegawaiModel;
 
     public function __construct()
     {
@@ -20,6 +22,7 @@ class Profil extends Controller
         $this->karyawanModel = new KaryawanModel();
         $this->jabatanModel = new JabatanModel();
         $this->userDivisiModel = new UserDivisiModel();
+        $this->absenPegawaiModel = new AbsenPegawaiModel();
     }
 
     // controller menu
@@ -255,6 +258,45 @@ class Profil extends Controller
             echo json_encode($data);
         } else {
             echo "No Direct Script access allowed";
+        }
+    }
+
+    // controller absen saya
+    public function absen()
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+        $user = $this->karyawanModel->getProfil($cekuser['id']);
+        $divisi = $this->userDivisiModel->getDivisi($cekuser['id']);
+        // dd($user);
+
+        $data = [
+            'title' => 'Absen Saya',
+            'user' => $user,
+            'divisi' => $divisi,
+            'validation' => \Config\Services::validation()
+        ];
+
+        return view('backend/profil/absen', $data);
+    }
+
+    public function fetchabsen()
+    {
+        if ($this->request->isAJAX()) {
+            // $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+            if ($absen = $this->absenPegawaiModel->getabsenprofil(session('id'))) {
+                $data = [
+                    'responce' => 'success',
+                    'absen' => $absen
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch data submenu'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
         }
     }
 }
