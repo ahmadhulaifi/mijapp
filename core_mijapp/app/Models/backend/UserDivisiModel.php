@@ -50,18 +50,7 @@ class UserDivisiModel extends Model
         return $query;
     }
 
-    public function getdivisibd()
-    {
-        $builder = $this->table($this->table);
-        $builder->select('user_divisi.*,karyawan.id as nik,karyawan.nama_lengkap,,karyawan.nip,divisi.divisi');
-        $builder->join('karyawan', 'karyawan.id=user_divisi.id_karyawan', 'right');
-        $builder->join('divisi', 'divisi.id=user_divisi.id_divisi', 'left outer');
 
-        $builder->where('user_divisi.id_karyawan', null);
-        $query = $builder->get()->getResultArray();
-
-        return $query;
-    }
 
     public function getdivisisatuan($id)
     {

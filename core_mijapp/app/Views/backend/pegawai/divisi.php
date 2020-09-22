@@ -49,7 +49,7 @@
                                         <option value="semua" selected>Tampilkan semua</option>
                                         <option value="belum">Belum Diatur</option>
                                         <?php foreach ($divisi as $divisi) : ?>
-                                            <option value="<?= $divisi['id']; ?>"><?= $divisi['divisi']; ?></option>
+                                            <option value="<?= $divisi['divisi']; ?>"><?= $divisi['divisi']; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -65,7 +65,7 @@
                                     <select name="divisitujuan" id="divisitujuan" class="form-control">
                                         <option selected disabled>Tampilkan semua</option>
                                         <?php foreach ($divisi2 as $div) : ?>
-                                            <option value="<?= $div['id']; ?>"><?= $div['divisi']; ?></option>
+                                            <option value="<?= $div['divisi']; ?>"><?= $div['divisi']; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -142,7 +142,7 @@
 
                         "render": function(data, type, row, meta) {
                             var r =
-                                '<input type="checkbox" name="checkbox" id = "' + row.nik + '"  value = "' + row.nik + '" class="select_checkbox"></input>';
+                                '<input type="checkbox" name="checkbox" id = "' + row.id + '"  value = "' + row.id + '" class="select_checkbox"></input>';
 
                             return r;
                         },
@@ -165,10 +165,12 @@
                             if (data == null) {
                                 a = ''
                             } else {
-                                // for (let i = 0; i < data.length; i++) {
-                                //     a += `<span class="badge badge-info">` + data + `</span>`
-                                // };
-                                a = `<span class="badge badge-info">` + data + `</span>`
+                                let explode = data.split(",");
+
+                                for (let i = 0; i < explode.length; i++) {
+                                    a += `<span class="badge badge-info mr-1">` + explode[i] + `</span>`
+                                };
+                                // a = `<span class="badge badge-info">` + data + `</span>`
                             }
                             return a
                         }
@@ -261,6 +263,7 @@
 
         $("#divisiasal").change(function() {
             let divisiasal = $("#divisiasal").val();
+            // alert(divisiasal)
             if (divisiasal == 'semua') {
                 $('.asal-divisi-overlay').show();
                 $('#tableAsalPegawai').DataTable().destroy();
@@ -327,64 +330,73 @@
             let iddivisitujuan = $("#divisitujuan").val();
             // let iddivisitujuan = $("input[name='divisitujuan']").val();;
 
-            // alert(checkbox);
+            // alert(iddivisitujuan);
 
-
-            if (checkbox.length > 0) {
-                Swal.fire({
-                    title: 'Apa kamu yakin ingin menambah ' + checkbox.length + ' data divisi pegawai?',
-                    text: "kamu bisa menghapusnya kembali nanti!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, tambahkan!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        let checkbox_value = [];
-                        $(checkbox).each(function() {
-                            checkbox_value.push($(this).val());
-                        });
-
-                        // console.log(checkbox);
-                        $.ajax({
-                            url: '<?= base_url('/pegawai/btntujuandivisipegawai'); ?>',
-                            type: "POST",
-                            data: {
-                                checkbox_value: checkbox_value,
-                                iddivisitujuan: iddivisitujuan
-                            },
-                            dataType: 'json',
-                            success: function(data) {
-                                if (data.responce == "success") {
-                                    Swal.fire(
-                                        'Sukses!',
-                                        'Data divisi berhasil ditambah.',
-                                        'success'
-                                    )
-                                    $('#tableAsalPegawai').DataTable().destroy();
-                                    fetchDivisiAsalSemua();
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Oops...',
-                                        text: 'Ada yang tidak beres!',
-                                    })
-                                }
-                            }
-                        })
-
-                    }
-                })
-
-            } else {
+            if (iddivisitujuan == null) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Pilih minimal satu data',
+                    text: 'Pilih divisi tujuan dulu ya',
                 })
+            } else {
+                if (checkbox.length > 0) {
+                    Swal.fire({
+                        title: 'Apa kamu yakin ingin menambah ' + checkbox.length + ' data divisi pegawai?',
+                        text: "kamu bisa menghapusnya kembali nanti!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, tambahkan!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let checkbox_value = [];
+                            $(checkbox).each(function() {
+                                checkbox_value.push($(this).val());
+                            });
 
+                            // console.log(checkbox);
+                            $.ajax({
+                                url: '<?= base_url('/pegawai/btntujuandivisipegawai'); ?>',
+                                type: "POST",
+                                data: {
+                                    checkbox_value: checkbox_value,
+                                    iddivisitujuan: iddivisitujuan
+                                },
+                                dataType: 'json',
+                                success: function(data) {
+                                    if (data.responce == "success") {
+                                        console.log(data)
+                                        Swal.fire(
+                                            'Sukses!',
+                                            'Data divisi berhasil ditambah.',
+                                            'success'
+                                        )
+                                        $('#tableAsalPegawai').DataTable().destroy();
+                                        fetchDivisiAsalSemua();
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: 'Ada yang tidak beres!',
+                                        })
+                                    }
+                                }
+                            })
+
+                        }
+                    })
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Pilih minimal satu data',
+                    })
+
+                }
             }
+
         });
 
 

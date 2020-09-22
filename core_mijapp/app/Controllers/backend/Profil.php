@@ -30,13 +30,13 @@ class Profil extends Controller
     {
         $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
         $user = $this->karyawanModel->getProfil($cekuser['id']);
-        $divisi = $this->userDivisiModel->getDivisi($cekuser['id']);
+        // $divisi = $this->userDivisiModel->getDivisi($cekuser['id']);
         // dd($user);
 
         $data = [
             'title' => 'Profil Saya',
             'user' => $user,
-            'divisi' => $divisi,
+            // 'divisi' => $divisi,
             'validation' => \Config\Services::validation()
         ];
 
@@ -266,13 +266,13 @@ class Profil extends Controller
     {
         $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
         $user = $this->karyawanModel->getProfil($cekuser['id']);
-        $divisi = $this->userDivisiModel->getDivisi($cekuser['id']);
+        // $divisi = $this->userDivisiModel->getDivisi($cekuser['id']);
         // dd($user);
 
         $data = [
             'title' => 'Absen Saya',
             'user' => $user,
-            'divisi' => $divisi,
+            // 'divisi' => $divisi,
             'validation' => \Config\Services::validation()
         ];
 

@@ -670,7 +670,7 @@ class Pegawai extends Controller
     {
 
         if ($this->request->isAJAX()) {
-            if ($pegawaibd = $this->userDivisiModel->getdivisibd()) {
+            if ($pegawaibd = $this->karyawanModel->where('divisi', '')->findAll()) {
                 $data = [
                     'responce' => 'success',
                     'pegawai' => $pegawaibd
@@ -692,7 +692,7 @@ class Pegawai extends Controller
     {
 
         if ($this->request->isAJAX()) {
-            if ($pegawaisemua = $this->userDivisiModel->getdivisisemua()) {
+            if ($pegawaisemua = $this->karyawanModel->findAll()) {
 
                 $data = [
                     'responce' => 'success',
@@ -714,7 +714,12 @@ class Pegawai extends Controller
     public function deletedivisipegawai($id)
     {
         if ($this->request->isAJAX()) {
-            $this->userDivisiModel->where('id', $id)->delete();
+
+            $update = [
+                'divisi' => ''
+            ];
+
+            $this->karyawanModel->update($id, $update);
         } else {
             echo "No direct script access allowed";
         }
@@ -726,7 +731,7 @@ class Pegawai extends Controller
         if ($this->request->isAJAX()) {
             $satuan = $this->request->getVar('divisiasal');
             // dd($satuan);
-            if ($pegawaisatuan = $this->userDivisiModel->getdivisisatuan($satuan)) {
+            if ($pegawaisatuan = $this->karyawanModel->getdivisisatuan($satuan)) {
                 $data = [
                     'responce' => 'success',
                     'pegawai' => $pegawaisatuan
@@ -752,12 +757,25 @@ class Pegawai extends Controller
                 $iddivisi = $this->request->getVar('iddivisitujuan');
 
                 for ($count = 0; $count < count($id); $count++) {
-                    $insert = [
-                        'id_karyawan' => $id[$count],
-                        'id_divisi' => $iddivisi,
+
+                    $peg = $this->karyawanModel->where('id', $id[$count])->get()->getRowArray();
+                    // dd($peg);
+                    $divisiawal = $peg['divisi'];
+
+                    if ($divisiawal == null) {
+                        $inputdivisi = $iddivisi;
+                    } else {
+                        $divisibaru = explode(",", $divisiawal);
+
+                        $divisibaru[] = $iddivisi;
+                        $inputdivisi = implode(',', $divisibaru);
+                    }
+
+                    $update = [
+                        'divisi' => $inputdivisi,
                     ];
                     // $this->userDivisiModel->where('id', $id[$count])->delete();
-                    $this->userDivisiModel->insert($insert);
+                    $this->karyawanModel->update($id[$count], $update);
                 }
 
                 $data = [

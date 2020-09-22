@@ -22,9 +22,15 @@
                                         <p class="text-secondary mb-1">NIP: <?= $user['nip']; ?></p>
                                         <p class="text-secondary mb-1">Jabatan: <span class="badge badge-primary"><?= $user['jabatan']; ?></span></p>
                                         <p class="text-secondary mb-1">Divisi:
-                                            <?php foreach ($divisi as $divisi) : ?>
-                                                <span class="badge badge-info"><?= $divisi['divisi']; ?></span>
-                                            <?php endforeach; ?>
+                                            <?php
+                                            $divisik = explode(",", $user['divisi']);
+
+                                            for ($i = 0; $i < count($divisik); $i++) {
+                                            ?>
+                                                <span class="badge badge-info"><?= $divisik[$i]; ?></span>
+                                            <?php
+                                            }
+                                            ?>
                                         </p>
                                         <p class="text-secondary mb-1">Status: <span class="badge badge-warning"><?= $user['status_pegawai']; ?></span></p>
                                         <p class="text-secondary mb-1">Tgl Mulai Bekerja: <span class="badge badge-success"><?= tgl_indo($user['tgl_mulai_bekerja']); ?></span></p>
