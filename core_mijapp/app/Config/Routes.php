@@ -94,6 +94,14 @@ $routes->get('/role/roleakses/(:any)', 'backend\role::roleakses/$1', ['filter' =
 $routes->get('/backend/role/roleakses/(:any)', 'backend\role::roleakses/$1', ['filter' => 'akseslogin']);
 $routes->post('/role/gantiakses', 'backend\role::gantiakses', ['filter' => 'akseslogin']);
 $routes->post('/backend/role/gantiakses', 'backend\role::gantiakses', ['filter' => 'akseslogin']);
+$routes->get('/role/userrole', 'backend\role::userrole', ['filter' => 'akseslogin']);
+$routes->get('/backend/role/userrole', 'backend\role::userrole', ['filter' => 'akseslogin']);
+$routes->post('/role/fetchrolesemuapegawai', 'backend\role::fetchrolesemuapegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/role/fetchrolesemuapegawai', 'backend\role::fetchrolesemuapegawai', ['filter' => 'akseslogin']);
+$routes->post('/role/fetchfilterrolepegawai', 'backend\role::fetchfilterrolepegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/role/fetchfilterrolepegawai', 'backend\role::fetchfilterrolepegawai', ['filter' => 'akseslogin']);
+$routes->post('/role/btntujuanrolepegawai', 'backend\role::btntujuanrolepegawai', ['filter' => 'akseslogin']);
+$routes->post('/backend/role/btntujuanrolepegawai', 'backend\role::btntujuanrolepegawai', ['filter' => 'akseslogin']);
 
 $routes->get('/profil', 'backend/profil::index', ['filter' => 'akseslogin']);
 $routes->get('/backend/profil', 'backend/profil::index', ['filter' => 'akseslogin']);

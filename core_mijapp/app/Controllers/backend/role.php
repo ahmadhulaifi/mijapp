@@ -231,4 +231,91 @@ class Role extends Controller
 
         session()->setFlashdata('pesan', 'Akses Berubah');
     }
+
+    public function userrole()
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+        $role = $this->roleModel->findAll();
+        $role2 = $this->roleModel->findAll();
+        // dd($role);
+
+        $data = [
+            'title' => 'User Role Akses',
+            'user' => $cekuser,
+            'role' => $role,
+            'role2' => $role2,
+            'validation' => \Config\Services::validation()
+        ];
+
+        return view('backend/role/userrole', $data);
+    }
+
+    public function fetchrolesemuapegawai()
+    {
+        if ($this->request->isAJAX()) {
+            if ($rolepegawai = $this->karyawanModel->findAll()) {
+                $data = [
+                    'responce' => 'success',
+                    'rolepegawai' => $rolepegawai
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'role' => 'gagal fetch data'
+                ];
+            }
+            return json_encode($data);
+        } else {
+            echo "No Direct script access allowed";
+        }
+    }
+
+    public function fetchfilterrolepegawai()
+    {
+        if ($this->request->isAJAX()) {
+            $satuan = $this->request->getVar('roleasal');
+            // dd($satuan);
+            if ($pegawaisatuan = $this->karyawanModel->where('role_kode', $satuan)->findAll()) {
+                $data = [
+                    'responce' => 'success',
+                    'rolepegawai' => $pegawaisatuan
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function btntujuanrolepegawai()
+    {
+        if ($this->request->isAJAX()) {
+
+            if ($id = $this->request->getVar('checkbox_value')) {
+                $idrole = $this->request->getVar('idroletujuan');
+
+                for ($count = 0; $count < count($id); $count++) {
+                    $update = [
+                        'role_kode' => $idrole,
+                    ];
+                    // $this->userDivisiModel->where('id', $id[$count])->delete();
+                    $this->karyawanModel->update($id[$count], $update);
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data Divisi pegawai berhasil dihapus'
+                ];
+
+                echo json_encode($data);
+            }
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
 }
