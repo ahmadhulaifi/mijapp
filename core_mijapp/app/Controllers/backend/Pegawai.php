@@ -631,6 +631,12 @@ class Pegawai extends Controller
             if ($id = $this->request->getVar('checkbox_value')) {
                 for ($count = 0; $count < count($id); $count++) {
                     // $this->karyawanModel->delete_karyawan($id[$count]);
+                    $karya = $this->karyawanModel->where('id', $id[$count])->get()->getRowArray();
+
+                    if ($karya['foto'] != 'default.png') {
+                        unlink('/asset/images/user/' . $karya['foto']);
+                    }
+
                     $this->karyawanModel->where('id', $id[$count])->delete();
                 }
 

@@ -8,6 +8,7 @@ use App\Models\backend\SubmenuModel;
 use App\Models\backend\DivisiModel;
 use App\Models\backend\JabatanModel;
 use App\Models\backend\StatusPegawaiModel;
+use App\Models\backend\TahunAjaranModel;
 use CodeIgniter\Controller;
 
 class Datasekolah extends Controller
@@ -18,6 +19,7 @@ class Datasekolah extends Controller
     protected $divisiModel;
     protected $jabatanModel;
     protected $statusPegawaiModel;
+    protected $tahunAjaranModel;
 
     public function __construct()
     {
@@ -27,6 +29,7 @@ class Datasekolah extends Controller
         $this->divisiModel = new DivisiModel();
         $this->jabatanModel = new JabatanModel();
         $this->statusPegawaiModel = new StatusPegawaiModel();
+        $this->tahunAjaranModel = new TahunAjaranModel();
     }
 
     // controller datasekolah divisi
@@ -490,6 +493,109 @@ class Datasekolah extends Controller
                 $data = [
                     'responce' => 'success',
                     'pesan' => 'Status pegawai berhasil diupdate'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function tahun()
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+        // $submenu = $this->submenuModel->orderBy('menu_id', 'asc')->findAll();
+        // dd($submenu);
+
+        $data = [
+            'title' => 'Tahun Ajaran',
+            'user' => $cekuser,
+            'validation' => \Config\Services::validation()
+        ];
+
+        return view('backend/datasekolah/tahun', $data);
+    }
+
+    public function fetchtahun()
+    {
+        if ($this->request->isAJAX()) {
+            if ($tahun = $this->tahunAjaranModel->findAll()) {
+                $data = [
+                    'responce' => 'success',
+                    'tahun' => $tahun
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal fetch menu'
+                ];
+            }
+
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function editmodaltahun()
+    {
+        if ($this->request->isAJAX()) {
+            $idtahun = $this->request->getVar('idtahun');
+            if ($tahun = $this->tahunAjaranModel->where('id', $idtahun)->get()->getRowArray()) {
+                $data = [
+                    'responce' => 'success',
+                    'tahun' => $tahun
+                ];
+            } else {
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'gagal memunculkan modal edit data'
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function edittahun()
+    {
+        if ($this->request->isAJAX()) {
+            if (!$this->validate([
+                'tahun' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Tahun tidak boleh kosong'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $idtahun = $this->request->getVar('idtahun');
+                $tahun = $this->request->getVar('tahun');
+
+                if ($this->request->getVar('aktif') == null) {
+                    $active = 0;
+                } else {
+                    $active = 1;
+                }
+
+                $update = [
+                    'tahun' => $tahun,
+                    'aktif' => $active
+                ];
+
+                $this->tahunAjaranModel->update($idtahun, $update);
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data berhasil diupdate'
                 ];
             }
             echo json_encode($data);

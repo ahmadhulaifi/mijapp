@@ -319,7 +319,7 @@
                                                     </div>
                                                     <div class="col-sm-8">
                                                         <div class="custom-file">
-                                                            <input type="file" class="custom-file-input " id="foto" name="foto" onchange="previewImg()">
+                                                            <input type="file" class="custom-file-input" id="foto" name="foto" onchange="previewImg()">
                                                             <label class="custom-file-label" for="foto"></label>
                                                             <!-- <input type="hidden" name="fotoLama"> -->
                                                         </div>

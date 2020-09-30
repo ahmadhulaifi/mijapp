@@ -156,6 +156,14 @@ $routes->post('/backend/datasekolah/editstatuspegawaimodal', 'backend\datasekola
 $routes->post('/datasekolah/editstatuspegawai', 'backend\datasekolah::editstatuspegawai', ['filter' => 'akseslogin']);
 $routes->post('/backend/datasekolah/editstatuspegawai', 'backend\datasekolah::editstatuspegawai', ['filter' => 'akseslogin']);
 
+$routes->get('/datasekolah/tahun', 'backend/datasekolah::tahun', ['filter' => 'akseslogin']);
+$routes->get('/backend/datasekolah/tahun', 'backend/datasekolah::tahun', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/fetchtahun', 'backend/datasekolah::fetchtahun', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/fetchtahun', 'backend/datasekolah::fetchtahun', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/editmodaltahun', 'backend/datasekolah::editmodaltahun', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/editmodaltahun', 'backend/datasekolah::editmodaltahun', ['filter' => 'akseslogin']);
+$routes->post('/datasekolah/edittahun', 'backend/datasekolah::edittahun', ['filter' => 'akseslogin']);
+$routes->post('/backend/datasekolah/edittahun', 'backend/datasekolah::edittahun', ['filter' => 'akseslogin']);
 
 $routes->get('/pegawai', 'backend/pegawai::index', ['filter' => 'akseslogin']);
 $routes->get('/backend/pegawai', 'backend/pegawai::index', ['filter' => 'akseslogin']);
