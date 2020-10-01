@@ -35,6 +35,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <label for="controller" class="col-sm-2 col-form-label">Controller</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="controller">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label for="icon" class="col-sm-2 col-form-label">Icon</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" name="icon">
@@ -108,6 +114,12 @@
                                 <label for="menu" class="col-sm-2 col-form-label">Menu</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="menu">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="controller" class="col-sm-2 col-form-label">Controller</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="controller">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -294,6 +306,7 @@
                         $('#editmenuModal').modal('show');
                         $("input[name='idmenu']").val(data.menu.id);
                         $("input[name='menu']").val(data.menu.menu);
+                        $("input[name='controller']").val(data.menu.controller);
                         $("input[name='icon']").val(data.menu.icon);
                         $("input[name='url']").val(data.menu.url);
                         $("input[name='sort']").val(data.menu.sort);

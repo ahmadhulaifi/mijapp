@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class MenuModel extends Model
 {
     protected $table      = 'user_menu';
-    protected $allowedFields = ['menu', 'icon', 'url', 'sort'];
+    protected $allowedFields = ['menu', 'icon', 'url', 'sort', 'controller'];
 
     // protected $useTimestamps = true;
     // protected $createdField  = 'created_at';

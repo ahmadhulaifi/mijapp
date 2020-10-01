@@ -69,6 +69,12 @@ class Menu extends Controller
                         'is_unique' => 'Data Menu sudah ada'
                     ]
                 ],
+                'controller' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Controller tidak boleh kosong'
+                    ]
+                ],
                 'icon' => [
                     'rules' => 'required',
                     'errors' => [
@@ -142,6 +148,12 @@ class Menu extends Controller
                         'required' => 'Menu tidak boleh kosong'
                     ]
                 ],
+                'controller' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Controller tidak boleh kosong'
+                    ]
+                ],
                 'icon' => [
                     'rules' => 'required',
                     'errors' => [
@@ -172,11 +184,13 @@ class Menu extends Controller
                 // validasi sukses
                 $idemenu = $this->request->getVar('idmenu');
                 $menu = $this->request->getVar('menu');
+                $controller = $this->request->getVar('controller');
                 $icon = $this->request->getVar('icon');
                 $url = $this->request->getVar('url');
                 $sort = $this->request->getVar('sort');
                 $update = [
                     'menu' => $menu,
+                    'controller' => $controller,
                     'icon' => $icon,
                     'url' => $url,
                     'sort' => $sort
