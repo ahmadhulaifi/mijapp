@@ -225,6 +225,20 @@ $routes->post('/backend/tatausaha/editkelas', 'backend/TataUsaha::editkelas', ['
 $routes->delete('/tatausaha/deletekelas/(:num)', 'backend\TataUsaha::deletekelas/$1', ['filter' => 'akseslogin']);
 $routes->delete('/backend/tatausaha/deletekelas/(:num)', 'backend\TataUsaha::deletekelas/$1', ['filter' => 'akseslogin']);
 
+$routes->get('/tatausaha/rombel', 'backend/TataUsaha::rombel', ['filter' => 'akseslogin']);
+$routes->get('/backend/tatausaha/rombel', 'backend/TataUsaha::rombel', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/fetchrombel', 'backend/TataUsaha::fetchrombel', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/fetchrombel', 'backend/TataUsaha::fetchrombel', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/cekdivisirombel', 'backend/TataUsaha::cekdivisirombel', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/cekdivisirombel', 'backend/TataUsaha::cekdivisirombel', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/saverombel', 'backend/TataUsaha::saverombel', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/saverombel', 'backend/TataUsaha::saverombel', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/editmodalrombel', 'backend/TataUsaha::editmodalrombel', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/editmodalrombel', 'backend/TataUsaha::editmodalrombel', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/editrombel', 'backend/TataUsaha::editrombel', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/editrombel', 'backend/TataUsaha::editrombel', ['filter' => 'akseslogin']);
+$routes->delete('/tatausaha/deleterombel/(:num)', 'backend\TataUsaha::deleterombel/$1', ['filter' => 'akseslogin']);
+$routes->delete('/backend/tatausaha/deleterombel/(:num)', 'backend\TataUsaha::deleterombel/$1', ['filter' => 'akseslogin']);
 
 /**
  * --------------------------------------------------------------------
