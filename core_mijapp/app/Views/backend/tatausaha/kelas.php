@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#kelasModal">
+                <button type="button" id="btntambahkelasbaru" class="btn btn-success" data-toggle="modal" data-target="#kelasModal">
                     Tambah Kelas
                 </button>
 
@@ -54,7 +54,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" id="btnsavekelas" class="btn btn-primary">Simpan</button>
                             </div>
                             </form>
                         </div>
@@ -119,7 +119,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btnupdatekelas" class="btn btn-primary">Update</button>
                     </div>
                     </form>
                 </div>
@@ -211,7 +211,9 @@
 
         fetchKelas();
 
-
+        $(document).on('click', '#btntambahkelasbaru', function() {
+            $('#tambahkelasform')[0].reset();
+        })
 
         // tambah absen
         $('#tambahkelasform').submit(function() {
@@ -222,18 +224,29 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnsavekelas').attr('disabled');
+                    $("#btnsavekelas").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
                         $('#kelasModal').modal('hide');
                         $('#tabelKelas').DataTable().destroy();
-                        $('#tambahkelasform')[0].reset();
+
                         fetchKelas();
                         toastr["success"](data.pesan);
                     } else {
                         // console.log(data);
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnsavekelas').removeAttr('disabled');
+                    $("#btnsavekelas").html(`Simpan`);
+
+                },
             });
         });
 
@@ -268,7 +281,7 @@
 
                         toastr["error"](data.pesan);
                     }
-                    $('#tambahkelasform')[0].reset();
+
                 }
             });
         });
@@ -282,6 +295,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnupdatekelas').attr('disabled');
+                    $("#btnupdatekelas").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == "success") {
@@ -292,8 +311,13 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                    $('#tambahkelasform')[0].reset();
-                }
+
+                },
+                complete: function() {
+                    $('#btnupdatekelas').removeAttr('disabled');
+                    $("#btnupdatekelas").html(`Update`);
+
+                },
 
             });
         })

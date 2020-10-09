@@ -337,7 +337,8 @@ class TataUsaha extends Controller
         if ($this->request->isAJAX()) {
             $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
             $idrombel = $this->request->getVar('idrombel');
-            if ($rombel = $this->rombelModel->where('id', $idrombel)->get()->getRowArray()) {
+            // if ($rombel = $this->rombelModel->where('id', $idrombel)->get()->getRowArray()) {
+            if ($rombel = $this->rombelModel->getRombelModal($idrombel)) {
 
                 $arr_iddivisi = $this->kelasModel->getiddivisi($cekuser['divisi']);
 

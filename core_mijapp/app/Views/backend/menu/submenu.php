@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#submenuModal">
+                <button type="button" id="btntambahsubmenubaru" class="btn btn-success" data-toggle="modal" data-target="#submenuModal">
                     Tambah Sub Menu
                 </button>
 
@@ -76,7 +76,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" id="btnsavesubmenu" class="btn btn-primary">Simpan</button>
                             </div>
                             </form>
                         </div>
@@ -186,7 +186,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btnupdatesubmenu" class="btn btn-primary">Update</button>
                     </div>
                     </form>
                 </div>
@@ -282,6 +282,10 @@
 
         fetchsubmenu();
 
+        $(document).on('click', '#btntambahsubmenubaru', function() {
+            $('#tambahsubform')[0].reset();
+        })
+
         // tambah submenu
         $('#tambahsubform').submit(function() {
             event.preventDefault();
@@ -291,6 +295,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnsavesubmenu').attr('disabled');
+                    $("#btnsavesubmenu").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == 'success') {
@@ -302,7 +312,12 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnsavesubmenu').removeAttr('disabled');
+                    $("#btnsavesubmenu").html(`Simpan`);
+
+                },
 
             });
 
@@ -351,7 +366,7 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                    $('#tambahsubform')[0].reset();
+
                 },
 
             });
@@ -366,6 +381,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnupdatesubmenu').attr('disabled');
+                    $("#btnupdatesubmenu").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == 'success') {
                         $('#editsubmenuModal').modal('hide');
@@ -375,7 +396,12 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnupdatesubmenu').removeAttr('disabled');
+                    $("#btnupdatesubmenu").html(`Update`);
+
+                },
             });
         });
 

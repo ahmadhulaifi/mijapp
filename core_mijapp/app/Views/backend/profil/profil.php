@@ -50,7 +50,7 @@
                                             <p class="text-muted font-size-sm"><?= $user['jalan_no_domisili']; ?>, Rt.<?= $user['rt_domisili']; ?>/<?= $user['rw_domisili']; ?> Kel.<?= $user['desa_kel_domisili']; ?> Kecamatan <?= $user['kecamatan_domisili']; ?> <?= $user['kota_domisili']; ?>, <?= $user['kd_pos_domisili']; ?></p>
                                         <?php endif; ?>
 
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#passwordModal">Ganti Password</button>
+                                        <button type="button" id="btngantipassword" class="btn btn-primary" data-toggle="modal" data-target="#passwordModal">Ganti Password</button>
                                         <a href="<?= base_url(); ?>/profil/editprofil/<?= $user['id']; ?>" class="btn btn-outline-primary">Edit Profil</a>
                                     </div>
                                 </div>
@@ -258,6 +258,11 @@
 
 <script>
     $(document).ready(function() {
+
+        $(document).on('click', '#btngantipassword', function() {
+            $('#editpasswordform')[0].reset();
+        })
+
         // edit password
         $('#editpasswordform').submit(function() {
             event.preventDefault();

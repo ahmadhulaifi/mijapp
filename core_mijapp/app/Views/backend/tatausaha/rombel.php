@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#rombelModal">
+                <button type="button" id="btntambahrombelbaru" class="btn btn-success" data-toggle="modal" data-target="#rombelModal">
                     Tambah Rombel
                 </button>
 
@@ -62,7 +62,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" id="btnsaverombel" class="btn btn-primary">Simpan</button>
                             </div>
                             </form>
                         </div>
@@ -136,7 +136,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btnupdaterombel" class="btn btn-primary">Update</button>
                     </div>
                     </form>
                 </div>
@@ -268,6 +268,9 @@
         fetchRombel();
 
 
+        $(document).on('click', '#btntambahrombelbaru', function() {
+            $('#tambahrombelform')[0].reset();
+        })
 
         // tambah rombel
         $('#tambahrombelform').submit(function() {
@@ -278,18 +281,29 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnsaverombel').attr('disabled');
+                    $("#btnsaverombel").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
                         $('#rombelModal').modal('hide');
                         $('#tabelRombel').DataTable().destroy();
-                        $('#tambahrombelform')[0].reset();
+
                         fetchRombel();
                         toastr["success"](data.pesan);
                     } else {
                         // console.log(data);
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnsaverombel').removeAttr('disabled');
+                    $("#btnsaverombel").html(`Simpan`);
+
+                },
             });
         });
 
@@ -311,6 +325,8 @@
                         $('#editrombelModal').modal('show');
                         $("input[name='idrombel']").val(data.rombel.id);
                         $("input[name='rombel']").val(data.rombel.rombel);
+                        $("#cekeditnamadivisi").val(data.rombel.divisi);
+
 
 
                         for (let i = 0; i < data.kelas.length; i++) {
@@ -324,7 +340,7 @@
 
                         toastr["error"](data.pesan);
                     }
-                    $('#tambahrombelform')[0].reset();
+
                 }
             });
         });
@@ -337,6 +353,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnupdaterombel').attr('disabled');
+                    $("#btnupdaterombel").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == "success") {
@@ -347,8 +369,13 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                    $('#tambahrombelform')[0].reset();
-                }
+
+                },
+                complete: function() {
+                    $('#btnupdaterombel').removeAttr('disabled');
+                    $("#btnupdaterombel").html(`Update`);
+
+                },
 
             });
         })

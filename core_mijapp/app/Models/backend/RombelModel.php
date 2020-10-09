@@ -74,4 +74,16 @@ class RombelModel extends Model
 
         return $arr_iddivisi;
     }
+
+    public function getRombelModal($id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('rombel.*, kelas.kelas,divisi.divisi');
+        $builder->join('kelas', 'kelas.id = rombel.id_kelas');
+        $builder->join('divisi', 'divisi.id = kelas.id_divisi');
+        $builder->where('rombel.id', $id);
+        $query = $builder->get()->getRowArray();
+
+        return $query;
+    }
 }

@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#roleModal">
+                <button type="button" id="btntambahrolebaru" class="btn btn-success" data-toggle="modal" data-target="#roleModal">
                     Tambah Role
                 </button>
 
@@ -51,7 +51,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" id="btnsaverole" class="btn btn-primary">Simpan</button>
                             </div>
                             </form>
                         </div>
@@ -119,7 +119,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btnupdaterole" class="btn btn-primary">Update</button>
                     </div>
                     </form>
                 </div>
@@ -196,6 +196,10 @@
 
         fetchRole();
 
+        $(document).on('click', '#btntambahrolebaru', function() {
+            $('#addrole')[0].reset();
+        })
+
         // add role
         $("#addrole").submit(function(event) {
             event.preventDefault();
@@ -204,6 +208,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnsaverole').attr('disabled');
+                    $("#btnsaverole").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
                         $('#roleModal').modal('hide')
@@ -214,7 +224,12 @@
                         console.log(data);
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnsaverole').removeAttr('disabled');
+                    $("#btnsaverole").html(`Simpan`);
+
+                },
             });
 
 
@@ -290,6 +305,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnupdaterole').attr('disabled');
+                    $("#btnupdaterole").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == "success") {
@@ -300,7 +321,12 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnupdaterole').removeAttr('disabled');
+                    $("#btnupdaterole").html(`Update`);
+
+                },
             });
 
 

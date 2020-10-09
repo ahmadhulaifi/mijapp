@@ -162,7 +162,6 @@
         }
 
 
-
         //fetch Role semua
         function fetchRoleSemua() {
             $.ajax({
@@ -180,18 +179,18 @@
         fetchRoleSemua();
 
 
-
-
         $("#roleasal").change(function() {
             let roleasal = $("#roleasal").val();
             if (roleasal == 'semua') {
                 $('.asal-divisi-overlay').show();
+                $('#tableRole').DataTable().clear();
                 $('#tableRole').DataTable().destroy();
                 fetchRoleSemua();
                 $('.asal-divisi-overlay').hide();
             } else {
                 // console.log(divisiasal)
                 $('.asal-divisi-overlay').show();
+                $('#tableRole').DataTable().clear();
                 $('#tableRole').DataTable().destroy();
                 $.ajax({
                     url: "<?= base_url(); ?>/role/fetchfilterrolepegawai",
@@ -209,8 +208,7 @@
                             tabelrole(data.rolepegawai)
                         } else {
                             // console.log(data.responce)
-                            $('#tableRole').DataTable().clear();
-                            $('#tableRole').DataTable().destroy();
+                            tabelrole(data.rolepegawai)
                         }
                     }
                 });
@@ -275,6 +273,12 @@
                                     idroletujuan: idroletujuan
                                 },
                                 dataType: 'json',
+                                beforeSend: function() {
+                                    // setting a timeout
+                                    $('#btntujuanrolepegawai').attr('disabled');
+                                    $("#btntujuanrolepegawai").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                                },
                                 success: function(data) {
                                     if (data.responce == "success") {
                                         Swal.fire(
@@ -291,7 +295,12 @@
                                             text: 'Ada yang tidak beres!',
                                         })
                                     }
-                                }
+                                },
+                                complete: function() {
+                                    $('#btntujuanrolepegawai').removeAttr('disabled');
+                                    $("#btntujuanrolepegawai").html(`<i class="fa fa-arrow-right"></i> Edit Role Tujuan`);
+
+                                },
                             })
 
                         }
