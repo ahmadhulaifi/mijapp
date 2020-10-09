@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" id="btntambahdivisi" data-toggle="modal" data-target="#divisiModal">
+                <button type="button" class="btn btn-success" id="btntambahdivisibaru" data-toggle="modal" data-target="#divisiModal">
                     Tambah Divisi
                 </button>
 
@@ -45,7 +45,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" id="btnsavedivisi" class="btn btn-primary">Simpan</button>
                             </div>
                             </form>
                         </div>
@@ -107,7 +107,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btneditdivisi" class="btn btn-primary">Update</button>
                     </div>
                     </form>
                 </div>
@@ -124,7 +124,7 @@
 <script>
     $(document).ready(function() {
 
-        $("#btntambahdivisi").click(function() {
+        $("#btntambahdivisibaru").click(function() {
             $('#tambahdivisiform')[0].reset();
         });
 
@@ -206,11 +206,17 @@
                 data: $(this).serialize(),
                 dataType: 'json',
                 // data: $(this).serialize(),
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnsavedivisi').attr('disabled');
+                    $("#btnsavedivisi").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
                         $('#divisiModal').modal('hide');
                         $('#tableDivisi').DataTable().destroy();
-                        $('#tambahdivisiform')[0].reset();
+
                         fetchDivisi();
                         toastr["success"](data.pesan);
 
@@ -218,7 +224,12 @@
                         // console.log(data);
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnsavedivisi').removeAttr('disabled');
+                    $("#btnsavedivisi").html(`Simpan`);
+
+                },
             });
         });
 
@@ -292,6 +303,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btneditdivisi').attr('disabled');
+                    $("#btneditdivisi").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == "success") {
@@ -302,7 +319,12 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btneditdivisi').removeAttr('disabled');
+                    $("#btneditdivisi").html(`Update`);
+
+                },
             });
 
 

@@ -11,8 +11,8 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" id="btntambahjabatan" data-toggle="modal" data-target="#jabatanModal">
-                    Tambah Divisi
+                <button type="button" class="btn btn-success" id="btntambahjabatanbaru" data-toggle="modal" data-target="#jabatanModal">
+                    Tambah Jabatan
                 </button>
 
                 <!-- Modal -->
@@ -44,7 +44,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" id="btntambahjabatan" class="btn btn-primary">Simpan</button>
                             </div>
                             </form>
                         </div>
@@ -106,7 +106,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btnupdatejabatan" class="btn btn-primary">Update</button>
                     </div>
                     </form>
                 </div>
@@ -123,7 +123,7 @@
 <script>
     $(document).ready(function() {
 
-        $("#btntambahjabatan").click(function() {
+        $("#btntambahjabatanbaru").click(function() {
             $('#tambahjabatanform')[0].reset();
         });
 
@@ -205,11 +205,17 @@
                 data: $(this).serialize(),
                 dataType: 'json',
                 // data: $(this).serialize(),
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btntambahjabatan').attr('disabled');
+                    $("#btntambahjabatan").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
                         $('#jabatanModal').modal('hide');
                         $('#tableJabatan').DataTable().destroy();
-                        $('#tambahjabatanform')[0].reset();
+
                         fetchJabatan();
                         toastr["success"](data.pesan);
 
@@ -217,7 +223,12 @@
                         // console.log(data);
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btntambahjabatan').removeAttr('disabled');
+                    $("#btntambahjabatan").html(`Simpan`);
+
+                },
             });
         });
 
@@ -268,6 +279,7 @@
                     idjabatan: idjabatan
                 },
                 dataType: 'json',
+
                 success: function(data) {
                     if (data.responce == 'success') {
                         $('#editjabatanModal').modal('show');
@@ -291,6 +303,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnupdatejabatan').attr('disabled');
+                    $("#btnupdatejabatan").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == "success") {
@@ -301,7 +319,12 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnupdatejabatan').removeAttr('disabled');
+                    $("#btnupdatejabatan").html(`Update`);
+
+                },
             });
 
 

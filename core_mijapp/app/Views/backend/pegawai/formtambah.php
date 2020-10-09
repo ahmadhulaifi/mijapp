@@ -472,7 +472,7 @@
                 <br>
 
                 <span>Note (*) harus diisi.</span><br><br>
-                <input type="submit" name="submit" value="Simpan" class="btn btn-primary btn-block">
+                <input type="submit" name="submit" value="Simpan" class="btn btn-primary btn-block" id="btnsavepegawaibaru">
                 <br><br>
 
             </div>
@@ -523,11 +523,28 @@
                 cache: false,
                 processData: false,
                 contentType: false,
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnsavepegawaibaru').attr('disabled');
+                    $("#btnsavepegawaibaru").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
                         // console.log(data.update);
-                        toastr["success"](data.pesan);
-                        window.location = '<?= base_url(); ?>/pegawai'
+
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Berhasil Menambah Data Pegawai',
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+
+                        setTimeout(function() {
+                            /* show the alert for 3sec and then reload the page. */
+                            window.location = '<?= base_url(); ?>/pegawai'
+                        }, 1500);
                     } else {
                         toastr["error"](data.pesan);
                         // console.log(data);

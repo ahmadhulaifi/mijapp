@@ -42,7 +42,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Import</button>
+                                <button type="submit" id="btnimportpegawai" class="btn btn-primary">Import</button>
                             </div>
                             </form>
                         </div>
@@ -154,8 +154,6 @@
 
 <script>
     $(document).ready(function() {
-
-
 
         //fetch Pegawai
         function fetchPegawai() {
@@ -374,6 +372,7 @@
         fetchPegawai();
 
         $(document).on('click', '.passwordpegawai', function(e) {
+            $("#editpasswordform")[0].reset();
             let arrayvalue = $(this).attr("value").split("/");
 
             let idpegawai = arrayvalue[0];
@@ -405,7 +404,7 @@
                     }
                 }
             });
-            $("#editpasswordform")[0].reset();
+
         });
 
         // import pegawai
@@ -419,6 +418,12 @@
                 cache: false,
                 processData: false,
                 contentType: false,
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnimportpegawai').attr('disabled');
+                    $("#btnimportpegawai").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
 
@@ -430,7 +435,12 @@
                         // console.log(data);
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnimportpegawai').removeAttr('disabled');
+                    $("#btnimportpegawai").html(`Update`);
+
+                },
             });
 
         });

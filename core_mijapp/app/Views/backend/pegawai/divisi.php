@@ -278,6 +278,7 @@
             } else {
                 // console.log(divisiasal)
                 $('.asal-divisi-overlay').show();
+                $('#tableAsalPegawai').DataTable().clear();
                 $('#tableAsalPegawai').DataTable().destroy();
                 $.ajax({
                     url: "<?= base_url(); ?>/pegawai/fetchdivisipegawai",
@@ -295,8 +296,7 @@
                             tabelpegawai(data.pegawai)
                         } else {
                             // console.log(data.responce)
-                            $('#tableAsalPegawai').DataTable().clear();
-                            $('#tableAsalPegawai').DataTable().destroy();
+                            tabelpegawai(data.pegawai)
                         }
                     }
                 });
@@ -364,6 +364,12 @@
                                     iddivisitujuan: iddivisitujuan
                                 },
                                 dataType: 'json',
+                                beforeSend: function() {
+                                    // setting a timeout
+                                    $('#btntujuandivisipegawai').attr('disabled');
+                                    $("#btntujuandivisipegawai").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                                },
                                 success: function(data) {
                                     if (data.responce == "success") {
                                         console.log(data)
@@ -381,7 +387,12 @@
                                             text: 'Ada yang tidak beres!',
                                         })
                                     }
-                                }
+                                },
+                                complete: function() {
+                                    $('#btntujuandivisipegawai').removeAttr('disabled');
+                                    $("#btntujuandivisipegawai").html(`<i class="fa fa-arrow-right"></i> Tambah Divisi Tujuan`);
+
+                                },
                             })
 
                         }

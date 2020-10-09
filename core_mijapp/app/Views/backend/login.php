@@ -75,15 +75,18 @@
                                 text: 'Username / Password anda tidak sesuai'
                             })
                         } else {
-                            window.location = '<?= base_url('/dashboard'); ?>'
                             Swal.fire({
                                 position: 'center',
                                 icon: 'success',
                                 title: 'Kamu berhasil login',
                                 showConfirmButton: false,
-                                timer: 5000
+                                timer: 2000
                             })
-                            // document.write(<?= base_url('/dashboard'); ?>)
+
+                            setTimeout(function() {
+                                /* show the alert for 3sec and then reload the page. */
+                                window.location = '<?= base_url('/dashboard'); ?>'
+                            }, 1500);
 
                         }
                     } else {

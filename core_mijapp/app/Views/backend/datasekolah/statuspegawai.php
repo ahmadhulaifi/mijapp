@@ -44,7 +44,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" id="btnsavestatuspegawai" class="btn btn-primary">Simpan</button>
                             </div>
                             </form>
                         </div>
@@ -106,7 +106,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btnupdatestatuspegawai" class="btn btn-primary">Update</button>
                     </div>
                     </form>
                 </div>
@@ -205,11 +205,17 @@
                 data: $(this).serialize(),
                 dataType: 'json',
                 // data: $(this).serialize(),
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnsavestatuspegawai').attr('disabled');
+                    $("#btnsavestatuspegawai").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
                         $('#statuspegawaiModal').modal('hide');
                         $('#tableStatusPegawai').DataTable().destroy();
-                        $('#tambahstatuspegawaiform')[0].reset();
+
                         fetchStatus();
                         toastr["success"](data.pesan);
 
@@ -217,7 +223,12 @@
                         // console.log(data);
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnsavestatuspegawai').removeAttr('disabled');
+                    $("#btnsavestatuspegawai").html(`Simpan`);
+
+                },
             });
         });
 
@@ -291,6 +302,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnupdatestatuspegawai').attr('disabled');
+                    $("#btnupdatestatuspegawai").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == "success") {
@@ -301,7 +318,12 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnupdatestatuspegawai').removeAttr('disabled');
+                    $("#btnupdatestatuspegawai").html(`Update`);
+
+                },
             });
         });
 

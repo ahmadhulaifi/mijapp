@@ -531,7 +531,7 @@ class Pegawai extends Controller
                 //baca file
                 $objPHPExcel = PHPExcel_IOFactory::load($fileLocation);
                 //ambil sheet active
-                $sheet    = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+                $sheet    = $objPHPExcel->getActiveSheet()->toArray('', true, true, true);
 
                 foreach ($sheet as $idx => $data) {
                     //skip index 1 karena title excel
@@ -1097,7 +1097,7 @@ class Pegawai extends Controller
                 //baca file
                 $objPHPExcel = PHPExcel_IOFactory::load($fileLocation);
                 //ambil sheet active
-                $sheet    = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+                $sheet    = $objPHPExcel->getActiveSheet()->toArray('', true, true, true);
 
                 $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
 

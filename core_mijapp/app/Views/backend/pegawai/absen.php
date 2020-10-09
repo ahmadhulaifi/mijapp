@@ -12,11 +12,11 @@
             <div class="col-md-4 mb-3">
                 <!-- Button trigger modal -->
 
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahModal">
+                <button type="button" id="btntambahabsenbaru" class="btn btn-success" data-toggle="modal" data-target="#tambahModal">
                     Tambah
                 </button>
                 <button type="button" name="btndeleteabsenpegawai" id="btndeleteabsenpegawai" class="btn btn-danger">Hapus</button>
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importModal">
+                <button type="button" id="btnimportabsenbaru" class="btn btn-info" data-toggle="modal" data-target="#importModal">
                     Import
                 </button>
 
@@ -43,7 +43,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Import</button>
+                                <button type="submit" id="btnimportabsen" class="btn btn-primary">Import</button>
                             </div>
                             </form>
                         </div>
@@ -193,7 +193,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Tambah</button>
+                        <button type="submit" id="btnsaveabsen" class="btn btn-primary">Tambah</button>
                     </div>
                     </form>
                 </div>
@@ -266,7 +266,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btnupdateabsen" class="btn btn-primary">Update</button>
                     </div>
                     </form>
                 </div>
@@ -441,6 +441,13 @@
                 .draw();
         });
 
+        $(document).on('click', '#btntambahabsenbaru', function() {
+            $('#tambahabsenform')[0].reset();
+        })
+
+        $(document).on('click', '#btnimportabsenbaru', function() {
+            $('#importabsenpegawai')[0].reset();
+        })
 
         // tambah absen
         $('#tambahabsenform').submit(function() {
@@ -451,18 +458,29 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnsaveabsen').attr('disabled');
+                    $("#btnsaveabsen").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
                         $('#tambahModal').modal('hide');
                         $('#tableAbsenPegawai').DataTable().destroy();
-                        $('#tambahabsenform')[0].reset();
+
                         fetchAbsen();
                         toastr["success"](data.pesan);
                     } else {
                         // console.log(data);
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnsaveabsen').removeAttr('disabled');
+                    $("#btnsaveabsen").html(`Simpan`);
+
+                },
             });
         });
 
@@ -514,7 +532,7 @@
 
                         toastr["error"](data.pesan);
                     }
-                    $('#tambahabsenform')[0].reset();
+
                 }
             });
         });
@@ -528,6 +546,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnupdateabsen').attr('disabled');
+                    $("#btnupdateabsen").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == "success") {
@@ -539,7 +563,12 @@
                         toastr["error"](data.pesan);
                     }
                     $('#tambahabsenform')[0].reset();
-                }
+                },
+                complete: function() {
+                    $('#btnupdateabsen').removeAttr('disabled');
+                    $("#btnupdateabsen").html(`Update`);
+
+                },
 
             });
         })
@@ -635,6 +664,12 @@
                 cache: false,
                 processData: false,
                 contentType: false,
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnimportabsen').attr('disabled');
+                    $("#btnimportabsen").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     if (data.responce == "success") {
 
@@ -646,7 +681,12 @@
                         // console.log(data);
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnimportabsen').removeAttr('disabled');
+                    $("#btnimportabsen").html(`Update`);
+
+                },
             });
 
         });

@@ -115,7 +115,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btnupdatetahunajaran" class="btn btn-primary">Update</button>
                     </div>
                     </form>
                 </div>
@@ -234,7 +234,7 @@
                     if (data.responce == "success") {
                         $('#divisiModal').modal('hide');
                         $('#tableDivisi').DataTable().destroy();
-                        $('#tambahdivisiform')[0].reset();
+
                         fetchDivisi();
                         toastr["success"](data.pesan);
 
@@ -319,6 +319,12 @@
                 type: 'post',
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend: function() {
+                    // setting a timeout
+                    $('#btnupdatetahunajaran').attr('disabled');
+                    $("#btnupdatetahunajaran").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+                },
                 success: function(data) {
                     // console.log(data);
                     if (data.responce == "success") {
@@ -329,7 +335,12 @@
                     } else {
                         toastr["error"](data.pesan);
                     }
-                }
+                },
+                complete: function() {
+                    $('#btnupdatetahunajaran').removeAttr('disabled');
+                    $("#btnupdatetahunajaran").html(`Update`);
+
+                },
             });
 
 
