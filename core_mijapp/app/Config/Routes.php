@@ -265,6 +265,8 @@ $routes->post('/tatausaha/deletesiswa', 'backend/TataUsaha::deletesiswa', ['filt
 $routes->post('/backend/tatausaha/deletesiswa', 'backend/TataUsaha::deletesiswa', ['filter' => 'akseslogin']);
 $routes->post('/tatausaha/importsiswa', 'backend/TataUsaha::importsiswa', ['filter' => 'akseslogin']);
 $routes->post('/backend/tatausaha/importsiswa', 'backend/TataUsaha::importsiswa', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/uploadfotosiswa', 'backend/TataUsaha::uploadfotosiswa', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/uploadfotosiswa', 'backend/TataUsaha::uploadfotosiswa', ['filter' => 'akseslogin']);
 
 /**
  * --------------------------------------------------------------------

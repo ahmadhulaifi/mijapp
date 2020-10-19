@@ -22,6 +22,9 @@
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importModal">
                         Import
                     </button>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#uploadModal">
+                        Upload Foto
+                    </button>
                 <?php
                 }
                 ?>
@@ -496,6 +499,33 @@
                     </div>
                 </div>
 
+                <!-- modal Upload foto -->
+                <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="uploadModalLabel">Upload Foto Siswa</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Form Tambah Data -->
+                                <form action="" method="POST" id="uploadfotosiswa" enctype="multipart/form-data">
+                                    <div class="form_group" style="margin-bottom: 5;">
+                                        <label for="">Unggah File</label>
+                                        <input type="file" id="fileuploadfoto" name="fileuploadfoto" class="form-control">
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" id="btnuploadfotosiswa" class="btn btn-primary">Upload</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="col-md-5">
@@ -541,6 +571,7 @@
                                 <th scope="col">Action</th>
                                 <th scope="col">Foto</th>
                                 <th scope="col">Username</th>
+
                                 <th scope="col">NIK</th>
                                 <th scope="col">NISN</th>
                                 <th scope="col">Nama Lengkap</th>
@@ -1242,7 +1273,7 @@
 
         });
 
-        // import pegawai
+        // import siswa
         $('#importsiswa').submit(function() {
             event.preventDefault();
             $.ajax({
@@ -1261,7 +1292,8 @@
                 },
                 success: function(data) {
                     if (data.responce == "success") {
-
+                        console.log(data.cekuser)
+                        console.log(data.ceknik)
                         $('#tableSiswa').DataTable().destroy();
                         fetchSiswa();
                         $('#importModal').modal('hide');
@@ -1362,6 +1394,69 @@
                 })
 
             }
+        });
+
+        $("#uploadfotosiswa").submit(function(event) {
+            event.preventDefault();
+            // console.log($("input[name='nik']").val())
+
+            Swal.fire({
+                title: 'Apa kamu yakin Nama filenya sudah sesuai?',
+                text: "gambar akan tersinkron otomatis dengan nama filenya",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Benar!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '<?= base_url(); ?>/tatausaha/uploadfotosiswa',
+                        type: 'post',
+                        // data: $(this).serialize(),
+                        data: new FormData(this),
+                        dataType: 'json',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        beforeSend: function() {
+
+                            // setting a timeout
+                            $('#btnuploadfotosiswa').attr('disabled');
+                            $("#btnuploadfotosiswa").html(`<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>`);
+
+
+                        },
+                        success: function(data) {
+                            if (data.responce == "success") {
+                                $('#uploadModal').modal('hide');
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: 'Selamat !! Upload foto telah berhasil',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+
+                                // window.location.reload();
+                            } else {
+                                toastr["error"](data.pesan);
+                                // console.log(data);
+                            }
+                        },
+                        complete: function(data) {
+                            $('#btnuploadfotosiswa').removeAttr('disabled');
+                            $("#btnuploadfotosiswa").html(`Upload`);
+
+                            if (data.responce == 'success') {
+                                $('#uploadfotosiswa')[0].reset();
+                            }
+                        },
+                    });
+
+                }
+            })
+
         });
 
     });

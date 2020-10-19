@@ -1021,7 +1021,7 @@ class TataUsaha extends Controller
     {
         if ($this->request->isAJAX()) {
 
-            $file = $this->request->getFile('fileabsenpegawai');
+            $file = $this->request->getFile('filesiswa');
 
             if ($file) {
                 $excelReader  = new PHPExcel();
@@ -1062,28 +1062,31 @@ class TataUsaha extends Controller
                     $pendapatan_ibu = $data['R'];
                     $alamat = $data['S'];
                     $no_hp = $data['T'];
+                    $foto = $data['U'];
 
 
                     // $idkaryawan = $this->karyawanModel->where('nip', $nip)->get()->getRowArray();
+                    $cekdoubleuser = $this->siswaModel->cekUsernameSiswa($username);
+                    $cekdoublenik = $this->siswaModel->cekNikSiswa($nik);
 
 
-                    if ($this->siswaModel->cekUsernameSiswa($username)) {
+                    if ($cekdoubleuser > 0) {
                         // $insert = [];
                         $angkagagal++;
-                    } elseif ($this->siswaModel->cekNikSiswa($nik)) {
+                    } elseif ($cekdoublenik > 0) {
                         // $insert = [];
                         $angkagagal++;
                     } else {
                         $insert = [
                             'username' => $username,
-                            'password' => password_hash($password, PASSWORD_DEFAULT),
+                            'password' => password($password),
                             'nik' => $nik,
                             'nisn' => $nisn,
                             'nama_lengkap' => $nama_lengkap,
                             'panggilan' => $panggilan,
                             'j_kel' => $j_kel,
                             'tem_lahir' => $tem_lahir,
-                            'tgl_lahir' => $tgl_lahir,
+                            'tgl_lahir' => tanggal($tgl_lahir),
                             'tahun_lulus' => $tahun_lulus,
                             'lanjut_sekolah' => $lanjut_sekolah,
                             'ayah' => $ayah,
@@ -1094,13 +1097,16 @@ class TataUsaha extends Controller
                             'pendapatan_ibu' => $pendapatan_ibu,
                             'alamat' => $alamat,
                             'no_hp' => $no_hp,
+                            'foto' => $foto,
                             'last_user_update' => $cekuser['nama_lengkap'],
                             'id_divisi' => $divisi
                         ];
 
-                        $this->absenPegawaiModel->insert($insert);
+                        $this->siswaModel->insert($insert);
                         $angkasukses++;
                     }
+
+
 
                     // insert data
                 }
@@ -1109,7 +1115,9 @@ class TataUsaha extends Controller
                     'responce' => 'success',
                     'pesan' => 'Import absen pegawai berhasil',
                     'angkasukses' => $angkasukses,
-                    'angkagagal' => $angkagagal
+                    'angkagagal' => $angkagagal,
+                    'cekuser' => $cekdoubleuser,
+                    'ceknik' => $cekdoublenik
                 ];
             } else {
                 //upload gagal
@@ -1122,6 +1130,51 @@ class TataUsaha extends Controller
             echo json_encode($data);
         } else {
             echo "No direct script access allowed";
+        }
+    }
+
+    public function uploadfotosiswa()
+    {
+        if ($this->request->isAJAX()) {
+
+            if (!$this->validate([
+
+                'fileuploadfoto' => [
+                    'rules' => 'uploaded[fileuploadfoto]|ext_in[fileuploadfoto,zip,rar]',
+                    'errors' => [
+                        'uploaded' => 'file tidak boleh kosong',
+                        'ext_in' => 'Gunakan file ekstensi zip atau rar'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+
+                $file = $this->request->getFile('fileuploadfoto');
+
+                $zip = new ZipArchive;
+
+                $res = $zip->open($file);
+
+                $path = 'asset/images/siswa/';
+
+                if ($res == TRUE) {
+                    $zip->extractTo($path . $file);
+
+                    $zip->close();
+
+                    unlink('asset/images/siswa/' . $file);
+                }
+            }
+            echo json_encode($data);
+        } else {
+            echo "No Direct Script access allowed";
         }
     }
 }

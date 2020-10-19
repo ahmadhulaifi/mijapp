@@ -172,11 +172,11 @@ class SiswaModel extends Model
     {
         $builder = $this->db->table($this->table);
         $builder->select('siswa.*, kelas.kelas,rombel.rombel');
-        $builder->join('rombel', 'rombel.id = siswa.id_rombel');
-        $builder->join('kelas', 'kelas.id = rombel.id_kelas');
+        $builder->join('rombel', 'rombel.id = siswa.id_rombel', 'left');
+        $builder->join('kelas', 'kelas.id = rombel.id_kelas', 'left');
         $builder->where('siswa.username', $username);
         $builder->where('kelas.kelas !=', 'Alumni');
-        $query = $builder->get()->getRowArray();
+        $query = $builder->countAllResults();
 
         return $query;
     }
@@ -185,11 +185,11 @@ class SiswaModel extends Model
     {
         $builder = $this->db->table($this->table);
         $builder->select('siswa.*, kelas.kelas,rombel.rombel');
-        $builder->join('rombel', 'rombel.id = siswa.id_rombel');
-        $builder->join('kelas', 'kelas.id = rombel.id_kelas');
-        $builder->where('siswa.username', $nik);
+        $builder->join('rombel', 'rombel.id = siswa.id_rombel', 'left');
+        $builder->join('kelas', 'kelas.id = rombel.id_kelas', 'left');
+        $builder->where('siswa.nik', $nik);
         $builder->where('kelas.kelas !=', 'Alumni');
-        $query = $builder->get()->getRowArray();
+        $query = $builder->countAllResults();
 
         return $query;
     }
