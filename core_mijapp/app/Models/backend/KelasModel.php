@@ -49,6 +49,8 @@ class KelasModel extends Model
         }
         // $builder->where('id_divisi', $divisiall);
 
+        $builder->where('kelas !=', 'Alumni');
+        $builder->where('kelas !=', 'kosong');
         $builder->orderBy('id_divisi', 'asc');
         $builder->orderBy('kelas', 'asc');
         $query = $builder->get()->getResultArray();

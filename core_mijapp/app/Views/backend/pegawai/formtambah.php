@@ -513,7 +513,6 @@
         $("#tambahpegawaiform").submit(function(event) {
             event.preventDefault();
 
-
             $.ajax({
                 url: '<?= base_url(); ?>/pegawai/tambahpegawai',
                 type: 'post',

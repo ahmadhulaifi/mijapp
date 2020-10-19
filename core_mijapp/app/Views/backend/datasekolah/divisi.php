@@ -181,9 +181,15 @@
                                 "data": null,
                                 "render": function(data, type, row, meta) {
                                     let a = '';
-                                    a = `
+
+                                    if (`${row.divisi}` == 'Umum') {
+                                        a = ``;
+                                    } else {
+                                        a = `
                                     <a href="" class="badge badge-info editdivisi" value="${row.id}"><i class="far fa-fw fa-edit"></i></a>
                                     <a href="" value="${row.id}" class="badge badge-danger deletedivisi"><i class="fas fa-fw fa-trash-alt"></i></a>`;
+                                    }
+
 
                                     return a;
                                 }

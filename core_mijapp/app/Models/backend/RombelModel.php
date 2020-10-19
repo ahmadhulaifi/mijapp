@@ -49,7 +49,8 @@ class RombelModel extends Model
             $builder->whereIn('id_divisi', $arr_iddivisi);
         }
         // $builder->where('id_divisi', $divisiall);
-
+        $builder->where('kelas.kelas !=', 'Alumni');
+        $builder->where('kelas.kelas !=', 'kosong');
         $builder->orderBy('id_divisi', 'asc');
         $builder->orderBy('kelas', 'asc');
         $query = $builder->get()->getResultArray();
@@ -82,6 +83,7 @@ class RombelModel extends Model
         $builder->join('kelas', 'kelas.id = rombel.id_kelas');
         $builder->join('divisi', 'divisi.id = kelas.id_divisi');
         $builder->where('rombel.id', $id);
+
         $query = $builder->get()->getRowArray();
 
         return $query;

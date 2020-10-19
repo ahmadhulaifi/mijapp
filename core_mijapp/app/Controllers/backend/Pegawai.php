@@ -256,7 +256,9 @@ class Pegawai extends Controller
 
                 if ($this->karyawanModel->insert($insert)) {
                     //pindahkan gambar
-                    $fileFoto->move('asset/images/user', $namaFoto);
+                    if ($fileFoto != null) {
+                        $fileFoto->move('asset/images/user', $namaFoto);
+                    }
                 };
 
                 $data = [
@@ -397,7 +399,6 @@ class Pegawai extends Controller
                 if ($fileFoto->getError() == 4) {
                     $namaFoto = $this->request->getVar('fotoLama');
                 } else {
-
                     if ($this->request->getVar('fotoLama') == "default.png") {
                         //generate nama file random
                         $namaFoto = $fileFoto->getRandomName();
@@ -634,7 +635,7 @@ class Pegawai extends Controller
                     $karya = $this->karyawanModel->where('id', $id[$count])->get()->getRowArray();
 
                     if ($karya['foto'] != 'default.png') {
-                        unlink('/asset/images/user/' . $karya['foto']);
+                        unlink('asset/images/user/' . $karya['foto']);
                     }
 
                     $this->karyawanModel->where('id', $id[$count])->delete();
