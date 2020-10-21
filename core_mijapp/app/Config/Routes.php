@@ -278,6 +278,11 @@ $routes->get('/backend/tatausaha/detailsiswa/(:num)', 'backend\TataUsaha::detail
 
 $routes->get('/tatausaha/galerisiswa', 'backend\TataUsaha::galerisiswa', ['filter' => 'akseslogin']);
 $routes->get('/backend/tatausaha/galerisiswa', 'backend\TataUsaha::galerisiswa', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/deletefotochecksiswa', 'backend/TataUsaha::deletefotochecksiswa', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/deletefotochecksiswa', 'backend/TataUsaha::deletefotochecksiswa', ['filter' => 'akseslogin']);
+$routes->delete('/tatausaha/deletefotogaleri/(:any)', 'backend\TataUsaha::deletefotogaleri/$1', ['filter' => 'akseslogin']);
+$routes->delete('/backend/tatausaha/deletefotogaleri/(:any)', 'backend\TataUsaha::deletefotogaleri/$1', ['filter' => 'akseslogin']);
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing

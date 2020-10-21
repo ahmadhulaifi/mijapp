@@ -56,8 +56,8 @@
                             Galeri Foto divisi
                         </div>
                         <div class="card-tools">
-                            <button type="button" id="btnuploadfotobaru" class="btn btn-default" data-toggle="modal" data-target="#galeriModal">
-                                Upload Gambar
+                            <button type="button" id="deletefotogaleri" class="btn btn-danger">
+                                Hapus Gambar
                             </button>
                         </div>
                     </div>
@@ -69,9 +69,6 @@
                                 <a class="btn btn-info active" href="javascript:void(0)" data-filter="all"> All items </a>
                                 <?php foreach ($divisi as $divisi) : ?>
                                     <?php if ($divisi['divisi'] != 'Umum') : ?>
-
-
-
                                         <a class="btn btn-info" href="javascript:void(0)" data-filter="<?= strtolower(substr($divisi['divisi'], 0, 2)); ?>">Kls <?= $divisi['divisi']; ?></a>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
@@ -107,7 +104,7 @@
                                 <?php foreach ($galerisiswa as $galerisiswa) : ?>
                                     <?php if ($galerisiswa != 'default.png') { ?>
 
-                                        <div class="filtr-item col-sm-2" data-category="<?= strtolower(substr($galerisiswa, 0, 2)); ?>">
+                                        <div class="filtr-item col-md-1" data-category="<?= strtolower(substr($galerisiswa, 0, 2)); ?>">
                                             <div class="card">
                                                 <input type="checkbox" style="position: relative;top: 10px;" name="checkbox" id="<?= $galerisiswa; ?>" value="<?= $galerisiswa; ?>" class="delete_checkbox"></input>
                                                 <label for="myCheckbox1">
@@ -115,16 +112,16 @@
                                                 </label>
                                                 <div class="card-body">
                                                     <center>
-                                                        <p class="card-text"><?= $galerisiswa; ?></p>
-                                                        <a href="#" class="btn btn-danger">Delete</a>
+                                                        <p class="card-text" style="font-size: 10px;"><?= $galerisiswa; ?></p>
+                                                        <a href="#" value="<?= $galerisiswa; ?>" class="btn btn-danger btn-sm deletefoto">Delete</a>
                                                     </center>
                                                 </div>
                                             </div>
                                         </div>
                                     <?php }; ?>
                                 <?php endforeach; ?>
-
                             </div>
+
                         </div>
 
                     </div>
@@ -154,12 +151,6 @@
 
 <script>
     $(document).ready(function() {
-
-
-
-
-
-
         $('.delete_checkbox').click(function() {
             if ($(this).is(':checked')) {
                 $(this).closest('tr').addClass('removeRow');
@@ -171,9 +162,7 @@
 
 
         $('#deletefotogaleri').click(function() {
-
             var checkbox = $('.delete_checkbox:checked');
-
             if (checkbox.length > 0) {
                 Swal.fire({
                     title: 'Apa kamu yakin ingin menghapus ' + checkbox.length + ' foto siswa?',
@@ -207,8 +196,11 @@
                                         'Foto berhasil dihapus.',
                                         'success'
                                     )
-                                    $('#tableSiswa').DataTable().destroy();
-                                    fetchSiswa();
+                                    setTimeout(function() {
+                                        /* show the alert for 3sec and then reload the page. */
+                                        location.reload();
+                                    }, 1500);
+
                                 } else {
                                     Swal.fire({
                                         icon: 'error',
@@ -230,6 +222,45 @@
                 })
 
             }
+        });
+
+        // delete kelas
+        $(document).on("click", ".deletefoto", function() {
+            event.preventDefault();
+            let namafoto = $(this).attr('value');
+
+            Swal.fire({
+                title: 'Apa kamu yakin untuk menghapusnya?',
+                text: "kamu tidak akan bisa mengembalikannya",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus saja!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '<?= base_url('/tatausaha/deletefotogaleri'); ?>/' + namafoto,
+                        type: 'DELETE',
+                        error: function() {
+                            alert('Something is wrong');
+                        },
+                        success: function(data) {
+
+                            Swal.fire(
+                                'Deleted!',
+                                'File sudah terdelete.',
+                                'success'
+                            )
+                            setTimeout(function() {
+                                /* show the alert for 3sec and then reload the page. */
+                                location.reload();
+                            }, 1500);
+                        }
+                    });
+
+                }
+            })
         });
     })
 </script>

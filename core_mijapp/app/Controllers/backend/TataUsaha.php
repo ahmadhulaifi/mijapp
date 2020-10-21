@@ -1206,49 +1206,76 @@ class TataUsaha extends Controller
         return view('backend/tatausaha/detailsiswa', $data);
     }
 
-    // public function galerisiswa()
-    // {
-    //     $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
-
-
-    //     $divisi = $this->divisiModel->getDivisiGaleri($cekuser['divisi']);
-    //     $galerisiswa = $this->galeriSiswaModel->getGaleriSiswa($cekuser['divisi']);
-    //     // dd($galerisiswa);
-
-
-    //     $data = [
-    //         'title' => 'Galeri Foto Siswa',
-    //         'user' => $cekuser,
-    //         'galerisiswa' => $galerisiswa,
-    //         'divisi' => $divisi
-
-    //     ];
-
-    //     return view('backend/tatausaha/galerisiswa', $data);
-    // }
-
 
     public function galerisiswa()
     {
         $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
 
+        $pager = \Config\Services::pager();
+
+        // $pager->makeLinks($page, $perPage, $total, 'bootstrap');
+
+        // $data = [
+        //     'users' => $this->galeriSiswaModel->paginate(2),
+        //     'pager' => $this->galeriSiswaModel->pager
+        // ];
+
 
         $divisi = $this->divisiModel->getDivisiGaleri($cekuser['divisi']);
-        // $galerisiswa = $this->galeriSiswaModel->getGaleriSiswaFolder();
 
-        $galerisiswa = directory_map('./asset/images/siswa/');
-        // dd($divisi);
-        // dd('/asset/images/siswa/');
 
+        $galerisiswa = $this->galeriSiswaModel->getGaleriSiswaFolder();
+
+        $total = count($galerisiswa);
+        $perPage = 10;
+        // dd($from);
+        $paager = $pager->makeLinks(1, $perPage, $total);
+        // dd($paager);
 
         $data = [
             'title' => 'Galeri Foto Siswa',
             'user' => $cekuser,
+            'divisi' => $divisi,
             'galerisiswa' => $galerisiswa,
-            'divisi' => $divisi
+            'pager' => $paager,
 
         ];
 
         return view('backend/tatausaha/galerisiswa', $data);
+    }
+
+    public function deletefotochecksiswa()
+    {
+        if ($this->request->isAJAX()) {
+            if ($id = $this->request->getVar('checkbox_value')) {
+                for ($count = 0; $count < count($id); $count++) {
+                    // $this->karyawanModel->delete_karyawan($id[$count]);
+
+                    if (file_exists('asset/images/siswa/' . $id[$count])) {
+                        unlink('asset/images/siswa/' . $id[$count]);
+                    }
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data siswa berhasil dihapus'
+                ];
+
+                echo json_encode($data);
+            }
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function deletefotogaleri($namafoto)
+    {
+        if ($this->request->isAJAX()) {
+            if (file_exists('asset/images/siswa/' . $namafoto)) {
+                unlink('asset/images/siswa/' . $namafoto);
+            }
+        } else {
+            echo "No direct script access allowed";
+        }
     }
 }

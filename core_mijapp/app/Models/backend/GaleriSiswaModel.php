@@ -25,33 +25,13 @@ class GaleriSiswaModel extends Model
     // protected $validationMessages = [];
     // protected $skipValidation     = false;
 
-    public function getGaleriSiswa($divisiall)
+
+
+    public function getGaleriSiswaFolder()
     {
-        $arr_divisi = explode(",", $divisiall);
-        $jmldivisi = count($arr_divisi);
+        // $query = directory_map('./asset/images/siswa/')->get('user', $number, $offset)->result();
+        $query = directory_map('./asset/images/siswa/');
 
-        for ($i = 0; $i < $jmldivisi; $i++) {
-            $builder2 = $this->db->table('divisi');
-            $builder2->select('*');
-            $builder2->where('divisi', $arr_divisi[$i]);
-            $query2 = $builder2->get()->getRowArray();
-
-            $arr_iddivisi[] = $query2['id'];
-        }
-
-        $builder = $this->db->table($this->table);
-        $builder->select('galeri_siswa.*,divisi.divisi');
-        $builder->join('divisi', 'divisi.id = galeri_siswa.id_divisi');
-
-        if (in_array('Umum', $arr_divisi) == false) {
-            $builder->whereIn('id_divisi', $arr_iddivisi);
-        }
-        // $builder->where('id_divisi', $divisiall);
-
-
-        $builder->orderBy('id_divisi', 'asc');
-
-        $query = $builder->get()->getResultArray();
 
         return $query;
     }
