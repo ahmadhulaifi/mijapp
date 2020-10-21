@@ -13,6 +13,10 @@ class Filters extends BaseConfig
 		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
 		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
 		'akseslogin' => \App\Filters\AksesFilter::class,
+		'aksesdivisi' => [
+			\App\Filters\AksesFilter::class,
+			\App\Filters\AksesDivisi::class,
+		]
 	];
 
 	// Always applied before every request

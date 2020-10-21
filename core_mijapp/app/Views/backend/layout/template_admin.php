@@ -32,6 +32,9 @@
     <!-- toastr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">
 
+    <!-- Ekko Lightbox -->
+    <link rel="stylesheet" href="<?= base_url(); ?>/asset/plugins/ekko-lightbox/ekko-lightbox.css">
+
     <!-- datatable -->
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" />
@@ -143,6 +146,12 @@
     <script type="text/javascript" src="https://cdn.datatables.net/searchpanes/1.1.1/js/searchPanes.bootstrap4.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    <!-- Ekko Lightbox -->
+    <script src="<?= base_url(); ?>/asset/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+
+    <!-- Filterizr-->
+    <script src="<?= base_url(); ?>/asset/plugins/filterizr/jquery.filterizr.min.js"></script>
 
     <script>
         $(document).ready(function() {

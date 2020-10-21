@@ -36,6 +36,8 @@ class SiswaModel extends Model
         $builder->where('kelas.kelas!=', 'Alumni');
         $builder->orwhere('kelas.kelas', null);
         $builder->where('siswa.id_divisi', $id);
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
         $query = $builder->get()->getResultArray();
 
         return $query;
@@ -52,6 +54,8 @@ class SiswaModel extends Model
         // $builder->where('kelas.kelas!=', 'Alumni');
         $builder->where('kelas.kelas', null);
         // $builder->where('siswa.id_divisi', $id);
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
         $query = $builder->get()->getResultArray();
 
         return $query;
@@ -66,6 +70,8 @@ class SiswaModel extends Model
         $builder->join('divisi', 'divisi.id = siswa.id_divisi', 'left');
         $builder->where('kelas.kelas!=', 'Alumni');
         $builder->orwhere('kelas.kelas', null);
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
         $query = $builder->get()->getResult();
 
         return $query;
@@ -80,6 +86,8 @@ class SiswaModel extends Model
         $builder->join('divisi', 'divisi.id = siswa.id_divisi', 'left');
         // $builder->where('kelas.kelas!=', 'Alumni');
         $builder->where('kelas.kelas', null);
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
         $query = $builder->get()->getResult();
 
         return $query;
@@ -96,6 +104,8 @@ class SiswaModel extends Model
         // $builder->where('kelas.kelas!=', 'Alumni');
         $builder->where('kelas.id', $id_kelas);
         // $builder->where('siswa.id_divisi', $id);
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
         $query = $builder->get()->getResultArray();
 
         return $query;
@@ -112,6 +122,8 @@ class SiswaModel extends Model
         // $builder->where('kelas.kelas!=', 'Alumni');
         $builder->where('kelas.id', $id_kelas);
         // $builder->where('siswa.id_divisi', $id);
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
         $query = $builder->get()->getResultArray();
 
         return $query;
@@ -128,6 +140,8 @@ class SiswaModel extends Model
         // $builder->where('kelas.kelas!=', 'Alumni');
         $builder->where('siswa.id_rombel', $id_rombel);
         // $builder->where('siswa.id_divisi', $id);
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
         $query = $builder->get()->getResultArray();
 
         return $query;
@@ -144,6 +158,8 @@ class SiswaModel extends Model
         // $builder->where('kelas.kelas!=', 'Alumni');
         $builder->where('siswa.id_rombel', $id_rombel);
         // $builder->where('siswa.id_divisi', $id);
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
         $query = $builder->get()->getResultArray();
 
         return $query;
@@ -190,6 +206,19 @@ class SiswaModel extends Model
         $builder->where('siswa.nik', $nik);
         $builder->where('kelas.kelas !=', 'Alumni');
         $query = $builder->countAllResults();
+
+        return $query;
+    }
+
+    public function getSiswaDetail($id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('siswa.*, kelas.kelas,rombel.rombel,divisi.divisi');
+        $builder->join('rombel', 'rombel.id = siswa.id_rombel', 'left');
+        $builder->join('kelas', 'kelas.id = rombel.id_kelas', 'left');
+        $builder->join('divisi', 'divisi.id = siswa.id_divisi', 'left');
+        $builder->where('siswa.id', $id);
+        $query = $builder->get()->getRowArray();
 
         return $query;
     }

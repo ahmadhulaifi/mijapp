@@ -787,7 +787,10 @@
                             } else {
                                 a = `
                                     <a type="button" value="${row.id}" class="badge badge-info editsiswa"><i class="far fa-fw fa-edit"></i></a>
-                                    <a type="button" value="${row.id}/${row.nama_lengkap}" class="badge badge-warning passwordsiswa"><i class="fas fa-fw fa-lock"></i></a>`;
+                                    <a type="button" value="${row.id}/${row.nama_lengkap}" class="badge badge-warning passwordsiswa"><i class="fas fa-fw fa-lock"></i></a>
+                                    <a href="<?= base_url(); ?>/tatausaha/detailsiswa/${row.id}" class="badge badge-success detailsiswa" target="blank"><i class="fas fa-fw fa-search"></i></a>`;
+
+
                             }
 
 
@@ -798,7 +801,7 @@
                         "data": "foto",
                         "render": function(data, type, row, meta) {
 
-                            let a = `<img src="<?= base_url(); ?>/asset/images/siswa/${data}">`;
+                            let a = `<img src="<?= base_url(); ?>/asset/images/siswa/${data}" width=50px>`;
 
                             return a;
                         }
@@ -1437,6 +1440,8 @@
                                     showConfirmButton: false,
                                     timer: 1500
                                 })
+                                $('#tableSiswa').DataTable().destroy();
+                                fetchSiswa();
 
                                 // window.location.reload();
                             } else {

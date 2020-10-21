@@ -4,10 +4,10 @@ namespace App\Models\backend;
 
 use CodeIgniter\Model;
 
-class DivisiModel extends Model
+class GaleriSiswaModel extends Model
 {
-    protected $table      = 'divisi';
-    protected $allowedFields = ['divisi', 'sort'];
+    protected $table      = 'galeri_siswa';
+    protected $allowedFields = ['foto', 'id_divisi'];
 
     // protected $useTimestamps = true;
     // protected $createdField  = 'created_at';
@@ -25,9 +25,8 @@ class DivisiModel extends Model
     // protected $validationMessages = [];
     // protected $skipValidation     = false;
 
-    public function getDivisiGaleri($divisiall)
+    public function getGaleriSiswa($divisiall)
     {
-
         $arr_divisi = explode(",", $divisiall);
         $jmldivisi = count($arr_divisi);
 
@@ -41,15 +40,16 @@ class DivisiModel extends Model
         }
 
         $builder = $this->db->table($this->table);
-        $builder->select('divisi.*');
+        $builder->select('galeri_siswa.*,divisi.divisi');
+        $builder->join('divisi', 'divisi.id = galeri_siswa.id_divisi');
 
         if (in_array('Umum', $arr_divisi) == false) {
-            $builder->whereIn('id', $arr_iddivisi);
+            $builder->whereIn('id_divisi', $arr_iddivisi);
         }
         // $builder->where('id_divisi', $divisiall);
 
 
-        $builder->orderby('divisi.sort', 'asc');
+        $builder->orderBy('id_divisi', 'asc');
 
         $query = $builder->get()->getResultArray();
 

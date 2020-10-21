@@ -3,6 +3,7 @@
 namespace App\Controllers\backend;
 
 use PHPExcel;
+// use ZIPLibrary;
 use PHPExcel_IOFactory;
 use App\Models\backend\KaryawanModel;
 use App\Models\backend\MenuModel;
@@ -14,7 +15,9 @@ use App\Models\backend\TahunAjaranModel;
 use App\Models\backend\KelasModel;
 use App\Models\backend\RombelModel;
 use App\Models\backend\SiswaModel;
+use App\Models\backend\GaleriSiswaModel;
 use CodeIgniter\Controller;
+use ZipArchive;
 
 class TataUsaha extends Controller
 {
@@ -28,10 +31,12 @@ class TataUsaha extends Controller
     protected $kelasModel;
     protected $rombelModel;
     protected $siswaModel;
+    protected $galeriSiswaModel;
 
     public function __construct()
     {
         helper('fisi');
+        helper('filesystem');
         $this->karyawanModel = new KaryawanModel();
         $this->menuModel = new MenuModel();
         $this->submenuModel = new SubmenuModel();
@@ -42,6 +47,7 @@ class TataUsaha extends Controller
         $this->kelasModel = new KelasModel();
         $this->rombelModel = new RombelModel();
         $this->siswaModel = new SiswaModel();
+        $this->galeriSiswaModel = new GaleriSiswaModel();
     }
 
     // controller kelas
@@ -999,7 +1005,9 @@ class TataUsaha extends Controller
                     $siswa = $this->siswaModel->where('id', $id[$count])->get()->getRowArray();
 
                     if ($siswa['foto'] != 'default.png') {
-                        unlink('asset/images/siswa/' . $siswa['foto']);
+                        if (file_exists('asset/images/siswa/' . $siswa['foto'])) {
+                            unlink('asset/images/siswa/' . $siswa['foto']);
+                        }
                     }
 
                     $this->siswaModel->where('id', $id[$count])->delete();
@@ -1165,16 +1173,82 @@ class TataUsaha extends Controller
                 $path = 'asset/images/siswa/';
 
                 if ($res == TRUE) {
-                    $zip->extractTo($path . $file);
-
+                    $zip->extractTo($path);
                     $zip->close();
-
-                    unlink('asset/images/siswa/' . $file);
+                    // unlink('asset/images/siswa/' . $file);
                 }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Upload foto berhasil'
+                ];
             }
             echo json_encode($data);
         } else {
             echo "No Direct Script access allowed";
         }
+    }
+
+    public function detailsiswa($id)
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+        // $siswa = $this->siswaModel->where('id', $id)->get()->getRowArray();
+        $siswa = $this->siswaModel->getSiswaDetail($id);
+
+        $data = [
+            'title' => 'Kelas',
+            'user' => $cekuser,
+            'siswa' => $siswa
+
+        ];
+
+        return view('backend/tatausaha/detailsiswa', $data);
+    }
+
+    // public function galerisiswa()
+    // {
+    //     $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+
+    //     $divisi = $this->divisiModel->getDivisiGaleri($cekuser['divisi']);
+    //     $galerisiswa = $this->galeriSiswaModel->getGaleriSiswa($cekuser['divisi']);
+    //     // dd($galerisiswa);
+
+
+    //     $data = [
+    //         'title' => 'Galeri Foto Siswa',
+    //         'user' => $cekuser,
+    //         'galerisiswa' => $galerisiswa,
+    //         'divisi' => $divisi
+
+    //     ];
+
+    //     return view('backend/tatausaha/galerisiswa', $data);
+    // }
+
+
+    public function galerisiswa()
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+
+        $divisi = $this->divisiModel->getDivisiGaleri($cekuser['divisi']);
+        // $galerisiswa = $this->galeriSiswaModel->getGaleriSiswaFolder();
+
+        $galerisiswa = directory_map('./asset/images/siswa/');
+        // dd($divisi);
+        // dd('/asset/images/siswa/');
+
+
+        $data = [
+            'title' => 'Galeri Foto Siswa',
+            'user' => $cekuser,
+            'galerisiswa' => $galerisiswa,
+            'divisi' => $divisi
+
+        ];
+
+        return view('backend/tatausaha/galerisiswa', $data);
     }
 }

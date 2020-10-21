@@ -75,4 +75,37 @@ class KelasModel extends Model
 
         return $arr_iddivisi;
     }
+
+    public function getKelasGaleri($divisiall)
+    {
+
+        $arr_divisi = explode(",", $divisiall);
+        $jmldivisi = count($arr_divisi);
+
+        for ($i = 0; $i < $jmldivisi; $i++) {
+            $builder2 = $this->db->table('divisi');
+            $builder2->select('*');
+            $builder2->where('divisi', $arr_divisi[$i]);
+            $query2 = $builder2->get()->getRowArray();
+
+            $arr_iddivisi[] = $query2['id'];
+        }
+
+        $builder = $this->db->table($this->table);
+        $builder->select('kelas.*, divisi.divisi,');
+        $builder->join('divisi', 'divisi.id = kelas.id_divisi');
+
+        if ($divisiall != 'Umum') {
+            $builder->whereIn('id_divisi', $arr_iddivisi);
+        }
+        // $builder->where('id_divisi', $divisiall);
+
+
+        $builder->where('kelas !=', 'kosong');
+        $builder->orderBy('id_divisi', 'asc');
+        $builder->orderBy('kelas', 'asc');
+        $query = $builder->get()->getResultArray();
+
+        return $query;
+    }
 }
