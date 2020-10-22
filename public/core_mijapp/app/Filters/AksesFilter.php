@@ -32,7 +32,7 @@ class AksesFilter implements FilterInterface
 
         // Do something here
         if (session('username') == null) {
-            return redirect()->to(base_url('/login'));
+            return redirect()->to(base_url('/loginadmin'));
         } elseif ($queryaccess < 1) {
             return redirect()->to(base_url('/block'));
         }

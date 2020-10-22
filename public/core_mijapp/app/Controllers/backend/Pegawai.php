@@ -57,7 +57,8 @@ class Pegawai extends Controller
     public function fetchpegawai()
     {
         if ($this->request->isAJAX()) {
-            if ($pegawai = $this->karyawanModel->findAll()) {
+            if ($pegawai = $this->karyawanModel->where('username!=', 'adminmij')->findAll()) {
+                // if ($pegawai = $this->karyawanModel->findAll()) {
                 $data = [
                     'responce' => 'success',
                     'pegawai' => $pegawai

@@ -33,7 +33,7 @@ class Dashboard extends Controller
         $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
         $menu = $this->menuModel->findAll();
         $submenu = $this->submenuModel->findAll();
-        $jumlahpegawai = $this->karyawanModel->countAll();
+        $jumlahpegawai = $this->karyawanModel->where('username!=', 'adminmij')->countAllResults();
         $jumlahkelas = $this->kelasModel->where('kelas!=', 'Alumni')->countAllResults();
         // dd($submenu);
         $jumlahsiswaaktif = $this->siswaModel->jmlhSiswaAll();

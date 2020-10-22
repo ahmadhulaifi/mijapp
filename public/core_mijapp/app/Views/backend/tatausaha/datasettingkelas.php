@@ -34,7 +34,7 @@
 
                         </div>
                         <div class="icon">
-                            <i class="fa fa-fw fa-users"></i>
+                            <i class="fas fa-fw fa-book-reader"></i>
                         </div>
                         <a href="<?= base_url(); ?>/tatausaha/settingkelas/<?= $divisi['id']; ?>" class="small-box-footer">Setting Kelas <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
