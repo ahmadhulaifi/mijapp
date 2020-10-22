@@ -37,6 +37,7 @@ class TataUsaha extends Controller
     {
         helper('fisi');
         helper('filesystem');
+        helper('date');
         $this->karyawanModel = new KaryawanModel();
         $this->menuModel = new MenuModel();
         $this->submenuModel = new SubmenuModel();
@@ -750,17 +751,25 @@ class TataUsaha extends Controller
                 // validasi sukses
                 $fileFoto = $this->request->getFile('foto');
 
+                $id_divisi = $this->request->getVar('id_divisi');
+                $nikk = $this->request->getVar('nik');
+                $cekdivisi = $this->divisiModel->where('id', $id_divisi)->get()->getRowArray();
+                $tgl_lahir = $this->request->getVar('tgl_lahir');
+
+                $ext = $fileFoto->guessExtension();
+
                 if ($fileFoto == '') {
                     $namaFoto = "default.png";
                 } else {
                     //generate nama file random
-                    $namaFoto = $fileFoto->getRandomName();
+                    // $namaFoto = $fileFoto->getRandomName();
+                    $namaFoto = $cekdivisi['divisi'] . '' . $nikk . '' . $tgl_lahir . '' . now() . '.' . $ext;
                 }
 
                 $insert = [
                     'username' => $this->request->getVar('username'),
                     'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
-                    'nik' => $this->request->getVar('nik'),
+                    'nik' => $nikk,
                     'nisn' => $this->request->getVar('nisn'),
                     'nama_lengkap' => $this->request->getVar('nama_lengkap'),
                     'panggilan' => $this->request->getVar('panggilan'),
@@ -779,7 +788,7 @@ class TataUsaha extends Controller
                     'alamat' => $this->request->getVar('alamat'),
                     'no_hp' => $this->request->getVar('no_hp'),
                     'last_user_update' => $this->request->getVar('last_user_update'),
-                    'id_divisi' => $this->request->getVar('id_divisi')
+                    'id_divisi' => $id_divisi
                 ];
 
                 $this->siswaModel->insert($insert);
@@ -936,19 +945,29 @@ class TataUsaha extends Controller
                 $fileFoto = $this->request->getFile('foto');
 
 
+                $id_divisi = $this->request->getVar('id_divisi');
+                $nikk = $this->request->getVar('nik');
+                $cekdivisi = $this->divisiModel->where('id', $id_divisi)->get()->getRowArray();
+                $tgl_lahir = $this->request->getVar('tgl_lahir');
+
+                $ext = $fileFoto->guessExtension();
+
+
                 //cek gambar, apakah tetap gambar lama
                 if ($fileFoto->getError() == 4) {
                     $namaFoto = $this->request->getVar('fotoLama');
                 } else {
                     if ($this->request->getVar('fotoLama') == "default.png") {
                         //generate nama file random
-                        $namaFoto = $fileFoto->getRandomName();
+                        // $namaFoto = $fileFoto->getRandomName();
+                        $namaFoto = $cekdivisi['divisi'] . '' . $nikk . '' . $tgl_lahir . '' . now() . '.' . $ext;
 
                         //pindahkan gambar
                         $fileFoto->move('asset/images/siswa', $namaFoto);
                     } else {
                         //generate nama file random
-                        $namaFoto = $fileFoto->getRandomName();
+                        // $namaFoto = $fileFoto->getRandomName();
+                        $namaFoto = $cekdivisi['divisi'] . '' . $nikk . '' . $tgl_lahir . '' . now() . '.' . $ext;
 
                         //pindahkan gambar
                         $fileFoto->move('asset/images/siswa', $namaFoto);
@@ -960,13 +979,13 @@ class TataUsaha extends Controller
 
                 $update = [
                     'username' => $this->request->getVar('username'),
-                    'nik' => $this->request->getVar('nik'),
+                    'nik' => $nikk,
                     'nisn' => $this->request->getVar('nisn'),
                     'nama_lengkap' => $this->request->getVar('nama_lengkap'),
                     'panggilan' => $this->request->getVar('panggilan'),
                     'j_kel' => $this->request->getVar('j_kel'),
                     'tem_lahir' => $this->request->getVar('tem_lahir'),
-                    'tgl_lahir' => $this->request->getVar('tgl_lahir'),
+                    'tgl_lahir' => $tgl_lahir,
                     'tahun_lulus' => $this->request->getVar('tahun_lulus'),
                     'lanjut_sekolah' => $this->request->getVar('lanjut_sekolah'),
                     'foto' => $namaFoto,
