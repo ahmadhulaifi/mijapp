@@ -27,7 +27,7 @@
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>12</h3>
+                        <h3><?= $jumlahkelas; ?></h3>
 
                         <p>Kelas</p>
                     </div>
@@ -43,7 +43,7 @@
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3>675</h3>
+                        <h3><?= $jumlahsiswaaktif; ?></h3>
 
                         <p>Peserta Didik</p>
                     </div>
@@ -59,7 +59,7 @@
                 <!-- small box -->
                 <div class="small-box bg-primary">
                     <div class="inner">
-                        <h3>65</h3>
+                        <h3><?= $jumlahalumni; ?></h3>
 
                         <p>Alumni</p>
                     </div>

@@ -1297,4 +1297,216 @@ class TataUsaha extends Controller
             echo "No direct script access allowed";
         }
     }
+
+    public function datasettingkelas()
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+
+        // $divisi = $this->divisiModel->where('divisi !=', 'Umum')->orderBy('sort', 'ASC')->findAll();
+        $divisi = $this->divisiModel->where('id !=', 1)->orderBy('sort', 'ASC')->findAll();
+        $kelas = $this->kelasModel->where('kelas !=', 'Alumni')->findColumn('id_divisi');
+
+
+        $jmlhkelas = $this->kelasModel->where('kelas !=', 'Alumni')->countAllResults();
+
+
+        $rombelalumni = ['Alumni KB', 'Alumni RA', 'Alumni MI', 'Alumni MTs', 'Alumni MA'];
+        $jmlhSiswaDivisi = $this->siswaModel->select('siswa.*')->join('rombel', 'rombel.id = siswa.id_rombel', 'left')->whereNotIn('rombel.rombel', $rombelalumni)->orwhere('id_rombel', '')->findColumn('id_divisi');
+
+
+        $data = [
+            'title' => 'Setting Kelas',
+            'user' => $cekuser,
+            'divisi' => $divisi,
+            'kelas' => $kelas,
+
+            'jmlhkelas' => $jmlhkelas,
+
+            'jmlsiswadivisi' => $jmlhSiswaDivisi
+
+        ];
+
+        return view('backend/tatausaha/datasettingkelas', $data);
+    }
+
+    public function settingkelas($id)
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+        $iddivisi = $id;
+
+        $divisi = $this->divisiModel->where('id', $id)->get()->getRowArray();
+        $kelas = $this->kelasModel->where('id_divisi', $iddivisi)->where('kelas!=', 'Alumni')->orderby('kelas', 'ASC')->findAll();
+        $siswa = $this->siswaModel->getSiswa($id);
+        $rombelasal = $this->rombelModel->select('rombel.*,kelas.kelas,divisi.divisi')->join('kelas', 'kelas.id = rombel.id_kelas')->join('divisi', 'divisi.id = kelas.id_divisi')->where('divisi.divisi', $divisi['divisi'])->orderby('rombel', 'ASC')->findAll();
+        $rombeltujuan = $this->rombelModel->select('rombel.*,kelas.kelas,divisi.divisi')->join('kelas', 'kelas.id = rombel.id_kelas')->join('divisi', 'divisi.id = kelas.id_divisi')->where('divisi.divisi', $divisi['divisi'])->orderby('rombel', 'ASC')->findAll();
+
+
+        $data = [
+            'title' => 'Setting Kelas ' . $divisi['divisi'],
+            'user' => $cekuser,
+            'siswa' => $siswa,
+            'rombelasal' => $rombelasal,
+            'rombeltujuan' => $rombeltujuan,
+            'divisi' => $divisi,
+            'iddivisii' => $iddivisi,
+            'kelas' => $kelas
+        ];
+
+        return view('backend/tatausaha/settingkelas', $data);
+    }
+
+    public function fetchsiswakelasasal()
+    {
+        if ($this->request->isAJAX()) {
+
+            if (!$this->validate([
+                'rombelasal' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Rombel asal tidak boleh kosong'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $id_rombel = $this->request->getVar('rombelasal');
+                $iddivisicek = $this->request->getVar('iddivisicekasal');
+
+
+                if ($id_rombel == 'belum') {
+                    $siswa = $this->siswaModel->where('id_rombel', 0)->where('id_divisi', $iddivisicek)->findAll();
+                } else {
+                    $siswa = $this->siswaModel->where('id_rombel', $id_rombel)->findAll();
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Berhasil Fetch Kelas asal',
+                    'siswa' => $siswa
+
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function fetchsiswakelastujuan()
+    {
+        if ($this->request->isAJAX()) {
+
+            if (!$this->validate([
+                'rombeltujuan' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Rombel Tujuan tidak boleh kosong'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $id_rombel = $this->request->getVar('rombeltujuan');
+                $iddivisicek = $this->request->getVar('iddivisicektujuan');
+
+
+                if ($id_rombel == 'belum') {
+                    $siswa = $this->siswaModel->where('id_rombel', 0)->where('id_divisi', $iddivisicek)->findAll();
+                } else {
+                    $siswa = $this->siswaModel->where('id_rombel', $id_rombel)->findAll();
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Berhasil Fetch Kelas asal',
+                    'siswa' => $siswa
+
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function pindahkelassiswa()
+    {
+        if ($this->request->isAJAX()) {
+
+            if (!$this->validate([
+                'rombelasal' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Rombel Asal tidak boleh kosong'
+                    ]
+                ],
+                'rombeltujuan' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Rombel Tujuan tidak boleh kosong'
+                    ]
+                ]
+            ])) {
+                $validation = \Config\Services::validation();
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                $id_rombelasal = $this->request->getVar('rombelasal');
+                $id_rombeltujuan = $this->request->getVar('rombeltujuan');
+                $iddivisicekasal = $this->request->getVar('iddivisicekasal');
+                $iddivisicektujuan = $this->request->getVar('iddivisicektujuan');
+
+                if ($id = $this->request->getVar('checkbox_value')) {
+                    for ($count = 0; $count < count($id); $count++) {
+
+                        $update = [
+                            'id_rombel' => $id_rombeltujuan
+                        ];
+
+                        $this->siswaModel->update($id[$count], $update);
+                    }
+
+                    if ($id_rombelasal == 'belum') {
+                        $siswaasal = $this->siswaModel->where('id_rombel', 0)->where('id_divisi', $iddivisicekasal)->findAll();
+                    } else {
+                        $siswaasal = $this->siswaModel->where('id_rombel', $id_rombelasal)->findAll();
+                    }
+
+                    if ($id_rombeltujuan == 'belum') {
+                        $siswatujuan = $this->siswaModel->where('id_rombel', 0)->where('id_divisi', $iddivisicektujuan)->findAll();
+                    } else {
+                        $siswatujuan = $this->siswaModel->where('id_rombel', $id_rombeltujuan)->findAll();
+                    }
+
+
+                    $data = [
+                        'responce' => 'success',
+                        'pesan' => 'Berhasil Fetch Kelas asal',
+                        'siswaasal' => $siswaasal,
+                        'siswatujuan' => $siswatujuan
+
+                    ];
+
+                    echo json_encode($data);
+                }
+            }
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
 }

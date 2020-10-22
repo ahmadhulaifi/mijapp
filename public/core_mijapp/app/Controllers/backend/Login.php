@@ -108,7 +108,7 @@ class Login extends Controller
     public function logout()
     {
         session()->destroy();
-        return redirect()->to(base_url('login'));
+        return redirect()->to(base_url('loginadmin'));
     }
 
     public function block()

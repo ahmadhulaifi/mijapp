@@ -283,6 +283,18 @@ $routes->post('/backend/tatausaha/deletefotochecksiswa', 'backend/TataUsaha::del
 $routes->delete('/tatausaha/deletefotogaleri/(:any)', 'backend\TataUsaha::deletefotogaleri/$1', ['filter' => 'akseslogin']);
 $routes->delete('/backend/tatausaha/deletefotogaleri/(:any)', 'backend\TataUsaha::deletefotogaleri/$1', ['filter' => 'akseslogin']);
 
+$routes->get('/tatausaha/datasettingkelas', 'backend\TataUsaha::datasettingkelas', ['filter' => 'akseslogin']);
+$routes->get('/backend/tatausaha/datasettingkelas', 'backend\TataUsaha::datasettingkelas', ['filter' => 'akseslogin']);
+$routes->get('/tatausaha/settingkelas/(:num)', 'backend\TataUsaha::settingkelas/$1', ['filter' => 'aksesdivisi']);
+$routes->get('/backend/tatausaha/settingkelas/(:num)', 'backend\TataUsaha::settingkelas/$1', ['filter' => 'aksesdivisi']);
+$routes->post('/tatausaha/fetchsiswakelasasal', 'backend/TataUsaha::fetchsiswakelasasal', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/fetchsiswakelasasal', 'backend/TataUsaha::fetchsiswakelasasal', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/fetchsiswakelastujuan', 'backend/TataUsaha::fetchsiswakelastujuan', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/fetchsiswakelastujuan', 'backend/TataUsaha::fetchsiswakelastujuan', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/pindahkelassiswa', 'backend/TataUsaha::pindahkelassiswa', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/pindahkelassiswa', 'backend/TataUsaha::pindahkelassiswa', ['filter' => 'akseslogin']);
+
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing
