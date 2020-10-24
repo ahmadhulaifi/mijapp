@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" id="btntambahsubmenubaru" class="btn btn-success" data-toggle="modal" data-target="#submenuModal">
+                <button type="button" id="btntambahsubmenubaru" class="btn btn-primary" data-toggle="modal" data-target="#submenuModal">
                     Tambah Sub Menu
                 </button>
 
@@ -105,7 +105,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table table-striped" id="tableSubMenu">
-                        <thead class="bg-success">
+                        <thead class="bg-navy">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Submenu</th>

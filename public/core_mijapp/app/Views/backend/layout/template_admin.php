@@ -158,8 +158,6 @@
             // menambahkan kelas aktif di sidebar
             let tes = $(".sub_menu.active").parent().parent().prev().addClass('active')
 
-
-
         });
     </script>
 </body>

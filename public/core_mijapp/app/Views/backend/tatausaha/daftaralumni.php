@@ -15,7 +15,7 @@
                 <?php
                 if ($iddivisii != 1) {
                 ?>
-                    <button type="button" id="btntambahsiswabaru" class="btn btn-success" data-toggle="modal" data-target="#siswaModal">
+                    <button type="button" id="btntambahsiswabaru" class="btn btn-primary" data-toggle="modal" data-target="#siswaModal">
                         Tambah Siswa
                     </button>
                     <button type="button" name="btn_deletesiswa" id="deletesiswa" class="btn btn-danger">Hapus</button>
@@ -556,7 +556,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table table-striped" id="tableSiswa">
-                        <thead class="bg-success">
+                        <thead class="bg-navy">
                             <tr>
                                 <th><input type="checkbox" id='checkall'></th>
                                 <!-- <th scope="col">No</th> -->

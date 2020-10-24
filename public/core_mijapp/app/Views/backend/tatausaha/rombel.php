@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" id="btntambahrombelbaru" class="btn btn-success" data-toggle="modal" data-target="#rombelModal">
+                <button type="button" id="btntambahrombelbaru" class="btn btn-primary" data-toggle="modal" data-target="#rombelModal">
                     Tambah Rombel
                 </button>
 
@@ -77,7 +77,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table table-striped" id="tabelRombel">
-                        <thead class="bg-success">
+                        <thead class="bg-navy">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Rombel</th>

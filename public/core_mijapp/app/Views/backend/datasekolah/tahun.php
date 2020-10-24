@@ -65,7 +65,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table table-striped" id="tableTahun">
-                        <thead class="bg-success">
+                        <thead class="bg-navy">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Tahun Ajaran</th>

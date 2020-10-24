@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" id="btntambahkelasbaru" class="btn btn-success" data-toggle="modal" data-target="#kelasModal">
+                <button type="button" id="btntambahkelasbaru" class="btn btn-primary" data-toggle="modal" data-target="#kelasModal">
                     Tambah Kelas
                 </button>
 
@@ -69,7 +69,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table table-striped" id="tabelKelas">
-                        <thead class="bg-success">
+                        <thead class="bg-navy">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Kelas</th>

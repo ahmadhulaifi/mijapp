@@ -12,7 +12,7 @@
             <div class="col-md-4 mb-3">
                 <!-- Button trigger modal -->
 
-                <button type="button" id="btntambahabsenbaru" class="btn btn-success" data-toggle="modal" data-target="#tambahModal">
+                <button type="button" id="btntambahabsenbaru" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">
                     Tambah
                 </button>
                 <button type="button" name="btndeleteabsenpegawai" id="btndeleteabsenpegawai" class="btn btn-danger">Hapus</button>
@@ -73,7 +73,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table table-striped" id="tableAbsenPegawai">
-                        <thead class="bg-success">
+                        <thead class="bg-navy">
                             <tr>
                                 <th scope="col"></th>
                                 <th><input type="checkbox" id='checkall'></th>

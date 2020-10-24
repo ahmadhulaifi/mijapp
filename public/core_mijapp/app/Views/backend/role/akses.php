@@ -20,7 +20,7 @@
                         <?= session()->getFlashdata('pesanError'); ?>
                     </div>
                 <?php endif; ?>
-                <h4>Status : <span class="btn btn-success"><?= $member['role']; ?></span></h4>
+                <h4>Status : <span class="btn btn-primary"><?= $member['role']; ?></span></h4>
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="thead-dark">

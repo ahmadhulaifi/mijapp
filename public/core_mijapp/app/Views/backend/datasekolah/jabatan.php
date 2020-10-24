@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" id="btntambahjabatanbaru" data-toggle="modal" data-target="#jabatanModal">
+                <button type="button" class="btn btn-primary" id="btntambahjabatanbaru" data-toggle="modal" data-target="#jabatanModal">
                     Tambah Jabatan
                 </button>
 
@@ -59,7 +59,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table table-striped" id="tableJabatan">
-                        <thead class="bg-success">
+                        <thead class="bg-navy">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Kode Jabatan</th>

@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col mb-3">
                 <!-- Button trigger modal -->
-                <a href="<?= base_url(); ?>/pegawai/formtambah" type="button" class="btn btn-success">
+                <a href="<?= base_url(); ?>/pegawai/formtambah" type="button" class="btn btn-primary">
                     Tambah Pegawai
                 </a>
                 <button type="button" name="btn_deletepegawai" id="deletepegawai" class="btn btn-danger">Hapus</button>
@@ -60,7 +60,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table table-striped" id="tablePegawai">
-                        <thead class="bg-success">
+                        <thead class="bg-navy">
                             <tr>
                                 <th><input type="checkbox" id='checkall'></th>
                                 <!-- <th scope="col">No</th> -->

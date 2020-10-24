@@ -466,7 +466,7 @@ class TataUsaha extends Controller
         // dd($jmlhSiswaDivisi);
 
         $data = [
-            'title' => 'Kelas',
+            'title' => 'Data Siswa',
             'user' => $cekuser,
             'divisi' => $divisi,
             'kelas' => $kelas,

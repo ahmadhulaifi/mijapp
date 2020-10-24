@@ -29,7 +29,7 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table table-striped" id="tableAbsen">
-                        <thead class="bg-success">
+                        <thead class="bg-navy">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">NIP</th>
@@ -66,6 +66,7 @@
     $(document).ready(function() {
 
         function tabelabsen(dataks) {
+            let i = 1;
             $('#tableAbsen').DataTable({
                 "data": dataks,
                 "responsive": true,
@@ -79,8 +80,6 @@
                 "columns": [{
                         "data": null,
                         "render": function() {
-                            let i = 1;
-
                             return a = i++;
                         }
                     },
