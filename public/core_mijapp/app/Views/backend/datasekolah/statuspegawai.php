@@ -89,6 +89,7 @@
                         <form method="post" action="" id="editstatuspegawaiform">
                             <?= csrf_field(); ?>
                             <input type="hidden" class="form-control" name="idstatuspegawai">
+                            <input type="hidden" class="form-control" name="statuskodelama">
                             <div class="form-group row">
                                 <label for="status_pegawai_kode" class="col-sm-2 col-form-label">Kode Status Pegawai</label>
                                 <div class="col-sm-10">
@@ -284,6 +285,7 @@
                         $('#editstatuspegawaiModal').modal('show');
                         $("input[name='idstatuspegawai']").val(data.status_pegawai.id);
                         $("input[name='status_pegawai_kode']").val(data.status_pegawai.status_pegawai_kode);
+                        $("input[name='statuskodelama']").val(data.status_pegawai.status_pegawai_kode);
                         $("input[name='status_pegawai']").val(data.status_pegawai.status_pegawai);
                     } else {
 

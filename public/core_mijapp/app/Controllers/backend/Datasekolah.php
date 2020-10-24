@@ -326,13 +326,27 @@ class Datasekolah extends Controller
                 // validasi sukses
                 $idjabatan = $this->request->getVar('idjabatan');
                 $jabatan_kode = $this->request->getVar('jabatan_kode');
+                $kodejabatanlama = $this->request->getVar('kodejabatanlama');
                 $jabatan = $this->request->getVar('jabatan');
+
+                $cekkaryawan = $this->karyawanModel->where('jabatan_kode', $kodejabatanlama)->findAll();
+
                 $update = [
                     'jabatan_kode' => $jabatan_kode,
                     'jabatan' => $jabatan
                 ];
+                $updatekaryawan = [
+                    'jabatan_kode' => $jabatan_kode
+                ];
+
+                foreach ($cekkaryawan as $cekkaryawan) {
+
+                    $this->karyawanModel->update($cekkaryawan['id'], $updatekaryawan);
+                }
 
                 $this->jabatanModel->update($idjabatan, $update);
+
+
                 $data = [
                     'responce' => 'success',
                     'pesan' => 'Jabatan berhasil diupdate'
@@ -483,16 +497,34 @@ class Datasekolah extends Controller
                 // validasi sukses
                 $idstatuspegawai = $this->request->getVar('idstatuspegawai');
                 $status_pegawai_kode = $this->request->getVar('status_pegawai_kode');
+                $statuskodelama = $this->request->getVar('statuskodelama');
                 $status_pegawai = $this->request->getVar('status_pegawai');
+
+
+
                 $update = [
                     'status_pegawai_kode' => $status_pegawai_kode,
                     'status_pegawai' => $status_pegawai
                 ];
+                $updatekaryawan = [
+                    'status_pegawai_kode' => $status_pegawai_kode
+                ];
+
+
+                $cekkaryawan = $this->karyawanModel->where('status_pegawai_kode', $statuskodelama)->findAll();
+
+
+                foreach ($cekkaryawan as $cekkaryawan) {
+                    $this->karyawanModel->update($cekkaryawan['id'], $updatekaryawan);
+                }
 
                 $this->statusPegawaiModel->update($idstatuspegawai, $update);
+
+
                 $data = [
                     'responce' => 'success',
-                    'pesan' => 'Status pegawai berhasil diupdate'
+                    'pesan' => 'Status pegawai berhasil diupdate',
+                    'cekkaryawan' => $cekkaryawan
                 ];
             }
             echo json_encode($data);

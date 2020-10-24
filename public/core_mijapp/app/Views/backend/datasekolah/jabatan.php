@@ -89,6 +89,7 @@
                         <form method="post" action="" id="editjabatanform">
                             <?= csrf_field(); ?>
                             <input type="hidden" class="form-control" name="idjabatan">
+                            <input type="hidden" class="form-control" name="kodejabatanlama">
                             <div class="form-group row">
                                 <label for="jabatan_kode" class="col-sm-2 col-form-label">Kode Jabatan</label>
                                 <div class="col-sm-10">
@@ -285,6 +286,7 @@
                         $('#editjabatanModal').modal('show');
                         $("input[name='idjabatan']").val(data.jabatan.id);
                         $("input[name='jabatan_kode']").val(data.jabatan.jabatan_kode);
+                        $("input[name='kodejabatanlama']").val(data.jabatan.jabatan_kode);
                         $("input[name='jabatan']").val(data.jabatan.jabatan);
                     } else {
 
