@@ -100,9 +100,16 @@
                         ?>
 
                         <?php foreach ($querysubmenu as $qsm) : ?>
+                            <?php
+                            $cekawal = explode("/", $qsm['url']);
+                            $urli = explode("/", uri_string());
+                            $uricurrent = $urli[0];
+                            // dd($cekawal[0])
+
+                            ?>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= base_url($qsm['url']); ?>" class="sub_menu nav-link <?php echo ($title == $qsm['sub_menu']) ? 'active' : '' ?>">
+                                    <a href="<?= base_url($qsm['url']); ?>" class="sub_menu nav-link <?php echo ($uricurrent == $cekawal[0]) ? 'subactive' : '' ?> <?php echo ($title == $qsm['sub_menu']) ? 'bg-navy' : '' ?>">
                                         <i class="<?= $qsm['icon']; ?>"></i>
                                         <p><?= $qsm['sub_menu']; ?></p>
                                     </a>

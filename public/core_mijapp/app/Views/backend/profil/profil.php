@@ -20,7 +20,9 @@
                                     <div class="mt-3">
                                         <h4><?= $user['nama_panggilan']; ?></h4>
                                         <p class="text-secondary mb-1">NIP: <?= $user['nip']; ?></p>
+
                                         <p class="text-secondary mb-1">Jabatan: <span class="badge badge-primary"><?= $user['jabatan']; ?></span></p>
+
                                         <p class="text-secondary mb-1">Divisi:
                                             <?php
                                             $divisik = explode(",", $user['divisi']);

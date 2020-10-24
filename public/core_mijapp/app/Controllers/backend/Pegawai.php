@@ -663,7 +663,7 @@ class Pegawai extends Controller
         // dd($divisi);
 
         $data = [
-            'title' => 'Divisi Pegawai',
+            'title' => 'Divisi Karyawan',
             'user' => $cekuser,
             'divisi' => $divisi,
             'divisi2' => $divisi2,
@@ -806,7 +806,7 @@ class Pegawai extends Controller
         $pegawai = $this->karyawanModel->findAll();
 
         $data = [
-            'title' => 'Absen Pegawai',
+            'title' => 'Absen',
             'user' => $cekuser,
             'pegawai' => $pegawai,
             'validation' => \Config\Services::validation()
