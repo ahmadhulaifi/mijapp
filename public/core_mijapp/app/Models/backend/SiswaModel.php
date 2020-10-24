@@ -222,4 +222,58 @@ class SiswaModel extends Model
 
         return $query;
     }
+
+    public function getSiswaAllAlumni()
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('siswa.*, kelas.kelas,rombel.rombel,divisi.divisi');
+        $builder->join('rombel', 'rombel.id = siswa.id_rombel', 'left');
+        $builder->join('kelas', 'kelas.id = rombel.id_kelas', 'left');
+        $builder->join('divisi', 'divisi.id = siswa.id_divisi', 'left');
+        $builder->where('kelas.kelas', 'Alumni');
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
+        $query = $builder->get()->getResult();
+
+        return $query;
+    }
+
+    public function getSiswaAlumni($id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('siswa.*, kelas.kelas,rombel.rombel,divisi.divisi');
+        $builder->join('rombel', 'rombel.id = siswa.id_rombel', 'left');
+        $builder->join('kelas', 'kelas.id = rombel.id_kelas', 'left');
+        $builder->join('divisi', 'divisi.id = siswa.id_divisi', 'left');
+        $builder->where('siswa.id_divisi', $id);
+        $builder->where('kelas.kelas', 'Alumni');
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
+        $query = $builder->get()->getResultArray();
+
+        return $query;
+    }
+
+    public function getSiswaAlumniSekolah($id, $sekolahlanjut)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('siswa.*, kelas.kelas,rombel.rombel,divisi.divisi');
+        $builder->join('rombel', 'rombel.id = siswa.id_rombel', 'left');
+        $builder->join('kelas', 'kelas.id = rombel.id_kelas', 'left');
+        $builder->join('divisi', 'divisi.id = siswa.id_divisi', 'left');
+        $builder->where('siswa.id_divisi', $id);
+        $builder->where('kelas.kelas', 'Alumni');
+
+        if ($sekolahlanjut == 'belum') {
+            $builder->where('siswa.lanjut_sekolah', '');
+        } else {
+            $builder->where('siswa.lanjut_sekolah!=', '');
+        }
+
+        $builder->orderBy('rombel.rombel', 'ASC');
+        $builder->orderBy('siswa.nama_lengkap', 'ASC');
+        $query = $builder->get()->getResultArray();
+
+        return $query;
+    }
 }

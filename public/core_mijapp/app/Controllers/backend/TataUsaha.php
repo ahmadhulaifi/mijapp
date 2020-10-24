@@ -1140,7 +1140,7 @@ class TataUsaha extends Controller
 
                 $data = [
                     'responce' => 'success',
-                    'pesan' => 'Import absen pegawai berhasil',
+                    'pesan' => 'Import Data siswa berhasil',
                     'angkasukses' => $angkasukses,
                     'angkagagal' => $angkagagal,
                     'cekuser' => $cekdoubleuser,
@@ -1150,7 +1150,7 @@ class TataUsaha extends Controller
                 //upload gagal
                 $data = [
                     'responce' => 'error',
-                    'pesan' => 'Import absen pegawai gagal'
+                    'pesan' => 'Import data siswa gagal'
                 ];
             }
 
@@ -1444,6 +1444,27 @@ class TataUsaha extends Controller
     public function pindahkelassiswa()
     {
         if ($this->request->isAJAX()) {
+            $tahunlulus = $this->request->getVar('tahunlulus');
+            $id_rombelasal = $this->request->getVar('rombelasal');
+            $id_rombeltujuan = $this->request->getVar('rombeltujuan');
+            $iddivisicekasal = $this->request->getVar('iddivisicekasal');
+            $iddivisicektujuan = $this->request->getVar('iddivisicektujuan');
+
+            $idalumni = [7, 8, 9, 10, 11];
+            // $idalumni = array('7', '8,', '9', '10', '11');
+            // dd(in_array($tahunlulus, $idalumni));
+            if (in_array($id_rombeltujuan, $idalumni)) {
+                $ruletahun = 'required';
+                $update = [
+                    'id_rombel' => $id_rombeltujuan,
+                    'tahun_lulus' => $tahunlulus
+                ];
+            } else {
+                $ruletahun = 'numeric';
+                $update = [
+                    'id_rombel' => $id_rombeltujuan
+                ];
+            }
 
             if (!$this->validate([
                 'rombelasal' => [
@@ -1457,6 +1478,13 @@ class TataUsaha extends Controller
                     'errors' => [
                         'required' => 'Rombel Tujuan tidak boleh kosong'
                     ]
+                ],
+                'tahunlulus' => [
+                    'rules' => $ruletahun,
+                    'errors' => [
+                        'required' => 'Tahun Lulus tidak boleh kosong',
+                        'numeric' => 'Tahun Lulus harus angka',
+                    ]
                 ]
             ])) {
                 $validation = \Config\Services::validation();
@@ -1466,17 +1494,11 @@ class TataUsaha extends Controller
                 ];
             } else {
                 // validasi sukses
-                $id_rombelasal = $this->request->getVar('rombelasal');
-                $id_rombeltujuan = $this->request->getVar('rombeltujuan');
-                $iddivisicekasal = $this->request->getVar('iddivisicekasal');
-                $iddivisicektujuan = $this->request->getVar('iddivisicektujuan');
+
+
 
                 if ($id = $this->request->getVar('checkbox_value')) {
                     for ($count = 0; $count < count($id); $count++) {
-
-                        $update = [
-                            'id_rombel' => $id_rombeltujuan
-                        ];
 
                         $this->siswaModel->update($id[$count], $update);
                     }
@@ -1500,11 +1522,588 @@ class TataUsaha extends Controller
                         'siswaasal' => $siswaasal,
                         'siswatujuan' => $siswatujuan
 
+
                     ];
 
                     echo json_encode($data);
                 }
             }
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    // controller datasiswa
+    public function dataalumni()
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+
+
+        $divisi = $this->divisiModel->orderBy('sort', 'ASC')->findAll();
+
+        $rombelalumni = ['Alumni KB', 'Alumni RA', 'Alumni MI', 'Alumni MTs', 'Alumni MA'];
+        $jmlhSiswaAll = $this->siswaModel->select('siswa.*')->join('rombel', 'rombel.id = siswa.id_rombel', 'left')->whereIn('rombel.rombel', $rombelalumni)->countAllResults();
+
+
+        $jmlhSiswaDivisi = $this->siswaModel->select('siswa.*')->join('rombel', 'rombel.id = siswa.id_rombel', 'left')->whereIn('rombel.rombel', $rombelalumni)->findColumn('id_divisi');
+
+
+        // dd($jmlhSiswaDivisi);
+
+        $data = [
+            'title' => 'Data Alumni',
+            'user' => $cekuser,
+            'divisi' => $divisi,
+            'jmlhsiswaall' => $jmlhSiswaAll,
+            'jmlsiswadivisi' => $jmlhSiswaDivisi
+
+        ];
+
+        return view('backend/tatausaha/dataalumni', $data);
+    }
+
+    public function daftaralumni($id)
+    {
+        $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+
+        $iddivisi = $id;
+
+        if ($iddivisi == 1) {
+            $divisi = $this->divisiModel->where('id', $id)->get()->getRowArray();
+            $siswa = $this->siswaModel->getSiswaAll();
+            $rombel = $this->rombelModel->select('rombel.*,kelas.kelas,divisi.divisi')->join('kelas', 'kelas.id = rombel.id_kelas')->join('divisi', 'divisi.id = kelas.id_divisi')->where('kelas.kelas !=', 'Alumni')->orderby('rombel', 'ASC')->findAll();
+
+            $kelas = $this->kelasModel->where('kelas!=', 'Alumni')->orderby('kelas', 'ASC')->findAll();
+
+            $data = [
+                'title' => 'Data Siswa Semua Divisi',
+                'user' => $cekuser,
+                'siswa' => $siswa,
+                'rombel' => $rombel,
+                'divisi' => $divisi,
+                'iddivisii' => $iddivisi,
+                'kelas' => $kelas
+
+            ];
+        } else {
+            $divisi = $this->divisiModel->where('id', $id)->get()->getRowArray();
+            $kelas = $this->kelasModel->where('id_divisi', $iddivisi)->where('kelas!=', 'Alumni')->orderby('kelas', 'ASC')->findAll();
+            $siswa = $this->siswaModel->getSiswa($id);
+            $rombel = $this->rombelModel->select('rombel.*,kelas.kelas,divisi.divisi')->join('kelas', 'kelas.id = rombel.id_kelas')->join('divisi', 'divisi.id = kelas.id_divisi')->where('kelas.kelas !=', 'Alumni')->where('divisi.divisi', $divisi['divisi'])->orderby('rombel', 'ASC')->findAll();
+
+
+            $data = [
+                'title' => 'Data Alumni ' . $divisi['divisi'],
+                'user' => $cekuser,
+                'siswa' => $siswa,
+                'rombel' => $rombel,
+                'divisi' => $divisi,
+                'iddivisii' => $iddivisi,
+                'kelas' => $kelas
+            ];
+        }
+
+        return view('backend/tatausaha/daftaralumni', $data);
+    }
+
+    public function fetchalumni()
+    {
+        if ($this->request->isAJAX()) {
+            $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+            $id_divisi = $this->request->getVar('id_divisi');
+
+            if ($id_divisi == 1) {
+                $siswa = $this->siswaModel->getSiswaAllAlumni();
+                $data = [
+                    'responce' => 'success',
+                    'user' => $cekuser,
+                    'siswa' => $siswa,
+                    'divisi' => $id_divisi
+                ];
+            } else {
+                if ($siswa = $this->siswaModel->getSiswaAlumni($id_divisi)) {
+                    $data = [
+                        'responce' => 'success',
+                        'user' => $cekuser,
+                        'siswa' => $siswa,
+                        'divisi' => $id_divisi
+                    ];
+                } else {
+                    $data = [
+                        'responce' => 'error',
+                        'pesan' => 'gagal fetch kelas'
+                    ];
+                }
+            }
+
+
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function tambahalumni()
+    {
+        if ($this->request->isAJAX()) {
+
+            $username = $this->request->getVar('username');
+            $nik = $this->request->getVar('nik');
+
+            if ($this->siswaModel->cekUsernameSiswa($username)) {
+                $usernamerule = 'required|is_unique[siswa.username]';
+            } else {
+                $usernamerule = 'required';
+            }
+
+            if ($this->siswaModel->cekNikSiswa($nik)) {
+                $nikrule = 'required|is_unique[siswa.nik]';
+            } else {
+                $nikrule = 'required';
+            }
+
+            if (!$this->validate([
+                'username' => [
+                    'rules' => $usernamerule,
+                    'errors' => [
+                        'required' => 'Username tidak boleh kosong',
+                        'is_unique' => 'Username sudah ada yang punya'
+                    ]
+                ],
+                'password' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Password tidak boleh kosong'
+                    ]
+                ],
+                'repassword' => [
+                    'rules' => 'required|matches[password]',
+                    'errors' => [
+                        'required' => 'Re-Type Password tidak boleh kosong',
+                        'matches' => 'Re-Type password tidak sesuai'
+                    ]
+                ],
+                'nik' => [
+                    'rules' => $nikrule,
+                    'errors' => [
+                        'required' => 'NIK tidak boleh kosong',
+                        'is_unique' => 'NIK sudah ada yang punya'
+                    ]
+                ],
+                'nama_lengkap' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Nama Lengkap tidak boleh kosong'
+                    ]
+                ],
+                'tahun_lulus' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Tahun Lulus tidak boleh kosong'
+                    ]
+                ]
+
+
+            ])) {
+                $validation = \Config\Services::validation();
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+                // validasi sukses
+                // validasi sukses
+                $fileFoto = $this->request->getFile('foto');
+
+                $id_divisi = $this->request->getVar('id_divisi');
+
+                // 2,3,5,6,7
+                // 7,8,9,10,11
+
+                if ($id_divisi == 2) {
+                    $id_rombel = 7;
+                } elseif ($id_divisi == 3) {
+                    $id_rombel = 8;
+                } elseif ($id_divisi == 5) {
+                    $id_rombel = 9;
+                } elseif ($id_divisi == 6) {
+                    $id_rombel = 10;
+                } elseif ($id_divisi == 7) {
+                    $id_rombel = 11;
+                } else {
+                    $id_rombel = 0;
+                }
+
+                $nikk = $this->request->getVar('nik');
+                $cekdivisi = $this->divisiModel->where('id', $id_divisi)->get()->getRowArray();
+                $tgl_lahir = $this->request->getVar('tgl_lahir');
+
+                $ext = $fileFoto->guessExtension();
+
+                if ($fileFoto == '') {
+                    $namaFoto = "default.png";
+                } else {
+                    //generate nama file random
+                    // $namaFoto = $fileFoto->getRandomName();
+                    $namaFoto = $cekdivisi['divisi'] . '' . $nikk . '' . $tgl_lahir . '' . now() . '.' . $ext;
+                }
+
+                $insert = [
+                    'username' => $this->request->getVar('username'),
+                    'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+                    'nik' => $nikk,
+                    'nisn' => $this->request->getVar('nisn'),
+                    'nama_lengkap' => $this->request->getVar('nama_lengkap'),
+                    'panggilan' => $this->request->getVar('panggilan'),
+                    'j_kel' => $this->request->getVar('j_kel'),
+                    'tem_lahir' => $this->request->getVar('tem_lahir'),
+                    'tgl_lahir' => $this->request->getVar('tgl_lahir'),
+                    'tahun_lulus' => $this->request->getVar('tahun_lulus'),
+                    'lanjut_sekolah' => $this->request->getVar('lanjut_sekolah'),
+                    'foto' => $namaFoto,
+                    'ayah' => $this->request->getVar('ayah'),
+                    'pekerjaan_ayah' => $this->request->getVar('pekerjaan_ayah'),
+                    'pendapatan_ayah' => $this->request->getVar('pendapatan_ayah'),
+                    'ibu' => $this->request->getVar('ibu'),
+                    'pekerjaan_ibu' => $this->request->getVar('pekerjaan_ibu'),
+                    'pendapatan_ibu' => $this->request->getVar('pendapatan_ibu'),
+                    'alamat' => $this->request->getVar('alamat'),
+                    'no_hp' => $this->request->getVar('no_hp'),
+                    'last_user_update' => $this->request->getVar('last_user_update'),
+                    'id_divisi' => $id_divisi,
+                    'id_rombel' => $id_rombel
+                ];
+
+                $this->siswaModel->insert($insert);
+
+                if ($fileFoto != '') {
+                    $fileFoto->move('asset/images/siswa', $namaFoto);
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data Siswa berhasil ditambah',
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function editsiswaalumni()
+    {
+        if ($this->request->isAJAX()) {
+
+            $username = $this->request->getVar('username');
+            $nik = $this->request->getVar('nik');
+            $idsiswa = $this->request->getVar('idsiswa');
+
+            $datalama = $this->siswaModel->where('id', $idsiswa)->get()->getRowArray();
+
+            if ($username == $datalama['username']) {
+                $usernamerule = 'required';
+            } else {
+                if ($this->siswaModel->cekUsernameSiswa($username)) {
+                    $usernamerule = 'required|is_unique[siswa.username]';
+                } else {
+                    $usernamerule = 'required';
+                }
+            }
+
+            if ($nik == $datalama['nik']) {
+                $nikrule = 'required';
+            } else {
+                if ($this->siswaModel->cekNikSiswa($nik)) {
+                    $nikrule = 'required|is_unique[siswa.nik]';
+                } else {
+                    $nikrule = 'required';
+                }
+            }
+
+
+
+
+            if (!$this->validate([
+                'username' => [
+                    'rules' => $usernamerule,
+                    'errors' => [
+                        'required' => 'Username tidak boleh kosong',
+                        'is_unique' => 'Username sudah ada yang punya'
+                    ]
+                ],
+                'nik' => [
+                    'rules' => $nikrule,
+                    'errors' => [
+                        'required' => 'NIK tidak boleh kosong',
+                        'is_unique' => 'NIK sudah ada yang punya'
+                    ]
+                ],
+                'nama_lengkap' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Nama Lengkap tidak boleh kosong'
+                    ]
+                ],
+                'tahun_lulus' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Tahun Lulus tidak boleh kosong'
+                    ]
+                ]
+
+            ])) {
+                $validation = \Config\Services::validation();
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => $validation->listErrors()
+                ];
+            } else {
+
+                // validasi sukses
+                $fileFoto = $this->request->getFile('foto');
+
+
+                $id_divisi = $this->request->getVar('id_divisi');
+                $nikk = $this->request->getVar('nik');
+                $cekdivisi = $this->divisiModel->where('id', $id_divisi)->get()->getRowArray();
+                $tgl_lahir = $this->request->getVar('tgl_lahir');
+
+                $ext = $fileFoto->guessExtension();
+
+
+                //cek gambar, apakah tetap gambar lama
+                if ($fileFoto->getError() == 4) {
+                    $namaFoto = $this->request->getVar('fotoLama');
+                } else {
+                    if ($this->request->getVar('fotoLama') == "default.png") {
+                        //generate nama file random
+                        // $namaFoto = $fileFoto->getRandomName();
+                        $namaFoto = $cekdivisi['divisi'] . '' . $nikk . '' . $tgl_lahir . '' . now() . '.' . $ext;
+
+                        //pindahkan gambar
+                        $fileFoto->move('asset/images/siswa', $namaFoto);
+                    } else {
+                        //generate nama file random
+                        // $namaFoto = $fileFoto->getRandomName();
+                        $namaFoto = $cekdivisi['divisi'] . '' . $nikk . '' . $tgl_lahir . '' . now() . '.' . $ext;
+
+                        //pindahkan gambar
+                        $fileFoto->move('asset/images/siswa', $namaFoto);
+
+                        //hapus gambar lama
+                        unlink('asset/images/siswa/' . $this->request->getPost('fotoLama'));
+                    }
+                }
+
+                $update = [
+                    'username' => $this->request->getVar('username'),
+                    'nik' => $nikk,
+                    'nisn' => $this->request->getVar('nisn'),
+                    'nama_lengkap' => $this->request->getVar('nama_lengkap'),
+                    'panggilan' => $this->request->getVar('panggilan'),
+                    'j_kel' => $this->request->getVar('j_kel'),
+                    'tem_lahir' => $this->request->getVar('tem_lahir'),
+                    'tgl_lahir' => $tgl_lahir,
+                    'tahun_lulus' => $this->request->getVar('tahun_lulus'),
+                    'lanjut_sekolah' => $this->request->getVar('lanjut_sekolah'),
+                    'foto' => $namaFoto,
+                    'ayah' => $this->request->getVar('ayah'),
+                    'pekerjaan_ayah' => $this->request->getVar('pekerjaan_ayah'),
+                    'pendapatan_ayah' => $this->request->getVar('pendapatan_ayah'),
+                    'ibu' => $this->request->getVar('ibu'),
+                    'pekerjaan_ibu' => $this->request->getVar('pekerjaan_ibu'),
+                    'pendapatan_ibu' => $this->request->getVar('pendapatan_ibu'),
+                    'alamat' => $this->request->getVar('alamat'),
+                    'no_hp' => $this->request->getVar('no_hp'),
+                    'last_user_update' => $this->request->getVar('last_user_update'),
+                    'id_divisi' => $this->request->getVar('id_divisi')
+                ];
+
+                $this->siswaModel->update($idsiswa, $update);
+
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Data Siswa berhasil diupdate',
+                ];
+            }
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function importsiswaalumni()
+    {
+        if ($this->request->isAJAX()) {
+
+            $file = $this->request->getFile('filesiswa');
+
+            if ($file) {
+                $excelReader  = new PHPExcel();
+                //mengambil lokasi temp file
+                $fileLocation = $file->getTempName();
+                //baca file
+                $objPHPExcel = PHPExcel_IOFactory::load($fileLocation);
+                //ambil sheet active
+                $sheet    = $objPHPExcel->getActiveSheet()->toArray('', true, true, true);
+
+                $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+                $divisi = $this->request->getVar('iddivisi');
+
+                if ($divisi == 2) {
+                    $id_rombel = 7;
+                } elseif ($divisi == 3) {
+                    $id_rombel = 8;
+                } elseif ($divisi == 5) {
+                    $id_rombel = 9;
+                } elseif ($divisi == 6) {
+                    $id_rombel = 10;
+                } elseif ($divisi == 7) {
+                    $id_rombel = 11;
+                } else {
+                    $id_rombel = 0;
+                }
+
+                $angkasukses = 0;
+                $angkagagal = 0;
+
+                foreach ($sheet as $idx => $data) {
+                    //skip index 1 karena title excel
+                    if ($idx == 1) {
+                        continue;
+                    }
+
+                    $username = $data['B'];
+                    $password = $data['C'];
+                    $nik = $data['D'];
+                    $nisn = $data['E'];
+                    $nama_lengkap = $data['F'];
+                    $panggilan = $data['G'];
+                    $j_kel = $data['H'];
+                    $tem_lahir = $data['I'];
+                    $tgl_lahir = $data['J'];
+                    $tahun_lulus = $data['K'];
+                    $lanjut_sekolah = $data['L'];
+                    $ayah = $data['M'];
+                    $pekerjaan_ayah = $data['N'];
+                    $pendapatan_ayah = $data['O'];
+                    $ibu = $data['P'];
+                    $pekerjaan_ibu = $data['Q'];
+                    $pendapatan_ibu = $data['R'];
+                    $alamat = $data['S'];
+                    $no_hp = $data['T'];
+                    $foto = $data['U'];
+
+
+                    // $idkaryawan = $this->karyawanModel->where('nip', $nip)->get()->getRowArray();
+                    $cekdoubleuser = $this->siswaModel->cekUsernameSiswa($username);
+                    $cekdoublenik = $this->siswaModel->cekNikSiswa($nik);
+
+
+                    if ($cekdoubleuser > 0) {
+                        // $insert = [];
+                        $angkagagal++;
+                    } elseif ($cekdoublenik > 0) {
+                        // $insert = [];
+                        $angkagagal++;
+                    } else {
+                        $insert = [
+                            'username' => $username,
+                            'password' => password($password),
+                            'nik' => $nik,
+                            'nisn' => $nisn,
+                            'nama_lengkap' => $nama_lengkap,
+                            'panggilan' => $panggilan,
+                            'j_kel' => $j_kel,
+                            'tem_lahir' => $tem_lahir,
+                            'tgl_lahir' => tanggal($tgl_lahir),
+                            'tahun_lulus' => $tahun_lulus,
+                            'lanjut_sekolah' => $lanjut_sekolah,
+                            'ayah' => $ayah,
+                            'pekerjaan_ayah' => $pekerjaan_ayah,
+                            'pendapatan_ayah' => $pendapatan_ayah,
+                            'ibu' => $ibu,
+                            'pekerjaan_ibu' => $pekerjaan_ibu,
+                            'pendapatan_ibu' => $pendapatan_ibu,
+                            'alamat' => $alamat,
+                            'no_hp' => $no_hp,
+                            'foto' => $foto,
+                            'last_user_update' => $cekuser['nama_lengkap'],
+                            'id_divisi' => $divisi,
+                            'id_rombel' => $id_rombel
+                        ];
+
+                        $this->siswaModel->insert($insert);
+                        $angkasukses++;
+                    }
+
+
+
+                    // insert data
+                }
+
+                $data = [
+                    'responce' => 'success',
+                    'pesan' => 'Import Data Alumni siswa berhasil',
+                    'angkasukses' => $angkasukses,
+                    'angkagagal' => $angkagagal,
+                    'cekuser' => $cekdoubleuser,
+                    'ceknik' => $cekdoublenik
+                ];
+            } else {
+                //upload gagal
+                $data = [
+                    'responce' => 'error',
+                    'pesan' => 'Import Data Alumni siswa gagal'
+                ];
+            }
+
+            echo json_encode($data);
+        } else {
+            echo "No direct script access allowed";
+        }
+    }
+
+    public function fetchalumniceksekolah()
+    {
+        if ($this->request->isAJAX()) {
+            $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
+            $id_divisi = $this->request->getVar('id_divisi');
+            $sekolahlanjut = $this->request->getVar('sekolahlanjut');
+
+            if ($id_divisi == 1) {
+                $siswa = $this->siswaModel->getSiswaAllAlumni();
+                $data = [
+                    'responce' => 'success',
+                    'user' => $cekuser,
+                    'siswa' => $siswa,
+                    'divisi' => $id_divisi
+                ];
+            } else {
+                if ($siswa = $this->siswaModel->getSiswaAlumniSekolah($id_divisi, $sekolahlanjut)) {
+                    $data = [
+                        'responce' => 'success',
+                        'user' => $cekuser,
+                        'siswa' => $siswa,
+                        'divisi' => $id_divisi
+
+                    ];
+                } else {
+                    $data = [
+                        'responce' => 'error',
+                        'pesan' => 'gagal fetch kelas',
+                        'divisi' => $id_divisi
+
+                    ];
+                }
+            }
+
+
+
+            echo json_encode($data);
         } else {
             echo "No direct script access allowed";
         }

@@ -24,9 +24,10 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <form id="form_kelas_asal">
+
                             <div class="form-group row">
-                                <label for="rombelasal" class="col-sm-2 col-form-label">Rombel</label>
-                                <div class="col-sm-10">
+                                <label for="rombelasal" class="col-sm-3 col-form-label">Rombel</label>
+                                <div class="col-sm-9">
                                     <select class="form-control" id="rombelasal" name="rombelasal">
                                         <option disabled selected>-- Pilih Rombel --</option>
                                         <option value="belum">Belum Diatur</option>
@@ -38,13 +39,21 @@
                                 <input type="hidden" name="iddivisicekasal" id="iddivisicekasal" value="<?= $divisi['id']; ?>">
                             </div>
                             <div class="form-group row">
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9">
                                     <button type="submit" id="btncekkelasasal" class="btn btn-primary">Cek</button>
                                 </div>
                             </div>
-                        </form>
 
+                        </form>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <p style="color:rgba(255,255,255,0.8)">pilih rombel</p>
+                            </div>
+                            <div class="col-sm-9">
+
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-striped" id="tableKelasAsal">
                                 <thead class="bg-success">
@@ -72,9 +81,9 @@
                     <div class="card-body">
                         <form id="form_kelas_tujuan">
                             <div class="form-group row">
-                                <label for="rombeltujuan" class="col-sm-2 col-form-label">Rombel</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" id="rombeltujuan" name="rombeltujuan">
+                                <label for="rombeltujuan" class="col-sm-3 col-form-label">Rombel</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" id="rombeltujuan" name="rombeltujuan" onchange="tahunlulusalumni()">
                                         <option disabled selected>-- Pilih Rombel --</option>
                                         <option value="belum">Belum Diatur</option>
                                         <?php foreach ($rombeltujuan as $rombeltujuan) : ?>
@@ -85,8 +94,14 @@
                                 <input type="hidden" name="iddivisicektujuan" id="iddivisicektujuan" value="<?= $divisi['id']; ?>">
                             </div>
                             <div class="form-group row">
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-10">
+                                <label for="tahunlulus" class="col-sm-3 col-form-label">Tahun Lulus</label>
+                                <div class="col-sm-9" id="formtahunlulus">
+                                    <input type="hidden" class="form-control" id="tahunlulus" name="tahunlulus" placeholder="Isi jika pilih alumni" value="0">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9">
                                     <button type="submit" id="btncekkelastujuan" class="btn btn-primary">Cek</button>
                         </form>
 
@@ -121,7 +136,21 @@
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<script>
+    function tahunlulusalumni() {
+        let rombeltujuan = document.getElementById("rombeltujuan").value;
+        let idalumni = ['7', '8', '9', '10', '11']
+        let form = document.getElementById("tahunlulus");
 
+        if (idalumni.includes(rombeltujuan)) {
+            form.setAttribute('type', 'text')
+            form.setAttribute('value', '')
+        } else {
+            form.setAttribute('type', 'hidden')
+            form.setAttribute('value', '0')
+        }
+    }
+</script>
 
 <script>
     $(document).ready(function() {
@@ -282,6 +311,8 @@
             let checkbox = $('.pindah_checkbox:checked');
             let rombelasal = $('#rombelasal').val();
             let rombeltujuan = $('#rombeltujuan').val();
+            let tahunlulus = $('#tahunlulus').val();
+            // alert(rombeltujuan);
 
             if (checkbox.length > 0) {
                 Swal.fire({
@@ -306,12 +337,14 @@
                             data: {
                                 checkbox_value: checkbox_value,
                                 rombelasal: rombelasal,
-                                rombeltujuan: rombeltujuan
+                                rombeltujuan: rombeltujuan,
+                                tahunlulus: tahunlulus
                             },
                             dataType: 'json',
                             success: function(data) {
                                 if (data.responce == "success") {
                                     // toastr["success"](data.pesan);
+
                                     Swal.fire(
                                         'Berhasil!',
                                         'Siswa berhasil dipindah.',

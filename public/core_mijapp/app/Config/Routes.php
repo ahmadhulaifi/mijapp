@@ -294,6 +294,20 @@ $routes->post('/backend/tatausaha/fetchsiswakelastujuan', 'backend/TataUsaha::fe
 $routes->post('/tatausaha/pindahkelassiswa', 'backend/TataUsaha::pindahkelassiswa', ['filter' => 'akseslogin']);
 $routes->post('/backend/tatausaha/pindahkelassiswa', 'backend/TataUsaha::pindahkelassiswa', ['filter' => 'akseslogin']);
 
+$routes->get('/tatausaha/dataalumni', 'backend\TataUsaha::dataalumni', ['filter' => 'akseslogin']);
+$routes->get('/backend/tatausaha/dataalumni', 'backend\TataUsaha::dataalumni', ['filter' => 'akseslogin']);
+$routes->get('/tatausaha/daftaralumni/(:num)', 'backend\TataUsaha::daftaralumni/$1', ['filter' => 'aksesdivisi']);
+$routes->get('/backend/tatausaha/daftaralumni/(:num)', 'backend\TataUsaha::daftaralumni/$1', ['filter' => 'aksesdivisi']);
+$routes->post('/tatausaha/fetchalumni', 'backend/TataUsaha::fetchalumni', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/fetchalumni', 'backend/TataUsaha::fetchalumni', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/tambahalumni', 'backend/TataUsaha::tambahalumni', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/tambahalumni', 'backend/TataUsaha::tambahalumni', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/editsiswaalumni', 'backend/TataUsaha::editsiswaalumni', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/editsiswaalumni', 'backend/TataUsaha::editsiswaalumni', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/importsiswaalumni', 'backend/TataUsaha::importsiswaalumni', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/importsiswaalumni', 'backend/TataUsaha::importsiswaalumni', ['filter' => 'akseslogin']);
+$routes->post('/tatausaha/fetchalumniceksekolah', 'backend/TataUsaha::fetchalumniceksekolah', ['filter' => 'akseslogin']);
+$routes->post('/backend/tatausaha/fetchalumniceksekolah', 'backend/TataUsaha::fetchalumniceksekolah', ['filter' => 'akseslogin']);
 
 /**
  * --------------------------------------------------------------------
