@@ -678,7 +678,7 @@ class Pegawai extends Controller
     {
 
         if ($this->request->isAJAX()) {
-            if ($pegawaibd = $this->karyawanModel->where('divisi', '')->findAll()) {
+            if ($pegawaibd = $this->karyawanModel->where('divisi', '')->where('username!=', 'adminmij')->findAll()) {
                 $data = [
                     'responce' => 'success',
                     'pegawai' => $pegawaibd
@@ -700,7 +700,7 @@ class Pegawai extends Controller
     {
 
         if ($this->request->isAJAX()) {
-            if ($pegawaisemua = $this->karyawanModel->findAll()) {
+            if ($pegawaisemua = $this->karyawanModel->where('username!=', 'adminmij')->findAll()) {
 
                 $data = [
                     'responce' => 'success',

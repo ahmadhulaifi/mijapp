@@ -253,7 +253,7 @@ class Role extends Controller
     public function fetchrolesemuapegawai()
     {
         if ($this->request->isAJAX()) {
-            if ($rolepegawai = $this->karyawanModel->findAll()) {
+            if ($rolepegawai = $this->karyawanModel->where('username!=', 'adminmij')->findAll()) {
                 $data = [
                     'responce' => 'success',
                     'rolepegawai' => $rolepegawai
@@ -275,7 +275,7 @@ class Role extends Controller
         if ($this->request->isAJAX()) {
             $satuan = $this->request->getVar('roleasal');
             // dd($satuan);
-            if ($pegawaisatuan = $this->karyawanModel->where('role_kode', $satuan)->findAll()) {
+            if ($pegawaisatuan = $this->karyawanModel->where('role_kode', $satuan)->where('username!=', 'adminmij')->findAll()) {
                 $data = [
                     'responce' => 'success',
                     'rolepegawai' => $pegawaisatuan

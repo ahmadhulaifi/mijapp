@@ -30,8 +30,8 @@ class KaryawanModel extends Model
     {
         $builder = $this->table($this->table);
         $builder->select('karyawan.*, jabatan.jabatan,status_pegawai.status_pegawai');
-        $builder->join('jabatan', 'jabatan.jabatan_kode = karyawan.jabatan_kode');
-        $builder->join('status_pegawai', 'status_pegawai.status_pegawai_kode = karyawan.status_pegawai_kode');
+        $builder->join('jabatan', 'jabatan.jabatan_kode = karyawan.jabatan_kode', 'left');
+        $builder->join('status_pegawai', 'status_pegawai.status_pegawai_kode = karyawan.status_pegawai_kode', 'left');
         $builder->where('karyawan.id', $id);
         $query = $builder->get()->getRowArray();
 
