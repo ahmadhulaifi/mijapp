@@ -92,6 +92,7 @@
                                 <th scope="col">Foto</th>
                                 <th scope="col">Created at</th>
                                 <th scope="col">Updated at</th>
+                                <th scope="col">Last User Update</th>
                             </tr>
                         </thead>
 
@@ -361,6 +362,9 @@
                             },
                             {
                                 "data": "updated_at"
+                            },
+                            {
+                                "data": "last_user"
                             }
 
                         ]

@@ -39,6 +39,7 @@
                                                 <td>Nama lengkap *: </td>
                                                 <td>
                                                     <input type="hidden" name="idpegawai" value="<?= $pegawai['id']; ?>">
+                                                    <input type="hidden" name="last_user" value="<?= $user['nama_lengkap']; ?>">
                                                     <div class="row">
                                                         <div class="form-group col-xs-12 col-sm-12">
                                                             <input type="text" name="nama_lengkap" placeholder="Nama Lengkap *" class="form-control" value="<?= $pegawai['nama_lengkap']; ?>">
@@ -496,6 +497,7 @@
         // edit pegawai
         $("#editformpegawai").submit(function(event) {
             event.preventDefault();
+            // console.log(new FormData(this))
             $.ajax({
                 url: '<?= base_url(); ?>/pegawai/editpegawai',
                 type: 'post',

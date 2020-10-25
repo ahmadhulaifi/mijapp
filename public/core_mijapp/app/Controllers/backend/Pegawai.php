@@ -250,6 +250,7 @@ class Pegawai extends Controller
                     'no_rek' => $this->request->getVar('no_rekening'),
                     'status_pegawai_kode' => $this->request->getVar('status_pegawai_kode'),
                     'jabatan_kode' => $this->request->getVar('jabatan_kode'),
+                    'last_user' => $this->request->getVar('last_user'),
                     'role_kode' => "UMUM",
                     'foto' => $namaFoto
 
@@ -457,7 +458,9 @@ class Pegawai extends Controller
                     'no_bpjs_ketenagakerjaan' => $this->request->getVar('no_bpjs_ketenagakerjaan'),
                     'no_bpjs_kesehatan' => $this->request->getVar('no_bpjs_kesehatan'),
                     'bank' => $this->request->getVar('bank'),
-                    'no_rek' => $this->request->getVar('no_rekening')
+                    'last_user' => $this->request->getVar('last_user'),
+                    'no_rek' => $this->request->getVar('no_rekening'),
+
 
                 ];
 
@@ -523,7 +526,7 @@ class Pegawai extends Controller
     public function importpegawai()
     {
         if ($this->request->isAJAX()) {
-
+            $cekuser = $this->karyawanModel->where('id', session('id'))->get()->getRowArray();
             $file = $this->request->getFile('filepegawai');
 
             if ($file) {
@@ -605,7 +608,8 @@ class Pegawai extends Controller
                         'no_bpjs_kesehatan'       =>    $no_bpjs_kesehatan,
                         'bank'       =>    $bank,
                         'no_rek'       =>    $no_rek,
-                        'role_kode'       =>    'UMUM'
+                        'role_kode'       =>    'UMUM',
+                        'last_user' => $cekuser['nama_lengkap']
                     ]);
                 }
 

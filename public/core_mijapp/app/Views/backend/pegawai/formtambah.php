@@ -11,6 +11,7 @@
 
         <form action="" method="post" id="tambahpegawaiform" enctype="multipart/form-data">
             <?= csrf_field(); ?>
+            <input type="hidden" name="last_user" value="<?= $user['nama_lengkap']; ?>">
             <div class="col-md-12">
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
