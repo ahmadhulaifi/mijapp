@@ -66,7 +66,7 @@
                     <div class="card-body">
                         <div>
                             <div class="btn-group w-100 mb-2">
-                                <a class="btn btn-info active" href="javascript:void(0)" data-filter="all"> All items </a>
+                                <!-- <a class="btn btn-info active" href="javascript:void(0)" data-filter="all"> All items </a> -->
                                 <?php foreach ($divisi as $divisi) : ?>
                                     <?php if ($divisi['divisi'] != 'Umum') : ?>
                                         <a class="btn btn-info" href="javascript:void(0)" data-filter="<?= strtolower(substr($divisi['divisi'], 0, 2)); ?>">Kls <?= $divisi['divisi']; ?></a>

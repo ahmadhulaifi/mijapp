@@ -758,7 +758,7 @@ class TataUsaha extends Controller
 
                 $ext = $fileFoto->guessExtension();
 
-                if ($fileFoto == '') {
+                if ($fileFoto->getError() == 4) {
                     $namaFoto = "default.png";
                 } else {
                     //generate nama file random
@@ -793,7 +793,7 @@ class TataUsaha extends Controller
 
                 $this->siswaModel->insert($insert);
 
-                if ($fileFoto != '') {
+                if ($fileFoto->getError() != 4) {
                     $fileFoto->move('asset/images/siswa', $namaFoto);
                 }
 

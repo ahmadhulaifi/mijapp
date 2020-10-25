@@ -15,6 +15,7 @@ use App\Models\backend\AbsenPegawaiModel;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\Request;
 use DateTime;
+use CodeIgniter\HTTP\Files\UploadedFile;
 
 class Pegawai extends Controller
 {
@@ -98,10 +99,6 @@ class Pegawai extends Controller
     {
         if ($this->request->isAJAX()) {
 
-
-            $rule_username = 'required|is_unique[karyawan.username]';
-
-
             if (!$this->validate([
                 'nama_lengkap' => [
                     'rules' => 'required',
@@ -140,7 +137,7 @@ class Pegawai extends Controller
                     ]
                 ],
                 'username' => [
-                    'rules' => $rule_username,
+                    'rules' => 'required|is_unique[karyawan.username]',
                     'errors' => [
                         'required' => 'Username tidak boleh kosong',
                         'is_unique' => 'Username sudah ada yang punya'
@@ -189,10 +186,10 @@ class Pegawai extends Controller
                     'rules' => 'max_size[foto,1024]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png]',
                     'errors' => [
                         'max_size' => 'ukuran gambar terlalu besar. Max 1 mb ',
-                        'is_image' => 'foto yang anda pilih bukan gambar',
+                        'is_image' => 'yang anda pilih bukan gambar',
                         'mime_in' => 'Gunakan file ekstensi jpg/jpeg/png'
                     ]
-                ]
+                ],
             ])) {
                 $validation = \Config\Services::validation();
 
@@ -204,10 +201,11 @@ class Pegawai extends Controller
                 // validasi sukses
                 $fileFoto = $this->request->getFile('foto');
 
-                if ($fileFoto == null) {
+                // if ($fileFoto === null) {
+                if ($fileFoto->getError() == 4) {
+                    // throw new \RuntimeException($fileFoto->getErrorString() . '(' . $fileFoto->getError() . ')');
                     $namaFoto = "default.png";
                 } else {
-
                     //generate nama file random
                     $namaFoto = $fileFoto->getRandomName();
                 }
@@ -258,7 +256,9 @@ class Pegawai extends Controller
 
                 if ($this->karyawanModel->insert($insert)) {
                     //pindahkan gambar
-                    if ($fileFoto != null) {
+                    // $fileFoto->getError() == 4
+                    // if ($fileFoto != null) {
+                    if ($fileFoto->getError() != 4) {
                         $fileFoto->move('asset/images/user', $namaFoto);
                     }
                 };

@@ -316,13 +316,13 @@
                                                 <td>
 
                                                     <div class="col-sm-2">
-                                                        <img src="" class="img-thumbnail img-preview">
+                                                        <img src="<?= base_url('/asset/images/user/default.png'); ?>" class="img-thumbnail img-preview">
                                                     </div>
                                                     <div class="col-sm-8">
                                                         <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="foto" name="foto" onchange="previewImg()">
+                                                            <input type="file" class="custom-file-input " id="foto" name="foto" onchange="previewImg()">
                                                             <label class="custom-file-label" for="foto"></label>
-                                                            <!-- <input type="hidden" name="fotoLama"> -->
+                                                            <!-- <input type="hidden" name="fotoLama" value="default.png"> -->
                                                         </div>
 
                                                     </div>
@@ -503,8 +503,6 @@
 <script>
     $(document).ready(function() {
 
-
-
         $('#alamatDomisili').hide();
         $("#domisili").on('click', function() {
             $('#alamatDomisili').slideToggle();
@@ -517,7 +515,6 @@
             $.ajax({
                 url: '<?= base_url(); ?>/pegawai/tambahpegawai',
                 type: 'post',
-
                 data: new FormData(this),
                 dataType: 'json',
                 cache: false,
